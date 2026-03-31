@@ -6,24 +6,25 @@
 <title>산업안전보건 관리 시스템</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;background:#f0f4f8;color:#1a202c;display:flex;min-height:100vh;}
+body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#f0f4f9;color:#374151;display:flex;min-height:100vh;}
 /* SIDEBAR */
-#sidebar{width:240px;min-height:100vh;background:#1a2744;color:#fff;position:fixed;top:0;left:0;z-index:100;display:flex;flex-direction:column;}
+#sidebar{width:220px;min-height:100vh;background:linear-gradient(180deg, #0d1f3c 0%, #1a3a6e 100%);color:#fff;position:fixed;top:0;left:0;z-index:100;display:flex;flex-direction:column;}
 #sidebar .logo{padding:20px 16px;border-bottom:1px solid rgba(255,255,255,0.1);}
-#sidebar .logo h1{font-size:15px;font-weight:700;color:#60a5fa;line-height:1.4;}
+#sidebar .logo h1{font-size:15px;font-weight:700;color:#7bacd4;line-height:1.4;}
 #sidebar .logo p{font-size:11px;color:#94a3b8;margin-top:2px;}
 #sidebar nav{flex:1;padding:12px 0;overflow-y:auto;}
-#sidebar nav a{display:flex;align-items:center;gap:10px;padding:10px 16px;color:#cbd5e1;text-decoration:none;font-size:13px;transition:all 0.2s;cursor:pointer;border:none;background:none;width:100%;}
+#sidebar nav a{display:flex;align-items:center;gap:10px;padding:10px 16px;color:#b0c4de;text-decoration:none;font-size:13px;transition:all 0.2s;cursor:pointer;border:none;background:none;width:100%;}
 #sidebar nav a:hover{background:rgba(255,255,255,0.08);color:#fff;}
-#sidebar nav a.active{background:#2563eb;color:#fff;}
+#sidebar nav a.active{background:#1e5096;color:#fff;border-left:3px solid #7bacd4;}
 #sidebar nav a .icon{font-size:16px;width:20px;text-align:center;}
-#sidebar nav .section-title{padding:16px 16px 6px;font-size:10px;color:#64748b;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;}
+#sidebar nav .section-title{padding:14px 16px 4px;font-size:9px;color:rgba(100,116,139,0.7);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;}
 #sidebar .footer{padding:12px 16px;border-top:1px solid rgba(255,255,255,0.1);font-size:11px;color:#64748b;}
 /* MAIN */
-#main{margin-left:240px;flex:1;min-height:100vh;}
-.topbar{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
-.topbar h2{font-size:17px;font-weight:700;color:#1a202c;}
+#main{margin-left:220px;flex:1;min-height:100vh;}
+.topbar{background:#fff;border-bottom:1px solid #e8edf3;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.topbar h2{font-size:17px;font-weight:700;color:#0d1f3c;}
 .topbar .actions{display:flex;gap:8px;align-items:center;}
 .content{padding:24px;}
 /* CARDS */
@@ -37,7 +38,7 @@ body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;background:#f0
 .stat-card .label{font-size:12px;color:#6b7280;margin-bottom:6px;}
 .stat-card .value{font-size:28px;font-weight:700;}
 .stat-card .sub{font-size:11px;color:#9ca3af;margin-top:4px;}
-.stat-card.blue .value{color:#2563eb;}
+.stat-card.blue .value{color:#1e5096;}
 .stat-card.green .value{color:#16a34a;}
 .stat-card.red .value{color:#dc2626;}
 .stat-card.orange .value{color:#ea580c;}
@@ -46,12 +47,12 @@ body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;background:#f0
 .badge.green{background:#dcfce7;color:#16a34a;}
 .badge.red{background:#fee2e2;color:#dc2626;}
 .badge.yellow{background:#fef9c3;color:#ca8a04;}
-.badge.blue{background:#dbeafe;color:#2563eb;}
+.badge.blue{background:#eef4ff;color:#1e5096;}
 .badge.gray{background:#f3f4f6;color:#6b7280;}
 /* BUTTONS */
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;border:none;cursor:pointer;transition:all 0.2s;}
-.btn-primary{background:#2563eb;color:#fff;}
-.btn-primary:hover{background:#1d4ed8;}
+.btn-primary{background:#1e5096;color:#fff;}
+.btn-primary:hover{background:#163d7a;}
 .btn-success{background:#16a34a;color:#fff;}
 .btn-success:hover{background:#15803d;}
 .btn-danger{background:#dc2626;color:#fff;}
@@ -63,21 +64,21 @@ body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;background:#f0
 .form-group{margin-bottom:14px;}
 .form-group label{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
 .form-group input,.form-group select,.form-group textarea{width:100%;padding:8px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:13px;font-family:inherit;transition:border 0.2s;}
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,0.1);}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#1e5096;box-shadow:0 0 0 3px rgba(30,80,150,0.1);}
 .form-group textarea{resize:vertical;min-height:80px;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
 /* TABLE */
-.table-wrap{overflow-x:auto;border-radius:8px;border:1px solid #e5e7eb;}
+.table-wrap{overflow-x:auto;border-radius:8px;border:1px solid #e8edf3;}
 table{width:100%;border-collapse:collapse;font-size:13px;}
-table th{background:#f8fafc;padding:10px 12px;text-align:left;font-size:12px;font-weight:600;color:#6b7280;border-bottom:1px solid #e5e7eb;}
+table th{background:#f8fafc;padding:10px 12px;text-align:left;font-size:12px;font-weight:600;color:#6b7280;border-bottom:1px solid #e8edf3;}
 table td{padding:10px 12px;border-bottom:1px solid #f1f5f9;vertical-align:middle;}
 table tr:last-child td{border-bottom:none;}
 table tr:hover td{background:#f8fafc;}
 /* CHECKBOX LIST */
 .check-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #f1f5f9;}
 .check-item:last-child{border-bottom:none;}
-.check-item input[type=checkbox]{width:16px;height:16px;margin-top:2px;accent-color:#2563eb;cursor:pointer;flex-shrink:0;}
+.check-item input[type=checkbox]{width:16px;height:16px;margin-top:2px;accent-color:#1e5096;cursor:pointer;flex-shrink:0;}
 .check-item label{font-size:13px;color:#374151;cursor:pointer;flex:1;}
 .check-item .check-note{font-size:11px;color:#9ca3af;margin-top:2px;}
 /* SECTION HIDDEN */
@@ -86,7 +87,7 @@ table tr:hover td{background:#f8fafc;}
 /* PROGRESS */
 .progress-bar{background:#e5e7eb;border-radius:20px;height:8px;overflow:hidden;}
 .progress-fill{height:100%;border-radius:20px;transition:width 0.3s;}
-.progress-fill.blue{background:#2563eb;}
+.progress-fill.blue{background:#1e5096;}
 .progress-fill.green{background:#16a34a;}
 .progress-fill.orange{background:#ea580c;}
 /* ALERT */
@@ -94,21 +95,48 @@ table tr:hover td{background:#f8fafc;}
 .alert.warning{background:#fffbeb;border-left:4px solid #f59e0b;color:#92400e;}
 .alert.danger{background:#fef2f2;border-left:4px solid #ef4444;color:#991b1b;}
 .alert.success{background:#f0fdf4;border-left:4px solid #22c55e;color:#166534;}
-.alert.info{background:#eff6ff;border-left:4px solid #3b82f6;color:#1e40af;}
+.alert.info{background:#eff6ff;border-left:4px solid #1e5096;color:#1e5096;}
 /* TABS */
 .tabs{display:flex;gap:4px;margin-bottom:16px;background:#f1f5f9;padding:4px;border-radius:8px;}
 .tab{padding:6px 14px;border-radius:6px;font-size:13px;cursor:pointer;border:none;background:none;color:#64748b;font-weight:500;transition:all 0.2s;}
-.tab.active{background:#fff;color:#1a202c;font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,0.1);}
-/* PATROL ZONE */
-.zone-card{border:2px solid #e5e7eb;border-radius:10px;margin-bottom:16px;overflow:hidden;}
-.zone-header{padding:12px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none;}
-.zone-header.ok{background:#f0fdf4;border-bottom:2px solid #bbf7d0;}
-.zone-header.warn{background:#fffbeb;border-bottom:2px solid #fde68a;}
-.zone-header.fail{background:#fef2f2;border-bottom:2px solid #fecaca;}
-.zone-header.default{background:#f8fafc;border-bottom:1px solid #e5e7eb;}
-.zone-body{padding:16px;}
-.zone-title{font-size:14px;font-weight:700;}
-.zone-score{font-size:12px;font-weight:600;}
+.tab.active{background:#fff;color:#0d1f3c;font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,0.1);}
+/* PATROL ZONE - CARD GRID */
+.patrol-total{background:linear-gradient(135deg, #0d1f3c 0%, #1a3a6e 60%, #1e5096 100%);border-radius:14px;padding:22px 28px;color:#fff;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:20px;}
+.patrol-total h3{font-size:16px;font-weight:800;}
+.patrol-total-bar{flex:1;max-width:400px;}
+.patrol-total-bar .ptb-track{background:rgba(255,255,255,0.2);border-radius:20px;height:14px;overflow:hidden;}
+.patrol-total-bar .ptb-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#22c55e,#4ade80);transition:width 0.4s;}
+.patrol-total-pct{font-size:28px;font-weight:900;min-width:70px;text-align:right;}
+.zone-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:16px;}
+.zone-card{border:2px solid #e8edf3;border-radius:14px;overflow:hidden;transition:all 0.25s;cursor:pointer;background:#fff;}
+.zone-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08);transform:translateY(-2px);}
+.zone-card.complete{border-color:#22c55e;background:#f0fdf4;}
+.zone-card.partial{border-color:#f59e0b;background:#fffbeb;}
+.zone-header{padding:16px 18px;display:flex;align-items:center;gap:14px;user-select:none;}
+.zone-header .zone-icon{font-size:28px;flex-shrink:0;}
+.zone-header .zone-info{flex:1;min-width:0;}
+.zone-title{font-size:14px;font-weight:700;color:#0d1f3c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.zone-subtitle{font-size:11px;color:#6b7280;margin-top:2px;}
+.zone-ring{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:800;position:relative;}
+.zone-ring svg{position:absolute;inset:0;transform:rotate(-90deg);}
+.zone-ring svg circle{fill:none;stroke-width:4;stroke-linecap:round;}
+.zone-ring .ring-bg{stroke:#e8edf3;}
+.zone-ring .ring-fg{transition:stroke-dashoffset 0.4s;}
+.zone-ring .ring-text{position:relative;z-index:1;}
+.zone-card.complete .zone-ring{color:#16a34a;}
+.zone-card.complete .ring-fg{stroke:#22c55e;}
+.zone-card.partial .zone-ring{color:#ea580c;}
+.zone-card.partial .ring-fg{stroke:#f59e0b;}
+.zone-card:not(.complete):not(.partial) .ring-fg{stroke:#d1d5db;}
+.zone-body{padding:0 18px 16px;display:none;}
+.zone-body.open{display:block;}
+.zone-body .check-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #f1f5f9;font-size:13px;}
+.zone-body .check-row:last-child{border-bottom:none;}
+.zone-body .check-row input[type=checkbox]{width:18px;height:18px;margin-top:1px;accent-color:#1e5096;cursor:pointer;flex-shrink:0;}
+.zone-body .check-row label{cursor:pointer;flex:1;color:#374151;line-height:1.5;}
+.zone-body .check-row label.checked{color:#9ca3af;text-decoration:line-through;}
+.zone-body .memo-input{margin-top:3px;padding:5px 10px;border:1px solid #e8edf3;border-radius:8px;font-size:11px;width:100%;font-family:inherit;display:none;}
+.zone-body .check-row:has(input:not(:checked)) .memo-input{display:block;}
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:none;align-items:center;justify-content:center;}
 .modal-overlay.show{display:flex;}
@@ -117,6 +145,7 @@ table tr:hover td{background:#f8fafc;}
 .modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:#9ca3af;}
 /* PRINT */
 @media print{#sidebar,#topbar-print-hide{display:none!important;}#main{margin-left:0!important;}}
+@media(max-width:1200px){.dash-hero-stats{grid-template-columns:repeat(2,1fr);}}
 /* RESPONSIVE */
 @media(max-width:768px){#sidebar{transform:translateX(-100%);}#main{margin-left:0;}}
 /* NOTICE */
@@ -131,6 +160,45 @@ table tr:hover td{background:#f8fafc;}
 .conn-dot.disconnected{background:#ef4444;}
 .conn-dot.local{background:#f59e0b;}
 .realtime-badge{position:fixed;bottom:16px;right:16px;background:#16a34a;color:#fff;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700;z-index:90;display:none;}
+/* DASHBOARD WWS STYLE */
+.dash-hero{background:linear-gradient(135deg, #0d1f3c 0%, #1a3a6e 60%, #1e5096 100%);color:#fff;border-radius:16px;padding:28px 32px;margin-bottom:16px;}
+.dash-hero h3{font-size:18px;font-weight:800;margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+.dash-hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.dash-hero-stat{background:rgba(255,255,255,0.95);border-radius:12px;padding:16px;text-align:center;color:#0d1f3c;}
+.dash-hero-stat .dhs-val{font-size:26px;font-weight:800;margin:4px 0 2px;}
+.dash-hero-stat .dhs-lbl{font-size:11px;color:#6b7280;font-weight:500;}
+.dash-hero-stat.blue .dhs-val{color:#1e5096;}
+.dash-hero-stat.green .dhs-val{color:#16a34a;}
+.dash-hero-stat.orange .dhs-val{color:#ea580c;}
+.dash-hero-stat.red .dhs-val{color:#dc2626;}
+.dash-my-card{background:#0d1f3c;border-radius:14px;padding:22px;color:#fff;}
+.dash-my-card h4{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.dash-my-bar{background:rgba(255,255,255,0.15);border-radius:20px;height:10px;overflow:hidden;margin-top:6px;}
+.dash-my-bar .fill{height:100%;border-radius:20px;transition:width 0.4s;}
+.dash-wws-card{background:#fff;border-radius:14px;padding:22px;box-shadow:0 1px 3px rgba(0,0,0,0.08);}
+.dash-wws-card h4{font-size:14px;font-weight:700;color:#374151;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.dash-donut{width:130px;height:130px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;position:relative;}
+.dash-donut-inner{width:90px;height:90px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#1e5096;position:absolute;}
+.dash-calendar{background:#fff;border-radius:14px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,0.08);}
+.dash-calendar h4{font-size:14px;font-weight:700;color:#374151;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.dash-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:11px;}
+.dash-cal-head{font-weight:700;color:#6b7280;padding:4px 0;}
+.dash-cal-day{padding:5px 0;border-radius:6px;color:#374151;}
+.dash-cal-day.today{background:#1e5096;color:#fff;font-weight:700;}
+.dash-cal-day.empty{color:transparent;}
+.dash-cal-day.sun{color:#dc2626;}
+.dash-notice-card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,0.08);}
+.dash-notice-card h4{font-size:14px;font-weight:700;color:#374151;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.dash-notice-item{padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:12px;color:#374151;display:flex;gap:8px;align-items:flex-start;}
+.dash-notice-item:last-child{border-bottom:none;}
+/* WWS */
+.wws-stat-card{background:#fff;border-radius:10px;padding:16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.08);}
+.wws-stat-card .wws-val{font-size:28px;font-weight:700;margin:6px 0 2px;}
+.wws-stat-card .wws-lbl{font-size:12px;color:#6b7280;}
+.wws-filter-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:16px;}
+.wws-filter-tab{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid #e8edf3;background:#fff;color:#374151;transition:all 0.2s;}
+.wws-filter-tab.active{background:#1e5096;color:#fff;border-color:#1e5096;}
+.wws-filter-tab:hover{border-color:#1e5096;}
 </style>
 </head>
 <body>
@@ -144,6 +212,7 @@ table tr:hover td{background:#f8fafc;}
   <nav>
     <div class="section-title">메인</div>
     <a class="active" onclick="showSection('dashboard')"><span class="icon">📊</span> 대시보드</a>
+    <!-- WWS 메뉴 삭제됨 - 서류·이행 통합관리로 통합 -->
     <div class="section-title">일일관리</div>
     <a onclick="showSection('tbm')"><span class="icon">🌅</span> TBM 일지</a>
     <a onclick="showSection('patrol')"><span class="icon">🔍</span> 패트롤 체크리스트</a>
@@ -151,7 +220,7 @@ table tr:hover td{background:#f8fafc;}
     <a onclick="showSection('education')"><span class="icon">📚</span> 교육 관리</a>
     <a onclick="showSection('risk')"><span class="icon">⚠️</span> 위험성 평가</a>
     <div class="section-title">기록·서류</div>
-    <a onclick="showSection('documents')"><span class="icon">📋</span> 서류 현황</a>
+    <a onclick="showSection('docmgr')"><span class="icon">📋</span> 서류·이행 통합관리</a>
     <a onclick="showSection('accident')"><span class="icon">🚨</span> 아차사고 보고</a>
     <a onclick="showSection('equipment')"><span class="icon">🔧</span> 설비 점검</a>
     <div class="section-title">계획</div>
@@ -165,7 +234,7 @@ table tr:hover td{background:#f8fafc;}
   </nav>
   <div class="footer">
     <div id="today-date"></div>
-    <div style="margin-top:4px;">ver 1.0 · localStorage 저장</div>
+    <div style="margin-top:4px;">ver 1.1 · localStorage 저장</div>
     <div class="conn-status"><div class="conn-dot local" id="conn-dot"></div><span id="conn-text">로컬 저장 모드</span></div>
   </div>
 </div>
@@ -185,49 +254,71 @@ table tr:hover td{background:#f8fafc;}
   <!-- ===== 대시보드 ===== -->
   <div id="section-dashboard" class="section active">
     <div id="dashboard-alerts" style="margin-bottom:16px;"></div>
-    <div class="grid-4" style="margin-bottom:16px;">
-      <div class="stat-card blue">
-        <div class="label">오늘 TBM</div>
-        <div class="value" id="stat-tbm">-</div>
-        <div class="sub" id="stat-tbm-sub">미기록</div>
-      </div>
-      <div class="stat-card green">
-        <div class="label">이번달 교육</div>
-        <div class="value" id="stat-edu">-</div>
-        <div class="sub" id="stat-edu-sub">회 실시</div>
-      </div>
-      <div class="stat-card orange">
-        <div class="label">이번달 패트롤</div>
-        <div class="value" id="stat-patrol">-</div>
-        <div class="sub" id="stat-patrol-sub">회 실시</div>
-      </div>
-      <div class="stat-card red">
-        <div class="label">아차사고</div>
-        <div class="value" id="stat-accident">-</div>
-        <div class="sub" id="stat-accident-sub">건 (이번달)</div>
+
+    <!-- 주요 이행현황 헤더 카드 -->
+    <div class="dash-hero">
+      <h3>📊 주요 이행현황</h3>
+      <div class="dash-hero-stats">
+        <div class="dash-hero-stat blue">
+          <div class="dhs-lbl">오늘 TBM</div>
+          <div class="dhs-val" id="stat-tbm">-</div>
+          <div class="dhs-lbl" id="stat-tbm-sub">미기록</div>
+        </div>
+        <div class="dash-hero-stat green">
+          <div class="dhs-lbl">이번달 교육</div>
+          <div class="dhs-val" id="stat-edu">-</div>
+          <div class="dhs-lbl" id="stat-edu-sub">회 실시</div>
+        </div>
+        <div class="dash-hero-stat orange">
+          <div class="dhs-lbl">이번달 패트롤</div>
+          <div class="dhs-val" id="stat-patrol">-</div>
+          <div class="dhs-lbl" id="stat-patrol-sub">회 실시</div>
+        </div>
+        <div class="dash-hero-stat red">
+          <div class="dhs-lbl">아차사고</div>
+          <div class="dhs-val" id="stat-accident">-</div>
+          <div class="dhs-lbl" id="stat-accident-sub">건 (이번달)</div>
+        </div>
       </div>
     </div>
 
-    <div class="grid-2" style="margin-bottom:16px;">
-      <div class="card">
-        <div class="card-title">📋 법적 필수 서류 현황</div>
+    <!-- 중간 3컬럼: 나의 현황 / WWS 이행현황 / 캘린더 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;">
+      <!-- 나의 현황 -->
+      <div class="dash-my-card">
+        <h4>📋 나의 현황</h4>
         <div id="doc-status-mini"></div>
-        <button class="btn btn-outline btn-sm" style="margin-top:12px;" onclick="showSection('documents')">전체 보기 →</button>
+        <div style="margin-top:14px;" id="monthly-progress"></div>
+        <button class="btn btn-outline btn-sm" style="margin-top:14px;color:#7bacd4;border-color:rgba(255,255,255,0.2);" onclick="showSection('documents')">서류 전체 보기 →</button>
       </div>
-      <div class="card">
-        <div class="card-title">📅 이번달 안전관리 진행률</div>
-        <div id="monthly-progress"></div>
+      <!-- WWS 이행현황 도넛 -->
+      <div class="dash-wws-card">
+        <h4>🏢 WWS 이행현황</h4>
+        <div id="dash-wws-donut"></div>
+        <button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="showSection('wws')">상세 보기 →</button>
+      </div>
+      <!-- 캘린더 -->
+      <div class="dash-calendar">
+        <h4>📅 캘린더</h4>
+        <div id="dash-calendar-body"></div>
       </div>
     </div>
 
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-title">🌅 최근 TBM 기록</div>
-        <div id="recent-tbm"></div>
+    <!-- 하단 2컬럼: 최근 기록 / 공지·알림 -->
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="card">
+          <div class="card-title">🌅 최근 TBM 기록</div>
+          <div id="recent-tbm"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">🔍 최근 패트롤 기록</div>
+          <div id="recent-patrol"></div>
+        </div>
       </div>
-      <div class="card">
-        <div class="card-title">🔍 최근 패트롤 기록</div>
-        <div id="recent-patrol"></div>
+      <div class="dash-notice-card">
+        <h4>🔔 공지 / 알림</h4>
+        <div id="dash-notices"></div>
       </div>
     </div>
   </div>
@@ -244,7 +335,7 @@ table tr:hover td{background:#f8fafc;}
         <div class="alert info">매일 작업 시작 전 <strong>5~10분</strong> 이내 실시 | 정상 작업 시 주제 <strong>3개 이내</strong> | 비정상 작업 시 시간 제한 없이 신중하게</div>
 
         <!-- 오늘의 요일 테마 자동 표시 -->
-        <div id="tbm-today-theme" style="background:#eff6ff;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;border-left:4px solid #2563eb;"></div>
+        <div id="tbm-today-theme" style="background:#eef4ff;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;border-left:4px solid #1e5096;"></div>
 
         <div class="form-row-3">
           <div class="form-group"><label>날짜</label><input type="date" id="tbm-date"></div>
@@ -262,11 +353,11 @@ table tr:hover td{background:#f8fafc;}
 
         <div style="margin:14px 0 8px;font-size:13px;font-weight:700;color:#374151;">② 금일 작업내용 / 위험요인 / 안전대책 공유</div>
         <div style="overflow-x:auto;margin-bottom:8px;">
-          <table style="width:100%;font-size:12px;border-collapse:collapse;border:1px solid #e5e7eb;">
+          <table style="width:100%;font-size:12px;border-collapse:collapse;border:1px solid #e8edf3;">
             <thead><tr style="background:#f8fafc;">
-              <th style="padding:8px;border:1px solid #e5e7eb;width:30%;">작업명</th>
-              <th style="padding:8px;border:1px solid #e5e7eb;width:35%;">위험요인</th>
-              <th style="padding:8px;border:1px solid #e5e7eb;width:35%;">대책 (제거→대체→통제 순)</th>
+              <th style="padding:8px;border:1px solid #e8edf3;width:30%;">작업명</th>
+              <th style="padding:8px;border:1px solid #e8edf3;width:35%;">위험요인</th>
+              <th style="padding:8px;border:1px solid #e8edf3;width:35%;">대책 (제거→대체→통제 순)</th>
             </tr></thead>
             <tbody>
               <tr><td><input type="text" id="tw1" style="width:100%;border:none;padding:4px;font-size:12px;" placeholder="예) 금형 교체"></td><td><input type="text" id="th1" style="width:100%;border:none;padding:4px;font-size:12px;" placeholder="예) 낙하·협착"></td><td><input type="text" id="td1" style="width:100%;border:none;padding:4px;font-size:12px;" placeholder="예) 2인1조+안전모착용"></td></tr>
@@ -342,7 +433,20 @@ table tr:hover td{background:#f8fafc;}
         </div>
       </div>
 
-      <div id="patrol-zones"></div>
+      <!-- 전체 달성률 바 -->
+      <div class="patrol-total" id="patrol-total">
+        <div>
+          <h3>🔍 전체 점검 진행률</h3>
+          <div style="font-size:12px;opacity:0.8;margin-top:4px;" id="patrol-total-sub">구역을 클릭하여 점검을 시작하세요</div>
+        </div>
+        <div class="patrol-total-bar">
+          <div class="ptb-track"><div class="ptb-fill" id="patrol-total-fill" style="width:0%"></div></div>
+        </div>
+        <div class="patrol-total-pct" id="patrol-total-pct">0%</div>
+      </div>
+
+      <!-- 구역별 카드 그리드 -->
+      <div class="zone-grid" id="patrol-zones"></div>
 
       <div class="card" style="margin-top:16px;">
         <div class="card-title">📝 종합 의견 및 조치 필요 사항</div>
@@ -499,18 +603,48 @@ table tr:hover td{background:#f8fafc;}
     </div>
   </div>
 
-  <!-- ===== 서류 현황 ===== -->
-  <div id="section-documents" class="section">
-    <div class="card" style="margin-bottom:16px;">
-      <div class="card-title">📋 법적 필수 서류 현황 관리</div>
-      <div class="alert warning">근로감독 시 아래 서류를 우선적으로 확인합니다. 미비 시 과태료 대상.</div>
+  <!-- ===== 서류·이행 통합관리 ===== -->
+  <div id="section-docmgr" class="section">
+    <!-- 상단: 보유현황 요약 카드 -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;">
+      <div class="stat-card blue"><div class="label">전체 서류</div><div class="value" id="dm-total">0</div><div class="sub">건</div></div>
+      <div class="stat-card green"><div class="label">보유</div><div class="value" id="dm-owned">0</div><div class="sub">건</div></div>
+      <div class="stat-card red"><div class="label">미보유</div><div class="value" id="dm-missing">0</div><div class="sub">건 확보 필요</div></div>
+      <div class="stat-card orange"><div class="label">WWS 이행률</div><div class="value" id="dm-rate">0%</div><div class="sub">이행 항목 기준</div></div>
+    </div>
+
+    <!-- 필터 탭 -->
+    <div class="tabs" style="margin-bottom:16px;">
+      <button class="tab active" onclick="dmFilter('all',this)">전체</button>
+      <button class="tab" onclick="dmFilter('missing',this)">❌ 미보유만</button>
+      <button class="tab" onclick="dmFilter('owned',this)">✅ 보유만</button>
+      <button class="tab" onclick="dmFilter('wws',this)">🏢 WWS 이행항목</button>
+      <button class="tab" onclick="dmFilter('legal',this)">⚖️ 법정 필수</button>
+    </div>
+
+    <!-- 메인 테이블 -->
+    <div class="card">
+      <div class="card-title">📋 서류·이행 통합 관리 <span style="font-size:11px;font-weight:400;color:#6b7280;">— 클릭하여 상세 관리</span></div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>서류명</th><th>법적 근거</th><th>주기</th><th>보유 상태</th><th>최종 업데이트</th><th>만료/갱신일</th><th>비고</th><th>관리</th></tr></thead>
-          <tbody id="doc-table-body"></tbody>
+          <thead><tr>
+            <th style="width:70px;">WWS코드</th>
+            <th>서류명</th>
+            <th style="width:80px;">법적 근거</th>
+            <th style="width:60px;">주기</th>
+            <th style="width:90px;">보유 상태</th>
+            <th style="width:100px;">최종 업데이트</th>
+            <th style="width:100px;">만료/갱신일</th>
+            <th style="width:150px;">비고</th>
+            <th style="width:80px;">관리</th>
+          </tr></thead>
+          <tbody id="dm-table-body"></tbody>
         </table>
       </div>
     </div>
+
+    <!-- 하단: 미보유 항목 안내 -->
+    <div id="dm-alert" style="margin-top:16px;"></div>
   </div>
 
   <!-- ===== 아차사고 ===== -->
@@ -631,7 +765,7 @@ table tr:hover td{background:#f8fafc;}
       <div class="grid-4">
         <div style="text-align:center;padding:12px;background:#fee2e2;border-radius:8px;"><div style="font-size:24px;">🔴</div><div style="font-weight:700;font-size:13px;margin-top:4px;">빨강</div><div style="font-size:11px;color:#6b7280;">금지 / 위험</div></div>
         <div style="text-align:center;padding:12px;background:#fef9c3;border-radius:8px;"><div style="font-size:24px;">🟡</div><div style="font-weight:700;font-size:13px;margin-top:4px;">노랑</div><div style="font-size:11px;color:#6b7280;">경고 / 주의</div></div>
-        <div style="text-align:center;padding:12px;background:#dbeafe;border-radius:8px;"><div style="font-size:24px;">🔵</div><div style="font-weight:700;font-size:13px;margin-top:4px;">파랑</div><div style="font-size:11px;color:#6b7280;">지시 / 의무</div></div>
+        <div style="text-align:center;padding:12px;background:#eef4ff;border-radius:8px;"><div style="font-size:24px;">🔵</div><div style="font-weight:700;font-size:13px;margin-top:4px;">파랑</div><div style="font-size:11px;color:#6b7280;">지시 / 의무</div></div>
         <div style="text-align:center;padding:12px;background:#dcfce7;border-radius:8px;"><div style="font-size:24px;">🟢</div><div style="font-weight:700;font-size:13px;margin-top:4px;">초록</div><div style="font-size:11px;color:#6b7280;">안내 / 비상구</div></div>
       </div>
     </div>
@@ -666,12 +800,14 @@ table tr:hover td{background:#f8fafc;}
     </div>
   </div>
 
+  <!-- section-wws 삭제됨 - section-docmgr로 통합 -->
+
   <!-- ===== 카드뉴스 시리즈 ===== -->
   <div id="section-cardnews" class="section">
     <div class="card" style="margin-bottom:16px;">
       <div class="card-title">📢 안전보건 카드뉴스 시리즈 — 카카오톡·게시판 배포용</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
-        <button class="btn btn-outline btn-sm" onclick="cnFilter('all',this)" id="cn-btn-all" style="background:#1a2744;color:#fff;">전체 12편</button>
+        <button class="btn btn-outline btn-sm" onclick="cnFilter('all',this)" id="cn-btn-all" style="background:#0d1f3c;color:#fff;">전체 12편</button>
         <button class="btn btn-outline btn-sm" onclick="cnFilter('basic',this)">기초 시리즈 (1~4)</button>
         <button class="btn btn-outline btn-sm" onclick="cnFilter('field',this)">현장 시리즈 (5~8)</button>
         <button class="btn btn-outline btn-sm" onclick="cnFilter('culture',this)">문화 시리즈 (9~12)</button>
@@ -686,7 +822,7 @@ table tr:hover td{background:#f8fafc;}
     <div class="card" style="margin-bottom:16px;">
       <div class="card-title">🖼️ 게시판 포스터 — A4 인쇄 후 현장 부착용</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
-        <button class="btn btn-outline btn-sm" onclick="ptFilter('all',this)" id="pt-btn-all" style="background:#1a2744;color:#fff;">전체 14종</button>
+        <button class="btn btn-outline btn-sm" onclick="ptFilter('all',this)" id="pt-btn-all" style="background:#0d1f3c;color:#fff;">전체 14종</button>
         <button class="btn btn-outline btn-sm" onclick="ptFilter('notice',this)">📋 법정 필수</button>
         <button class="btn btn-outline btn-sm" onclick="ptFilter('rule',this)">📌 안전수칙</button>
         <button class="btn btn-outline btn-sm" onclick="ptFilter('monthly',this)">📅 월별 교체</button>
@@ -785,8 +921,8 @@ const DB = {
 // NAVIGATION
 // ============================================================
 const pageTitles = {
-  dashboard:'📊 대시보드', tbm:'🌅 TBM 일지', patrol:'🔍 패트롤 체크리스트',
-  education:'📚 교육 관리', risk:'⚠️ 위험성 평가', documents:'📋 서류 현황',
+  dashboard:'📊 대시보드', docmgr:'📋 서류·이행 통합관리', tbm:'🌅 TBM 일지', patrol:'🔍 패트롤 체크리스트',
+  education:'📚 교육 관리', risk:'⚠️ 위험성 평가',
   accident:'🚨 아차사고 보고', equipment:'🔧 설비 점검', schedule:'📅 연간 일정',
   signs:'🪧 안전 비표 관리', cardnews:'📢 카드뉴스 시리즈', posters:'🖼️ 게시판 포스터', settings:'⚙️ 설정'
 };
@@ -797,7 +933,7 @@ function showSection(id){
   event && event.currentTarget && event.currentTarget.classList.add('active');
   document.getElementById('page-title').textContent = pageTitles[id]||id;
   if(id==='dashboard') renderDashboard();
-  if(id==='documents') renderDocuments();
+  if(id==='docmgr') renderDocMgr();
   if(id==='schedule') renderSchedule();
   if(id==='signs') renderSigns();
 }
@@ -951,45 +1087,113 @@ const patrolZones = [
 function renderPatrolZones(){
   const container = document.getElementById('patrol-zones');
   if(!container) return;
-  container.innerHTML = patrolZones.map(zone=>`
+  const R=20, C=2*Math.PI*R;
+  container.innerHTML = patrolZones.map(zone=>{
+    const icon = zone.name.match(/^(\S+)/)?.[1]||'📋';
+    const label = zone.name.replace(/^(\S+)\s*/,'');
+    return `
     <div class="zone-card" id="zone-card-${zone.id}">
-      <div class="zone-header default" onclick="toggleZone('${zone.id}')">
-        <span class="zone-title">${zone.name}</span>
-        <span class="zone-score" id="zone-score-${zone.id}">0 / ${zone.items.length}</span>
+      <div class="zone-header" onclick="toggleZone('${zone.id}')">
+        <div class="zone-icon">${icon}</div>
+        <div class="zone-info">
+          <div class="zone-title">${label}</div>
+          <div class="zone-subtitle" id="zone-sub-${zone.id}">0 / ${zone.items.length} 항목</div>
+        </div>
+        <div class="zone-ring" id="zone-ring-${zone.id}">
+          <svg viewBox="0 0 48 48"><circle class="ring-bg" cx="24" cy="24" r="${R}"/><circle class="ring-fg" cx="24" cy="24" r="${R}" stroke-dasharray="${C}" stroke-dashoffset="${C}" id="zone-arc-${zone.id}"/></svg>
+          <span class="ring-text" id="zone-pct-${zone.id}">0%</span>
+        </div>
       </div>
       <div class="zone-body" id="zone-body-${zone.id}">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0 12px;border-bottom:1px solid #e8edf3;margin-bottom:8px;">
+          <span style="font-size:12px;font-weight:700;color:#0d1f3c;">${label} 점검 항목</span>
+          <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();checkAllZone('${zone.id}')" style="font-size:11px;">전체 체크 ✓</button>
+        </div>
         ${zone.items.map((item,i)=>`
-          <div class="check-item">
+          <div class="check-row">
             <input type="checkbox" id="${zone.id}_${i}" onchange="updateZoneScore('${zone.id}')">
-            <div>
-              <label for="${zone.id}_${i}">${item}</label>
-              <input type="text" placeholder="이상 시 메모..." style="margin-top:4px;padding:4px 8px;border:1px solid #e5e7eb;border-radius:6px;font-size:11px;width:100%;" id="${zone.id}_memo_${i}">
+            <div style="flex:1;">
+              <label for="${zone.id}_${i}" id="lbl-${zone.id}_${i}">${item}</label>
+              <input type="text" class="memo-input" placeholder="이상 시 메모..." id="${zone.id}_memo_${i}">
             </div>
           </div>
         `).join('')}
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 function toggleZone(id){
+  // 클릭한 구역 토글
   const body = document.getElementById('zone-body-'+id);
-  body.style.display = body.style.display==='none' ? 'block' : 'none';
+  const isOpen = body.classList.contains('open');
+  // 모든 구역 닫기
+  patrolZones.forEach(z=>{
+    const b=document.getElementById('zone-body-'+z.id);
+    if(b) b.classList.remove('open');
+  });
+  // 클릭한 것만 열기 (닫힌 상태였으면)
+  if(!isOpen) body.classList.add('open');
+}
+
+function checkAllZone(zoneId){
+  const zone = patrolZones.find(z=>z.id===zoneId);
+  const allChecked = zone.items.every((_,i)=>document.getElementById(`${zoneId}_${i}`)?.checked);
+  zone.items.forEach((_,i)=>{
+    const cb=document.getElementById(`${zoneId}_${i}`);
+    if(cb) cb.checked = !allChecked;
+  });
+  updateZoneScore(zoneId);
 }
 
 function updateZoneScore(zoneId){
   const zone = patrolZones.find(z=>z.id===zoneId);
   const checked = zone.items.filter((_,i)=>document.getElementById(`${zoneId}_${i}`)?.checked).length;
   const total = zone.items.length;
-  const scoreEl = document.getElementById('zone-score-'+zoneId);
+  const pct = Math.round(checked/total*100);
+  const R=20, C=2*Math.PI*R;
+  // 카드 상태
   const cardEl = document.getElementById('zone-card-'+zoneId);
-  if(scoreEl) scoreEl.textContent = `${checked} / ${total}`;
-  const header = cardEl?.querySelector('.zone-header');
-  if(header){
-    header.className = 'zone-header ';
-    if(checked===total) header.classList.add('ok');
-    else if(checked===0) header.classList.add('default');
-    else header.classList.add('warn');
+  if(cardEl){
+    cardEl.classList.remove('complete','partial');
+    if(checked===total) cardEl.classList.add('complete');
+    else if(checked>0) cardEl.classList.add('partial');
+  }
+  // 원형 링
+  const arc = document.getElementById('zone-arc-'+zoneId);
+  if(arc) arc.setAttribute('stroke-dashoffset', C - (C * pct / 100));
+  const pctEl = document.getElementById('zone-pct-'+zoneId);
+  if(pctEl) pctEl.textContent = checked===total ? '✓' : pct+'%';
+  // 서브 텍스트
+  const subEl = document.getElementById('zone-sub-'+zoneId);
+  if(subEl) subEl.textContent = checked===total ? '점검 완료 ✓' : `${checked} / ${total} 항목`;
+  // 라벨 줄긋기
+  zone.items.forEach((_,i)=>{
+    const cb=document.getElementById(`${zoneId}_${i}`);
+    const lbl=document.getElementById(`lbl-${zoneId}_${i}`);
+    if(cb&&lbl) lbl.className = cb.checked ? 'checked' : '';
+  });
+  // 전체 진행률 갱신
+  updatePatrolTotal();
+}
+
+function updatePatrolTotal(){
+  let totalChecked=0, totalItems=0;
+  patrolZones.forEach(zone=>{
+    zone.items.forEach((_,i)=>{
+      totalItems++;
+      if(document.getElementById(`${zone.id}_${i}`)?.checked) totalChecked++;
+    });
+  });
+  const pct = totalItems>0 ? Math.round(totalChecked/totalItems*100) : 0;
+  const fill=document.getElementById('patrol-total-fill');
+  const pctEl=document.getElementById('patrol-total-pct');
+  const subEl=document.getElementById('patrol-total-sub');
+  if(fill) fill.style.width = pct+'%';
+  if(pctEl) pctEl.textContent = pct+'%';
+  if(subEl){
+    const doneZones = patrolZones.filter(z=>z.items.every((_,i)=>document.getElementById(`${z.id}_${i}`)?.checked)).length;
+    subEl.textContent = pct===100 ? '전 구역 점검 완료! 🎉' : `${totalChecked}/${totalItems} 항목 · ${doneZones}/${patrolZones.length} 구역 완료`;
   }
 }
 
@@ -1301,23 +1505,28 @@ function renderDashboard(){
   renderMonthlyProgress();
   renderRecentTBM();
   renderRecentPatrol();
+  renderDashWWSDonut();
+  renderDashCalendar();
+  renderDashNotices();
 }
 
 function renderDocStatusMini(){
-  const docs = getDocList();
+  const docs = getDMList();
   const total = docs.length;
   const ok = docs.filter(d=>d.status==='보유').length;
   const missing = docs.filter(d=>d.status==='미보유').length;
+  const pct = Math.round(ok/total*100);
   const el = document.getElementById('doc-status-mini');
   if(!el)return;
   el.innerHTML = `
-    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
-      <span class="badge green">보유 ${ok}건</span>
-      <span class="badge red">미보유 ${missing}건</span>
-      <span class="badge yellow">갱신필요 ${total-ok-missing}건</span>
+    <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:6px;">서류 보유율</div>
+    <div style="font-size:28px;font-weight:800;color:#fff;">${pct}%</div>
+    <div class="dash-my-bar"><div class="fill" style="width:${pct}%;background:#22c55e;"></div></div>
+    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+      <span class="badge green">보유 ${ok}</span>
+      <span class="badge red">미보유 ${missing}</span>
+      <span class="badge yellow">갱신 ${total-ok-missing}</span>
     </div>
-    <div class="progress-bar"><div class="progress-fill green" style="width:${Math.round(ok/total*100)}%"></div></div>
-    <div style="font-size:11px;color:#6b7280;margin-top:4px;">${ok} / ${total} 서류 구비 (${Math.round(ok/total*100)}%)</div>
   `;
 }
 
@@ -1332,19 +1541,81 @@ function renderMonthlyProgress(){
   const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth()+1, 0).getDate();
   const workDays = Math.round(daysInMonth * 5/7);
   el.innerHTML = `
-    <div style="margin-bottom:12px;">
-      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>TBM 기록</span><span>${tbm}/${workDays}일</span></div>
-      <div class="progress-bar"><div class="progress-fill blue" style="width:${Math.min(100,Math.round(tbm/workDays*100))}%"></div></div>
+    <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:8px;">이번달 진행률</div>
+    <div style="margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,0.8);margin-bottom:4px;"><span>TBM</span><span>${tbm}/${workDays}일</span></div>
+      <div class="dash-my-bar"><div class="fill" style="width:${Math.min(100,Math.round(tbm/workDays*100))}%;background:#60a5fa;"></div></div>
     </div>
-    <div style="margin-bottom:12px;">
-      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>패트롤 점검</span><span>${patrol}회 (권장: 월4회)</span></div>
-      <div class="progress-bar"><div class="progress-fill orange" style="width:${Math.min(100,patrol*25)}%"></div></div>
+    <div style="margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,0.8);margin-bottom:4px;"><span>패트롤</span><span>${patrol}/4회</span></div>
+      <div class="dash-my-bar"><div class="fill" style="width:${Math.min(100,patrol*25)}%;background:#fb923c;"></div></div>
     </div>
     <div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>교육 실시</span><span>${edu}회 (법정: 월1회)</span></div>
-      <div class="progress-bar"><div class="progress-fill green" style="width:${Math.min(100,edu*100)}%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,0.8);margin-bottom:4px;"><span>교육</span><span>${edu}/1회</span></div>
+      <div class="dash-my-bar"><div class="fill" style="width:${Math.min(100,edu*100)}%;background:#4ade80;"></div></div>
     </div>
   `;
+}
+
+function renderDashWWSDonut(){
+  const el = document.getElementById('dash-wws-donut');
+  if(!el) return;
+  const wwsDocs = getDMList().filter(d=>d.wwsCode);
+  const total = wwsDocs.length;
+  const owned = wwsDocs.filter(d=>d.status==='보유').length;
+  const missing = total - owned;
+  const rate = total>0 ? Math.round(owned/total*100) : 0;
+  const deg = total>0 ? Math.round(owned/total*360) : 0;
+  el.innerHTML = `
+    <div class="dash-donut" style="background:conic-gradient(#1e5096 0deg ${deg}deg, #e5e7eb ${deg}deg 360deg);">
+      <div class="dash-donut-inner">${rate}%</div>
+    </div>
+    <div style="text-align:center;font-size:12px;color:#6b7280;">보유 <strong style="color:#1e5096;">${owned}</strong> / 미보유 <strong style="color:#dc2626;">${missing}</strong> (총 ${total})</div>
+  `;
+}
+
+function renderDashCalendar(){
+  const el = document.getElementById('dash-calendar-body');
+  if(!el) return;
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const todayDate = now.getDate();
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  const dayNames = ['일','월','화','수','목','금','토'];
+  let html = `<div style="text-align:center;font-size:13px;font-weight:700;color:#0d1f3c;margin-bottom:8px;">${year}년 ${month+1}월</div>`;
+  html += '<div class="dash-cal-grid">';
+  dayNames.forEach((d,i)=> html += `<div class="dash-cal-head${i===0?' sun':''}">${d}</div>`);
+  for(let i=0;i<firstDay;i++) html += '<div class="dash-cal-day empty">.</div>';
+  for(let d=1;d<=daysInMonth;d++){
+    const dow = (firstDay + d - 1) % 7;
+    const cls = d===todayDate ? 'today' : dow===0 ? 'sun' : '';
+    html += `<div class="dash-cal-day ${cls}">${d}</div>`;
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function renderDashNotices(){
+  const el = document.getElementById('dash-notices');
+  if(!el) return;
+  const today = new Date().toISOString().split('T')[0];
+  const thisMonth = today.slice(0,7);
+  const notices = [];
+  const todayTBM = DB.get('tbm').find(r=>r.date===today);
+  if(!todayTBM) notices.push({icon:'🔴', text:'오늘 TBM 미기록 — 작업 전 실시 필요'});
+  const patrolCount = DB.get('patrol').filter(r=>r.date&&r.date.startsWith(thisMonth)).length;
+  if(patrolCount===0) notices.push({icon:'🟡', text:'이번달 패트롤 점검 기록 없음'});
+  const eduCount = DB.get('education').filter(r=>r.date&&r.date.startsWith(thisMonth)).length;
+  if(eduCount===0) notices.push({icon:'🟡', text:'이번달 정기교육 미실시 (법정: 월 2시간)'});
+  const docs = getDMList();
+  const missingDocs = docs.filter(d=>d.status==='미보유').length;
+  if(missingDocs>0) notices.push({icon:'📋', text:`미보유 서류 ${missingDocs}건 — 확보 필요`});
+  const wwsMissing = docs.filter(d=>d.wwsCode && d.status==='미보유').length;
+  if(wwsMissing>0) notices.push({icon:'🏢', text:`WWS 미이행 항목 ${wwsMissing}건`});
+  if(notices.length===0) notices.push({icon:'✅', text:'현재 특별한 알림이 없습니다.'});
+  el.innerHTML = notices.map(n=>`<div class="dash-notice-item"><span>${n.icon}</span><span>${n.text}</span></div>`).join('');
 }
 
 function renderRecentTBM(){
@@ -1378,88 +1649,159 @@ function renderRecentPatrol(){
 }
 
 // ============================================================
-// DOCUMENTS
+// DOCUMENTS + WWS 통합 (docMasterList)
 // ============================================================
-const docListDefault = [
-  {id:'d01',name:'안전보건관리규정',basis:'산안법 §25',period:'상시',status:'미보유',updated:'',expires:'',note:'50인 이상 의무, 50인 미만 권고'},
-  {id:'d02',name:'안전보건관리계획서',basis:'산안법 §14',period:'연1회',status:'보유',updated:'2026-03-10',expires:'2026-12-31',note:''},
-  {id:'d03',name:'위험성평가 실시결과서',basis:'산안법 §36',period:'연1회 이상',status:'미보유',updated:'',expires:'',note:'미이행 시 과태료'},
-  {id:'d04',name:'안전보건목표·경영방침',basis:'산안법 §14',period:'연1회',status:'미보유',updated:'',expires:'',note:''},
-  {id:'d05',name:'정기 안전보건교육 일지',basis:'산안법 §29',period:'매월',status:'미보유',updated:'',expires:'',note:'근로자 월 2시간'},
-  {id:'d06',name:'신규채용자 교육 일지',basis:'산안법 §29',period:'채용시',status:'보유',updated:'2026-03-01',expires:'',note:'교안 보유'},
-  {id:'d07',name:'신규채용자 서약서',basis:'자율관리',period:'채용시',status:'보유',updated:'2026-03-01',expires:'',note:''},
-  {id:'d08',name:'관리감독자 교육 일지',basis:'산안법 §29',period:'연16시간',status:'미보유',updated:'',expires:'',note:''},
-  {id:'d09',name:'특별 안전보건교육 일지',basis:'산안법 §29',period:'해당작업 전',status:'미보유',updated:'',expires:''},
-  {id:'d10',name:'안전보건교육 연간 계획서',basis:'산안법 §29',period:'연1회',status:'미보유',updated:'',expires:'',note:''},
-  {id:'d11',name:'작업장 안전보건 점검표',basis:'산안법 §15',period:'월1회',status:'미보유',updated:'',expires:'',note:'환경점검표 보유'},
-  {id:'d12',name:'관리감독자 순회점검 기록',basis:'산안법 §16',period:'매일',status:'미보유',updated:'',expires:'',note:''},
-  {id:'d13',name:'기계·기구 자체검사 기록',basis:'산안법 §98',period:'장비별',status:'미보유',updated:'',expires:'',note:''},
-  {id:'d14',name:'도급인 안전보건관리계획서',basis:'산안법 §63',period:'계약시',status:'보유',updated:'2024-11-01',expires:'',note:''},
-  {id:'d15',name:'수급인 안전보건계획서 양식',basis:'산안법 §64',period:'계약시',status:'보유',updated:'',expires:'',note:''},
-  {id:'d16',name:'수급인 안전보건수준 평가기준',basis:'산안법 §64',period:'연1회',status:'보유',updated:'',expires:'',note:''},
-  {id:'d17',name:'중량물 운반기계 안전조치 지침서',basis:'산안법 §38',period:'상시',status:'보유',updated:'',expires:'',note:''},
-  {id:'d18',name:'근로자 참여·의견청취 절차서',basis:'산안법 §24',period:'상시',status:'보유',updated:'',expires:'',note:''},
-  {id:'d19',name:'협력업체 작업허가서',basis:'산안법 §63',period:'작업시',status:'미보유',updated:'',expires:'',note:''},
-  {id:'d20',name:'산업재해 발생 기록부',basis:'산안법 §57',period:'발생시',status:'미보유',updated:'',expires:'',note:''},
-  {id:'d21',name:'아차사고 보고서',basis:'자율관리',period:'발생시',status:'미보유',updated:'',expires:'',note:''},
-  {id:'d22',name:'특수건강검진 결과 관리대장',basis:'산안법 §130',period:'연1회',status:'미보유',updated:'',expires:'',note:''},
-  {id:'d23',name:'작업환경측정 결과서',basis:'산안법 §125',period:'반기1회',status:'미보유',updated:'',expires:'',note:''},
-  {id:'d24',name:'MSDS 관리대장',basis:'산안법 §114',period:'상시',status:'미보유',updated:'',expires:'',note:'화학물질 사용시'},
-  {id:'d25',name:'환경운영점검표',basis:'자율관리',period:'주기적',status:'보유',updated:'2024-01-01',expires:'',note:'2024년도 양식'},
+const docMasterList = [
+  // === A. 경영책임자 의무이행 ===
+  {id:'d01', wwsCode:'', wwsNo:'', name:'안전보건관리규정', basis:'산안법 §25', period:'상시', status:'미보유', updated:'', expires:'', note:'50인 이상 의무, 50인 미만 권고', category:'legal', hasTemplate:false},
+  {id:'d02', wwsCode:'A-2-1', wwsNo:302, name:'안전보건관리계획서', basis:'산안법 §14', period:'연1회', status:'보유', updated:'2026-03-10', expires:'2026-12-31', note:'WWS: 안전보건관리체계의 수립 및 운영', category:'wws', hasTemplate:false},
+  {id:'d04', wwsCode:'A-2-4', wwsNo:305, name:'안전보건목표·경영방침', basis:'산안법 §14', period:'연1회', status:'미보유', updated:'', expires:'', note:'WWS: 기업 안전보건관리 실행 통합 확인', category:'wws', hasTemplate:true},
+  {id:'w01', wwsCode:'A-1-1', wwsNo:301, name:'경영책임자 안전보건교육 이수증', basis:'산안법 §14', period:'연1회', status:'미보유', updated:'', expires:'', note:'경영책임자 교육 참석사진·교육서류', category:'wws', hasTemplate:false},
+  {id:'w02', wwsCode:'A-3-1-3', wwsNo:306, name:'안전보건 담당자 배치 현황 (인사발령문)', basis:'산안법 §15', period:'상시', status:'미보유', updated:'', expires:'', note:'조직도/인사발령문', category:'wws', hasTemplate:false},
+
+  // === B. 안전보건 교육 ===
+  {id:'d10', wwsCode:'B-2-1', wwsNo:313, name:'안전보건교육 연간 계획서', basis:'산안법 §29', period:'연1회', status:'미보유', updated:'', expires:'', note:'WWS: 근로자 안전보건교육 체계 수립', category:'wws', hasTemplate:true},
+  {id:'d05', wwsCode:'B-2-2', wwsNo:314, name:'정기 안전보건교육 일지', basis:'산안법 §29', period:'매월', status:'미보유', updated:'', expires:'', note:'근로자 월 2시간 법정. WWS: 교육 실시(이수)', category:'wws', hasTemplate:true},
+  {id:'w03', wwsCode:'B-2-5', wwsNo:317, name:'교육 이수 누적 관리대장', basis:'산안법 §29', period:'상시', status:'미보유', updated:'', expires:'', note:'연 24시간 이상 누적 관리', category:'wws', hasTemplate:true},
+  {id:'d08', wwsCode:'B-3-3', wwsNo:320, name:'관리감독자 교육 일지', basis:'산안법 §29', period:'연16시간', status:'미보유', updated:'', expires:'', note:'WWS: 관리감독자 안전보건교육 이수', category:'wws', hasTemplate:true},
+  {id:'w04', wwsCode:'B-3-4', wwsNo:321, name:'안전보건 담당자 직무교육 이수증', basis:'산안법 §32', period:'2년마다', status:'미보유', updated:'', expires:'', note:'신규 34시간, 보수 24시간', category:'wws', hasTemplate:false},
+  {id:'d06', wwsCode:'', wwsNo:'', name:'신규채용자 교육 일지', basis:'산안법 §29', period:'채용시', status:'보유', updated:'2026-03-01', expires:'', note:'교안 보유', category:'legal', hasTemplate:false},
+  {id:'d07', wwsCode:'', wwsNo:'', name:'신규채용자 서약서', basis:'자율관리', period:'채용시', status:'보유', updated:'2026-03-01', expires:'', note:'', category:'self', hasTemplate:false},
+  {id:'d09', wwsCode:'', wwsNo:'', name:'특별 안전보건교육 일지', basis:'산안법 §29', period:'해당작업 전', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false},
+
+  // === C. 근로자 안전관리활동 ===
+  {id:'d03', wwsCode:'C-1-3', wwsNo:324, name:'위험성평가 실시결과서', basis:'산안법 §36', period:'연1회 이상', status:'미보유', updated:'', expires:'', note:'미이행 시 과태료. WWS: 유해위험요인 발굴', category:'wws', hasTemplate:true},
+  {id:'w05', wwsCode:'C-2-3', wwsNo:326, name:'TBM 일지 / TBM 절차서', basis:'산안법 §36', period:'매일', status:'보유', updated:'2025-11-14', expires:'', note:'TBM절차서 Rev.0 보유. 대시보드 TBM 기록 활용', category:'wws', hasTemplate:false},
+
+  // === D. 관리감독자 안전관리활동 ===
+  {id:'d12', wwsCode:'D-1-2', wwsNo:332, name:'관리감독자 순회점검 기록', basis:'산안법 §16', period:'매일', status:'미보유', updated:'', expires:'', note:'WWS: 관리감독자 순회점검 및 안전보건 관리', category:'wws', hasTemplate:true},
+  {id:'w06', wwsCode:'D-2-3', wwsNo:336, name:'관리감독자 TBM 교육 수행 기록', basis:'산안법 §16', period:'매일', status:'보유', updated:'', expires:'', note:'대시보드 TBM 기록 활용', category:'wws', hasTemplate:false},
+
+  // === E. 구매/도급관리(SFS) ===
+  {id:'d14', wwsCode:'E-4-1', wwsNo:341, name:'도급인 안전보건관리계획서', basis:'산안법 §63', period:'계약시', status:'보유', updated:'2024-11-01', expires:'', note:'WWS: 구매 제어 및 도급 법규 이행', category:'wws', hasTemplate:false},
+  {id:'d15', wwsCode:'E-4-2', wwsNo:342, name:'수급인 안전보건계획서 양식', basis:'산안법 §64', period:'계약시', status:'보유', updated:'', expires:'', note:'WWS: 도급업자에 대한 위험성평가 이행', category:'wws', hasTemplate:false},
+  {id:'w07', wwsCode:'E-4-3-4', wwsNo:343, name:'위험성평가 결과 및 유해위험요인 발굴 기록', basis:'산안법 §36', period:'수시', status:'미보유', updated:'', expires:'', note:'위험성평가 미실시', category:'wws', hasTemplate:false},
+  {id:'d16', wwsCode:'E-5-5', wwsNo:345, name:'수급인 안전보건수준 평가기준', basis:'산안법 §64', period:'연1회', status:'보유', updated:'', expires:'', note:'WWS: 도급업체 안전보건관리부문 점검', category:'wws', hasTemplate:false},
+  {id:'w08', wwsCode:'E-6-2', wwsNo:348, name:'위험성평가 시 TBM 활용 교육 기록', basis:'산안법 §36', period:'수시', status:'보유', updated:'', expires:'', note:'TBM절차서 보유', category:'wws', hasTemplate:false},
+
+  // === F. 비상/기타 ===
+  {id:'w09', wwsCode:'F-3-1-4', wwsNo:350, name:'산업안전보건 관계법령 준수사항 점검표', basis:'산안법', period:'주기적', status:'미보유', updated:'', expires:'', note:'자체 점검표 작성 필요', category:'wws', hasTemplate:true},
+  {id:'w10', wwsCode:'F-4-1', wwsNo:358, name:'산업안전보건 관계법령 이행 및 준수 교육 기록', basis:'산안법', period:'주기적', status:'미보유', updated:'', expires:'', note:'정기적 법령 교육 필요', category:'wws', hasTemplate:false},
+
+  // === 기타 법정 서류 (WWS 코드 없음) ===
+  {id:'d11', wwsCode:'', wwsNo:'', name:'작업장 안전보건 점검표', basis:'산안법 §15', period:'월1회', status:'미보유', updated:'', expires:'', note:'환경점검표 보유', category:'legal', hasTemplate:true},
+  {id:'d13', wwsCode:'', wwsNo:'', name:'기계·기구 자체검사 기록', basis:'산안법 §98', period:'장비별', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false},
+  {id:'d17', wwsCode:'', wwsNo:'', name:'중량물 운반기계 안전조치 지침서', basis:'산안법 §38', period:'상시', status:'보유', updated:'', expires:'', note:'ISPF-EHS-G-02', category:'legal', hasTemplate:false},
+  {id:'d18', wwsCode:'', wwsNo:'', name:'근로자 참여·의견청취 절차서', basis:'산안법 §24', period:'상시', status:'보유', updated:'', expires:'', note:'ISPF-EHS-P-02', category:'legal', hasTemplate:false},
+  {id:'d19', wwsCode:'', wwsNo:'', name:'협력업체 작업허가서', basis:'산안법 §63', period:'작업시', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:true},
+  {id:'d20', wwsCode:'', wwsNo:'', name:'산업재해 발생 기록부', basis:'산안법 §57', period:'발생시', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false},
+  {id:'d21', wwsCode:'', wwsNo:'', name:'아차사고 보고서', basis:'자율관리', period:'발생시', status:'미보유', updated:'', expires:'', note:'', category:'self', hasTemplate:false},
+  {id:'d22', wwsCode:'', wwsNo:'', name:'특수건강검진 결과 관리대장', basis:'산안법 §130', period:'연1회', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false},
+  {id:'d23', wwsCode:'', wwsNo:'', name:'작업환경측정 결과서', basis:'산안법 §125', period:'반기1회', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false},
+  {id:'d24', wwsCode:'', wwsNo:'', name:'MSDS 관리대장', basis:'산안법 §114', period:'상시', status:'미보유', updated:'', expires:'', note:'화학물질 사용시', category:'legal', hasTemplate:false},
+  {id:'d25', wwsCode:'', wwsNo:'', name:'환경운영점검표', basis:'자율관리', period:'주기적', status:'보유', updated:'2024-01-01', expires:'', note:'2024년도 양식', category:'self', hasTemplate:false},
 ];
 
-function getDocList(){
+function getDMList(){
   const saved = DB.getObj('doclist');
-  if(Object.keys(saved).length===0) return docListDefault;
-  return docListDefault.map(d=>({...d,...(saved[d.id]||{})}));
+  if(Object.keys(saved).length===0) return docMasterList;
+  return docMasterList.map(d=>({...d,...(saved[d.id]||{})}));
 }
-function saveDocItem(id, field, value){
+function saveDMItem(id, field, value){
   const saved = DB.getObj('doclist');
   if(!saved[id]) saved[id]={};
   saved[id][field]=value;
   DB.set('doclist',saved);
 }
 
-function renderDocuments(){
-  const docs = getDocList();
-  const tbody = document.getElementById('doc-table-body');
-  if(!tbody)return;
-  tbody.innerHTML = docs.map(d=>{
-    const statusClass = d.status==='보유'?'green':d.status==='갱신필요'?'yellow':'red';
-    return `<tr>
-      <td style="font-weight:600;">${d.name}</td>
-      <td style="font-size:11px;color:#6b7280;">${d.basis}</td>
-      <td style="font-size:12px;">${d.period}</td>
-      <td>
-        <select class="badge ${statusClass}" style="border:none;cursor:pointer;font-size:11px;font-weight:600;" onchange="updateDocStatus('${d.id}','status',this.value)" id="doc-status-${d.id}">
-          <option value="보유" ${d.status==='보유'?'selected':''}>✅ 보유</option>
-          <option value="갱신필요" ${d.status==='갱신필요'?'selected':''}>⚠️ 갱신필요</option>
-          <option value="미보유" ${d.status==='미보유'?'selected':''}>❌ 미보유</option>
-        </select>
-      </td>
-      <td><input type="date" value="${d.updated||''}" style="border:1px solid #e5e7eb;border-radius:6px;padding:3px 6px;font-size:12px;" onchange="updateDocStatus('${d.id}','updated',this.value)"></td>
-      <td><input type="date" value="${d.expires||''}" style="border:1px solid #e5e7eb;border-radius:6px;padding:3px 6px;font-size:12px;" onchange="updateDocStatus('${d.id}','expires',this.value)"></td>
-      <td style="font-size:11px;color:#6b7280;">${d.note||''}</td>
-      <td>
-        <button class="btn btn-outline btn-sm" onclick="docNote('${d.id}')">메모</button>
-      </td>
-    </tr>`;
-  }).join('');
+let dmCurrentFilter = 'all';
+function dmFilter(type, btn){
+  document.querySelectorAll('#section-docmgr .tab').forEach(t=>t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  dmCurrentFilter = type;
+  renderDocMgr();
 }
 
-function updateDocStatus(id, field, value){
-  saveDocItem(id, field, value);
-  const el = document.getElementById('doc-status-'+id);
-  if(el && field==='status'){
-    el.className = `badge ${value==='보유'?'green':value==='갱신필요'?'yellow':'red'}`;
+function renderDocMgr(){
+  const docs = getDMList();
+  const total = docs.length;
+  const owned = docs.filter(d=>d.status==='보유').length;
+  const missing = docs.filter(d=>d.status==='미보유').length;
+  const wwsTotal = docs.filter(d=>d.wwsCode).length;
+  const wwsOwned = docs.filter(d=>d.wwsCode && d.status==='보유').length;
+  const rate = wwsTotal>0 ? Math.round(wwsOwned/wwsTotal*100) : 0;
+
+  // 요약 카드 업데이트
+  const el = (id)=>document.getElementById(id);
+  if(el('dm-total')) el('dm-total').textContent = total;
+  if(el('dm-owned')) el('dm-owned').textContent = owned;
+  if(el('dm-missing')) el('dm-missing').textContent = missing;
+  if(el('dm-rate')) el('dm-rate').textContent = rate+'%';
+
+  // 필터 적용
+  let filtered = docs;
+  if(dmCurrentFilter==='missing') filtered = docs.filter(d=>d.status==='미보유');
+  else if(dmCurrentFilter==='owned') filtered = docs.filter(d=>d.status==='보유');
+  else if(dmCurrentFilter==='wws') filtered = docs.filter(d=>d.wwsCode);
+  else if(dmCurrentFilter==='legal') filtered = docs.filter(d=>d.category==='legal'||d.category==='wws');
+
+  // 테이블 렌더링
+  const tbody = document.getElementById('dm-table-body');
+  if(!tbody) return;
+  tbody.innerHTML = filtered.length===0
+    ? '<tr><td colspan="9" style="text-align:center;color:#9ca3af;padding:24px;">해당 항목이 없습니다</td></tr>'
+    : filtered.map(d=>{
+      const sc = d.status==='보유'?'green':d.status==='갱신필요'?'yellow':'red';
+      const wwsBadge = d.wwsCode ? `<span class="badge blue" style="font-size:10px;">${d.wwsCode}</span>` : '<span style="font-size:10px;color:#9ca3af;">—</span>';
+      const templateBtn = d.hasTemplate ? `<button class="btn btn-primary btn-sm" onclick="openTemplate('${d.id}')" style="font-size:10px;">📝 웹양식</button>` : '';
+      return `<tr>
+        <td style="text-align:center;">${wwsBadge}</td>
+        <td style="font-weight:600;font-size:13px;">${d.name}</td>
+        <td style="font-size:11px;color:#6b7280;">${d.basis}</td>
+        <td style="font-size:12px;">${d.period}</td>
+        <td>
+          <select class="badge ${sc}" style="border:none;cursor:pointer;font-size:11px;font-weight:600;" onchange="updateDMStatus('${d.id}','status',this.value)">
+            <option value="보유" ${d.status==='보유'?'selected':''}>✅ 보유</option>
+            <option value="갱신필요" ${d.status==='갱신필요'?'selected':''}>⚠️ 갱신필요</option>
+            <option value="미보유" ${d.status==='미보유'?'selected':''}>❌ 미보유</option>
+          </select>
+        </td>
+        <td><input type="date" value="${d.updated||''}" style="border:1px solid #e8edf3;border-radius:6px;padding:3px 6px;font-size:11px;width:100%;" onchange="updateDMStatus('${d.id}','updated',this.value)"></td>
+        <td><input type="date" value="${d.expires||''}" style="border:1px solid #e8edf3;border-radius:6px;padding:3px 6px;font-size:11px;width:100%;" onchange="updateDMStatus('${d.id}','expires',this.value)"></td>
+        <td style="font-size:11px;color:#6b7280;">${d.note||''}</td>
+        <td style="display:flex;gap:4px;flex-wrap:wrap;">
+          ${templateBtn}
+          <button class="btn btn-outline btn-sm" onclick="dmNote('${d.id}')" style="font-size:10px;">메모</button>
+        </td>
+      </tr>`;
+    }).join('');
+
+  // 하단 미보유 알림
+  const alertEl = document.getElementById('dm-alert');
+  if(alertEl){
+    const missingWWS = docs.filter(d=>d.wwsCode && d.status==='미보유');
+    if(missingWWS.length>0){
+      alertEl.innerHTML = `<div class="alert danger">⚠️ <strong>WWS 미이행 항목 ${missingWWS.length}건</strong> — 우선 확보가 필요합니다:<br>${missingWWS.map(d=>`• ${d.wwsCode} ${d.name}`).join('<br>')}</div>`;
+    } else {
+      alertEl.innerHTML = '<div class="alert success">✅ WWS 이행항목 관련 서류를 모두 보유하고 있습니다.</div>';
+    }
   }
 }
-function docNote(id){
-  const docs = getDocList();
+
+function updateDMStatus(id, field, value){
+  saveDMItem(id, field, value);
+  renderDocMgr();
+}
+function dmNote(id){
+  const docs = getDMList();
   const doc = docs.find(d=>d.id===id);
   const note = prompt(`[${doc?.name}] 메모 입력:`, doc?.note||'');
-  if(note!==null) saveDocItem(id,'note',note);
-  renderDocuments();
+  if(note!==null){ saveDMItem(id,'note',note); renderDocMgr(); }
+}
+
+function openTemplate(docId){
+  // 향후 HTML 템플릿 연결
+  alert('웹 양식 기능은 곧 추가됩니다.');
 }
 
 // ============================================================
@@ -1485,11 +1827,11 @@ function renderSchedule(){
   if(!el)return;
   el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
     ${scheduleData.map(s=>`
-      <div style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
-        <div style="background:#1a2744;color:#fff;padding:8px 12px;font-weight:700;font-size:13px;">${s.month}월</div>
+      <div style="border:1px solid #e8edf3;border-radius:8px;overflow:hidden;">
+        <div style="background:#0d1f3c;color:#fff;padding:8px 12px;font-weight:700;font-size:13px;">${s.month}월</div>
         <div style="padding:10px 12px;">
           ${s.items.map(item=>`<div style="font-size:12px;padding:3px 0;border-bottom:1px solid #f8fafc;display:flex;gap:6px;align-items:flex-start;">
-            <span style="color:#2563eb;flex-shrink:0;">•</span><span>${item}</span>
+            <span style="color:#1e5096;flex-shrink:0;">•</span><span>${item}</span>
           </div>`).join('')}
         </div>
       </div>
@@ -1535,10 +1877,10 @@ function renderSigns(){
       <td style="font-weight:600;">${s.location}</td>
       <td style="font-size:12px;">${s.content}</td>
       <td style="font-size:12px;">${s.color}</td>
-      <td><input type="date" value="${s.installed||''}" style="border:1px solid #e5e7eb;border-radius:6px;padding:3px 6px;font-size:12px;" onchange="saveSignItem('${s.id}','installed',this.value)"></td>
-      <td><input type="date" value="${s.checked||''}" style="border:1px solid #e5e7eb;border-radius:6px;padding:3px 6px;font-size:12px;" onchange="saveSignItem('${s.id}','checked',this.value)"></td>
+      <td><input type="date" value="${s.installed||''}" style="border:1px solid #e8edf3;border-radius:6px;padding:3px 6px;font-size:12px;" onchange="saveSignItem('${s.id}','installed',this.value)"></td>
+      <td><input type="date" value="${s.checked||''}" style="border:1px solid #e8edf3;border-radius:6px;padding:3px 6px;font-size:12px;" onchange="saveSignItem('${s.id}','checked',this.value)"></td>
       <td>
-        <select style="border:1px solid #e5e7eb;border-radius:6px;padding:3px 6px;font-size:12px;" onchange="saveSignItem('${s.id}','status',this.value)">
+        <select style="border:1px solid #e8edf3;border-radius:6px;padding:3px 6px;font-size:12px;" onchange="saveSignItem('${s.id}','status',this.value)">
           <option value="설치필요" ${s.status==='설치필요'?'selected':''}>❌ 설치필요</option>
           <option value="설치완료" ${s.status==='설치완료'?'selected':''}>✅ 설치완료</option>
           <option value="교체필요" ${s.status==='교체필요'?'selected':''}>⚠️ 교체필요</option>
@@ -1652,14 +1994,13 @@ function closeModal(e){
 // ============================================================
 function v(id){ const el=document.getElementById(id); return el?el.value:''; }
 
-// ============================================================
-// INIT
-// ============================================================
+// wwsItems 및 renderWWS 삭제됨 - docMasterList / renderDocMgr로 통합
+
 // ============================================================
 // CARD NEWS DATA
 // ============================================================
 const cnCards = [
-  {id:1,series:'basic',color:'linear-gradient(135deg,#1a2744,#2563eb)',ep:'SERIES 01 · 기초편',title:'우리 회사\n안전관리,\n왜 해야 할까요?',emoji:'🏭',footer:'안전은 선택이 아닌 의무입니다',fb:'#1a2744',fc:'#fff',
+  {id:1,series:'basic',color:'linear-gradient(135deg,#0d1f3c,#1e5096)',ep:'SERIES 01 · 기초편',title:'우리 회사\n안전관리,\n왜 해야 할까요?',emoji:'🏭',footer:'안전은 선택이 아닌 의무입니다',fb:'#0d1f3c',fc:'#fff',
    preview:['사망사고 1건 → 사업주 최대 징역 7년(중처법)','산재 발생 시 회사 이미지 훼손 + 거래처 계약 해지 위험','안전관리 잘 되는 회사 = 직원이 오래 다니는 회사'],
    detail:{intro:'중대재해처벌법(2022년 시행) 이후 안전관리는 선택이 아닌 법적 의무가 되었습니다.',sections:[{t:'📌 법적 처벌 수준',i:['중대재해 발생 시 경영책임자 1년 이상 징역 (최대 7년)','법인 벌금 최대 50억원','반복 위반 시 가중처벌']},{t:'📌 우리 회사가 실천하는 것들',i:['매일 TBM — 10분 작업 전 안전회의','주간 패트롤 점검 — 현장 순회 및 위험요인 발굴','월간 정기 안전교육 — 법정 의무 이수']},{t:'✅ 직원 여러분이 해주실 것',i:['TBM 매일 빠짐없이 참석','위험 발견 즉시 보고 (처벌 없음, 포상 있음)','개인보호구 항상 착용']}],hl:'사고 한 건이 10년치 이익을 날릴 수 있습니다.',law:'산업안전보건법 제1조, 중대재해처벌법 제4조'}},
   {id:2,series:'basic',color:'linear-gradient(135deg,#065f46,#10b981)',ep:'SERIES 02 · 기초편',title:'TBM\n매일 아침\n10분의 기적',emoji:'☀️',footer:'작업 전 TBM = 사고 예방의 시작',fb:'#065f46',fc:'#fff',
@@ -1701,9 +2042,9 @@ const cnCards = [
 // POSTER DATA
 // ============================================================
 const ptPosters = [
-  {id:'p1',cat:'notice',color:'#1a2744',accent:'#2563eb',badge:'📋 법정 필수 게시',emoji:'📞',title:'비상 연락처',sub:'화재·사고 발생 시 즉시 연락',
+  {id:'p1',cat:'notice',color:'#0d1f3c',accent:'#1e5096',badge:'📋 법정 필수 게시',emoji:'📞',title:'비상 연락처',sub:'화재·사고 발생 시 즉시 연락',
    rules:[{n:'🔥',t:'화재 신고',d:'119'},{n:'🚑',t:'응급 구조',d:'119'},{n:'🚓',t:'경찰',d:'112'},{n:'🏢',t:'안전보건 담당자',d:'연락처 기재'},{n:'🏥',t:'가까운 병원',d:'병원명·전화번호 기재'},{n:'👨‍💼',t:'공장장',d:'연락처 기재'}],
-   footer:'이 연락처는 항상 최신 상태로 유지하세요',fb:'#1a2744',fc:'#fff'},
+   footer:'이 연락처는 항상 최신 상태로 유지하세요',fb:'#0d1f3c',fc:'#fff'},
   {id:'p2',cat:'notice',color:'#991b1b',accent:'#ef4444',badge:'📋 법정 필수 게시',emoji:'🧯',title:'소화기 사용법',sub:'화재 발생 즉시 PASS 기억하세요',
    rules:[{n:'P',t:'핀 뽑기',d:'안전핀을 뽑아 잠금 해제'},{n:'A',t:'겨냥',d:'호스를 불 쪽 아래를 향해 겨냥'},{n:'S',t:'분사',d:'손잡이를 꽉 눌러 분사 시작'},{n:'S',t:'쓸기',d:'좌우로 빗자루 쓸듯이 뿌리기'}],
    footer:'분사 시간 약 10~15초 | 소화기는 1회용',fb:'#991b1b',fc:'#fff'},
@@ -1720,7 +2061,7 @@ const ptPosters = [
    rules:[{n:'✅',t:'면허자만 운전',d:'지게차 운전기능사 면허'},{n:'✅',t:'포크 높이: 지상 20~30cm',d:'주행 시 항상 낮게'},{n:'✅',t:'안전벨트 착용',d:'항상, 예외 없이'},{n:'🚫',t:'보행자 구역 진입 금지',d:'통로 분리 준수'},{n:'🚫',t:'포크에 사람 탑승 금지',d:'즉시 징계 대상'},{n:'🚫',t:'시야 가린 채 전진 금지',d:'후진으로 운행'}],
    footer:'무면허 운전 = 형사처벌 | 지게차 1톤 = 성인 14명 무게',fb:'#1e1b4b',fc:'#fff'},
   {id:'p7',cat:'rule',color:'#4a1d96',accent:'#8b5cf6',badge:'📌 안전수칙',emoji:'⚡',title:'전기 안전수칙',sub:'감전은 순식간에 사망으로 이어집니다',
-   rules:[{n:'✅',t:'작업 전 전원 차단',d:'잠금(Lock)+태그(Tag) 부착'},{n:'✅',t:'이상 발견 즉시 신고',d:'전선 피복 손상, 이상 냄새·소리'},{n:'🚫',t:'분전반 무단 접근 금지',d:'허가받은 담당자만 개방'},{n:'🚫',t:'물기 있는 손 조작 금지',d:'반드시 손 건조 후'},{n:'🚫',t:'임시 연장선 방치 금지',d:'반드시 정리 후 마감'},{n:'🚫',t:'자가 수리·개조 금지',d:'전문가에게 요청'}],
+   rules:[{n:'✅',t:'작업 전 전원 차단',d:'잠금(Lock)+태그(Tag) 부착 후 작업'},{n:'✅',t:'이상 발견 즉시 신고',d:'전선 피복 손상, 이상 냄새·소리'},{n:'🚫',t:'분전반 무단 접근 금지',d:'허가받은 담당자만 개방'},{n:'🚫',t:'물기 있는 손 조작 금지',d:'반드시 손 건조 후'},{n:'🚫',t:'임시 연장선 방치 금지',d:'반드시 정리 후 마감'},{n:'🚫',t:'자가 수리·개조 금지',d:'전문가에게 요청'}],
    footer:'전기는 눈에 보이지 않는 살인자 | 규정 준수가 생명',fb:'#4a1d96',fc:'#fff'},
   {id:'p8',cat:'monthly',color:'#0f4c75',accent:'#1b98e0',badge:'📅 이달의 안전 목표',emoji:'🎯',title:'이달의 안전 목표',sub:'우리 모두 함께 지킵시다',
    rules:[{n:'①',t:'TBM 100% 참석',d:'매일 작업 전 10분, 빠짐없이'},{n:'②',t:'아차사고 1건 이상 신고',d:'숨기지 말고 공유 = 예방'},{n:'③',t:'보호구 완전 착용',d:'단 한 순간도 예외 없이'},{n:'④',t:'퇴근 전 작업장 정리',d:'내 구역은 내가 책임'}],
@@ -1750,7 +2091,7 @@ const ptPosters = [
 // ============================================================
 function cnFilter(cat, btn){
   document.querySelectorAll('#section-cardnews .btn').forEach(b=>{b.style.background='';b.style.color='';});
-  btn.style.background='#1a2744'; btn.style.color='#fff';
+  btn.style.background='#0d1f3c'; btn.style.color='#fff';
   renderCN(cat);
 }
 function renderCN(cat){
@@ -1763,7 +2104,7 @@ function renderCN(cat){
         <div style="font-size:15px;font-weight:800;color:#fff;line-height:1.3;">${c.title.replace(/\n/g,'<br>')}</div>
       </div>
       <div style="padding:12px 14px;">
-        ${c.preview.map(p=>`<div style="font-size:11px;color:#374151;padding:4px 0;border-bottom:1px solid #f8fafc;display:flex;gap:6px;"><span style="color:#2563eb;">•</span><span>${p}</span></div>`).join('')}
+        ${c.preview.map(p=>`<div style="font-size:11px;color:#374151;padding:4px 0;border-bottom:1px solid #f8fafc;display:flex;gap:6px;"><span style="color:#1e5096;">•</span><span>${p}</span></div>`).join('')}
       </div>
       <div style="padding:8px 14px;background:${c.fb};color:${c.fc};font-size:10px;font-weight:700;text-align:center;">${c.footer}</div>
       <div style="display:flex;gap:6px;padding:8px 12px;background:#f8fafc;">
@@ -1785,9 +2126,9 @@ function openCN(id){
   const d=c.detail;
   document.getElementById('cn-modal-body').innerHTML=`
     <p style="font-size:13px;color:#374151;line-height:1.6;margin-bottom:12px;">${d.intro}</p>
-    ${d.sections.map(s=>`<div style="font-size:13px;font-weight:700;color:#1a2744;margin:12px 0 6px;">${s.t}</div><ul style="list-style:none;padding:0;">${s.i.map(x=>`<li style="padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:12px;color:#374151;display:flex;gap:8px;"><span>✓</span><span>${x}</span></li>`).join('')}</ul>`).join('')}
+    ${d.sections.map(s=>`<div style="font-size:13px;font-weight:700;color:#0d1f3c;margin:12px 0 6px;">${s.t}</div><ul style="list-style:none;padding:0;">${s.i.map(x=>`<li style="padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:12px;color:#374151;display:flex;gap:8px;"><span>✓</span><span>${x}</span></li>`).join('')}</ul>`).join('')}
     <div style="background:#fef9c3;border-radius:8px;padding:12px;font-size:12px;color:#92400e;margin:12px 0;border-left:4px solid #f59e0b;">💡 ${d.hl}</div>
-    <div style="background:#eff6ff;border-radius:8px;padding:10px;font-size:11px;color:#1e40af;margin:8px 0;">⚖️ ${d.law}</div>
+    <div style="background:#eff6ff;border-radius:8px;padding:10px;font-size:11px;color:#1e5096;margin:8px 0;">⚖️ ${d.law}</div>
     <div style="display:flex;gap:8px;margin-top:12px;">
       <button onclick="cnCopy(${c.id})" class="btn btn-outline" style="flex:1;font-size:12px;">📋 카카오톡 복사</button>
       <button onclick="cnPrint(${c.id})" class="btn btn-primary" style="flex:1;font-size:12px;">🖨️ 인쇄</button>
@@ -1810,18 +2151,18 @@ function cnPrint(id){
   const c=cnCards.find(x=>x.id===id);
   const w=window.open('','_blank','width=500,height:800');
   w.document.write(`<html><head><meta charset="UTF-8"><style>
-    body{margin:0;font-family:'Malgun Gothic',sans-serif;}
+    body{margin:0;font-family:'Noto Sans KR','Malgun Gothic',sans-serif;}
     .h{padding:32px 24px 20px;background:${c.color};min-height:170px;position:relative;}
     .em{position:absolute;top:16px;right:16px;font-size:64px;opacity:0.22;}
     .ep{font-size:11px;font-weight:700;color:rgba(255,255,255,0.7);letter-spacing:0.08em;}
     .t{font-size:24px;font-weight:900;color:#fff;margin-top:6px;line-height:1.3;}
     .body{padding:20px 24px;}
     p{font-size:13px;color:#374151;line-height:1.6;margin-bottom:10px;}
-    .sec{font-size:13px;font-weight:700;color:#1a2744;margin:12px 0 6px;}
+    .sec{font-size:13px;font-weight:700;color:#0d1f3c;margin:12px 0 6px;}
     ul{list-style:none;padding:0;}
     li{padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:12px;color:#374151;display:flex;gap:8px;}
     .hl{background:#fef9c3;border-radius:8px;padding:12px;font-size:12px;color:#92400e;margin:12px 0;border-left:4px solid #f59e0b;}
-    .lw{background:#eff6ff;border-radius:8px;padding:10px;font-size:11px;color:#1e40af;margin:8px 0;}
+    .lw{background:#eff6ff;border-radius:8px;padding:10px;font-size:11px;color:#1e5096;margin:8px 0;}
     .f{padding:14px;text-align:center;font-size:13px;font-weight:800;background:${c.fb};color:${c.fc};}
   </style></head><body>
     <div class="h"><div class="em">${c.emoji}</div><div class="ep">${c.ep}</div><div class="t">${c.title.replace(/\n/g,'<br>')}</div></div>
@@ -1841,7 +2182,7 @@ function cnPrint(id){
 // ============================================================
 function ptFilter(cat, btn){
   document.querySelectorAll('#section-posters .btn').forEach(b=>{b.style.background='';b.style.color='';});
-  btn.style.background='#1a2744'; btn.style.color='#fff';
+  btn.style.background='#0d1f3c'; btn.style.color='#fff';
   renderPT(cat);
 }
 function renderPT(cat){
@@ -1856,7 +2197,7 @@ function renderPT(cat){
       </div>
       <div style="padding:14px 16px;">
         <ul style="list-style:none;padding:0;">
-          ${p.rules.map(r=>`<li style="display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid #f8fafc;font-size:12px;"><span style="flex-shrink:0;width:22px;height:22px;border-radius:50%;background:${p.accent};color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;">${r.n}</span><div><strong style="display:block;font-size:12px;font-weight:700;color:#1a2744;">${r.t}</strong><span style="font-size:11px;color:#6b7280;">${r.d}</span></div></li>`).join('')}
+          ${p.rules.map(r=>`<li style="display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid #f8fafc;font-size:12px;"><span style="flex-shrink:0;width:22px;height:22px;border-radius:50%;background:${p.accent};color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;">${r.n}</span><div><strong style="display:block;font-size:12px;font-weight:700;color:#0d1f3c;">${r.t}</strong><span style="font-size:11px;color:#6b7280;">${r.d}</span></div></li>`).join('')}
         </ul>
       </div>
       <div style="padding:10px;text-align:center;font-size:11px;font-weight:700;background:${p.fb};color:${p.fc};">${p.footer}</div>
@@ -1879,7 +2220,7 @@ function ptPrint(id){
   const w=window.open('','_blank','width=800,height:1100');
   w.document.write(`<html><head><meta charset="UTF-8"><style>
     @page{size:A4;margin:15mm;}
-    body{margin:0;font-family:'Malgun Gothic',sans-serif;}
+    body{margin:0;font-family:'Noto Sans KR','Malgun Gothic',sans-serif;}
     .h{padding:36px 28px 24px;background:${p.color};text-align:center;}
     .badge{font-size:12px;font-weight:700;color:rgba(255,255,255,0.7);letter-spacing:0.1em;}
     .em{font-size:80px;margin:10px 0;}
@@ -1889,7 +2230,7 @@ function ptPrint(id){
     ul{list-style:none;padding:0;}
     li{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #f1f5f9;}
     .num{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:${p.accent};color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;}
-    strong{display:block;font-size:15px;font-weight:700;color:#1a2744;}
+    strong{display:block;font-size:15px;font-weight:700;color:#0d1f3c;}
     span{font-size:12px;color:#6b7280;}
     .footer{padding:16px;text-align:center;font-size:15px;font-weight:800;background:${p.fb};color:${p.fc};}
   </style></head><body>
