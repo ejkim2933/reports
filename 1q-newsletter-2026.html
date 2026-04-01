@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>경영기획실 2026년 1Q 뉴스레터</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #eef1f6;
+    color: #374151;
+    font-size: 14px;
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+  }
+  .nl { max-width: 1040px; margin: 0 auto; background: #f6f8fb; }
+
+  /* ===== TOP BAR ===== */
+  .topbar {
+    background: #fff;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 44px;
+    border-bottom: 3px solid #0d1f3c;
+  }
+  .topbar-logo { display: flex; align-items: center; gap: 14px; }
+  .topbar-logo img { height: 32px; }
+  .topbar-right { text-align: right; }
+  .topbar-label { font-size: 10px; font-weight: 500; color: #7bacd4; letter-spacing: 2.5px; text-transform: uppercase; }
+  .topbar-dept { font-size: 12px; font-weight: 700; color: #1a3a6e; margin-top: 1px; }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: linear-gradient(135deg, #0d1f3c 0%, #162d55 50%, #1a3a6e 100%);
+    padding: 52px 44px 44px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 280px; height: 280px; border-radius: 50%;
+    background: rgba(123,172,212,0.06);
+  }
+  .hero-quarter {
+    font-size: 11px; font-weight: 500; letter-spacing: 3px;
+    color: #7bacd4; text-transform: uppercase; margin-bottom: 14px;
+  }
+  .hero-title { font-size: 32px; font-weight: 900; line-height: 1.25; letter-spacing: -1px; }
+  .hero-title em { color: #7bacd4; font-style: normal; }
+  .hero-period { font-size: 13px; color: rgba(255,255,255,0.45); margin-top: 8px; }
+
+  /* ===== SUMMARY CARD ===== */
+  .summary-card {
+    background: #fff; border-radius: 12px;
+    margin: -24px 44px 0; padding: 28px 32px;
+    border-left: 5px solid #1e5096;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    position: relative; z-index: 2;
+    line-height: 1.9; font-size: 13.5px; color: #374151;
+  }
+  .summary-card strong { color: #0d1f3c; font-weight: 700; }
+  .summary-highlight {
+    display: inline-block; background: #eef4ff; color: #1a3a6e;
+    padding: 1px 8px; border-radius: 4px; font-weight: 600; font-size: 12.5px;
+  }
+
+  /* ===== SECTION HEADER ===== */
+  .sec-header {
+    padding: 0 44px; margin-top: 36px; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .sec-header::before {
+    content: ''; width: 3px; height: 16px;
+    background: linear-gradient(180deg, #1e5096, #7bacd4);
+    border-radius: 2px; flex-shrink: 0;
+  }
+  .sec-header h2 {
+    font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
+    color: #1e5096; text-transform: uppercase; margin: 0;
+  }
+  .sec-header .sec-sub {
+    font-size: 11px; font-weight: 400; color: #9ca3af; letter-spacing: 0; text-transform: none; margin-left: 4px;
+  }
+
+  /* ===== INITIATIVE CARDS ===== */
+  .init-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 14px; padding: 0 44px;
+  }
+  .init-card {
+    background: #fff; border-radius: 10px; overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex; flex-direction: column;
+  }
+  .init-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+  .init-card-head {
+    padding: 18px 18px 14px;
+    background: linear-gradient(135deg, #0d1f3c, #1a3a6e);
+    position: relative;
+  }
+  .init-num {
+    font-size: 9px; font-weight: 700; letter-spacing: 2px;
+    color: #7bacd4; margin-bottom: 6px;
+  }
+  .init-title { font-size: 14px; font-weight: 700; color: #fff; line-height: 1.35; }
+  .init-card-body {
+    padding: 14px 18px 18px; flex: 1;
+    font-size: 12px; color: #6b7280; line-height: 1.7;
+  }
+  .init-card-body li { margin-bottom: 3px; }
+  .init-tag {
+    display: inline-block; background: #f0f4f9; color: #1e5096;
+    font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px;
+    margin-right: 4px; margin-bottom: 3px;
+  }
+
+  /* ===== TABLE SECTION ===== */
+  .table-wrap { padding: 0 44px; overflow-x: auto; }
+  .work-table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    background: #fff; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    font-size: 12px;
+  }
+  .work-table thead th {
+    background: #0d1f3c; color: #fff; font-weight: 700; font-size: 13px;
+    padding: 14px 16px; text-align: left; white-space: nowrap;
+    position: sticky; top: 0;
+  }
+  .work-table thead th:first-child {
+    width: 148px; border-radius: 12px 0 0 0;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+  .work-table thead th:last-child { border-radius: 0 12px 0 0; }
+  .work-table thead th .th-sub {
+    font-size: 10px; font-weight: 400; color: #7bacd4; display: block; margin-top: 1px;
+  }
+  .work-table tbody tr { transition: background 0.15s; }
+  .work-table tbody tr:hover td { background: #fafbfe; }
+  .work-table tbody tr:hover td:first-child { background: #f0f3f8; }
+  .work-table tbody td {
+    padding: 14px 14px; vertical-align: top;
+    border-bottom: 1px solid #f0f2f6;
+  }
+  .work-table tbody tr:last-child td { border-bottom: none; }
+  .work-table tbody td:first-child {
+    background: #f8f9fc; font-weight: 700; font-size: 11.5px; color: #0d1f3c;
+    border-right: 2px solid #e5e9f0;
+  }
+  .cat-label { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+  .cat-label .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .cat-label .cat-en { display: block; font-size: 9px; font-weight: 400; color: #9ca3af; margin-top: 2px; letter-spacing: 0.3px; }
+
+  .dot-hr  { background: #1a3a6e; }
+  .dot-ga  { background: #374151; }
+  .dot-acc { background: #155e75; }
+  .dot-rpa { background: #7c3aed; }
+  .dot-saf { background: #b45309; }
+  .dot-esg { background: #166534; }
+  .dot-gov { background: #1e40af; }
+
+  .work-table ul { list-style: none; padding: 0; margin: 0; }
+  .work-table li {
+    padding: 3px 0; line-height: 1.6; color: #374151;
+    display: flex; align-items: flex-start; gap: 6px;
+  }
+  .work-table li::before {
+    content: ''; width: 4px; height: 4px;
+    border-radius: 50%; background: #c7d2de; flex-shrink: 0; margin-top: 8px;
+  }
+  .work-table .sub { color: #9ca3af; font-size: 10.5px; }
+  .badge {
+    display: inline-flex; align-items: center; padding: 1px 7px; border-radius: 10px;
+    font-size: 9px; font-weight: 700; white-space: nowrap; margin-left: 3px;
+    letter-spacing: 0.3px; vertical-align: middle;
+  }
+  .badge-done { background: #eef4ff; color: #1a3a6e; border: 1px solid #c7d8f0; }
+  .badge-ing  { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+  .cell-empty { color: #d1d5db; text-align: center; font-size: 11px; }
+
+  /* Consolidated row */
+  .consolidated td { background: #f8f9fe !important; border-bottom: 2px solid #e5e9f0 !important; }
+  .consolidated td:first-child { background: #eef1f8 !important; }
+
+  /* ===== PLANS SECTION ===== */
+  .plans-grid {
+    display: grid; grid-template-columns: 3fr 2fr; gap: 16px;
+    padding: 0 44px;
+  }
+  .plan-card {
+    background: #fff; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+  .plan-card-head {
+    padding: 18px 22px;
+    background: linear-gradient(135deg, #0d1f3c 0%, #1a3a6e 100%);
+    color: #fff; font-size: 15px; font-weight: 700;
+  }
+  .plan-card-head .head-sub {
+    font-size: 10px; font-weight: 400; color: #7bacd4; letter-spacing: 1.5px; margin-top: 3px;
+  }
+  .plan-card-body { padding: 20px 22px; }
+  .plan-group-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+    color: #1e5096; text-transform: uppercase; margin-bottom: 10px; margin-top: 18px;
+    padding-bottom: 6px; border-bottom: 1px solid #f0f2f6;
+  }
+  .plan-group-label:first-child { margin-top: 0; }
+  .plan-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 8px 0; border-bottom: 1px solid #f5f6f8;
+    font-size: 12.5px; color: #374151; line-height: 1.55;
+  }
+  .plan-item:last-child { border-bottom: none; }
+  .pi-marker {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #1e5096; flex-shrink: 0; margin-top: 7px;
+  }
+  .pi-text { flex: 1; }
+  .pi-date {
+    flex-shrink: 0; font-size: 10px; font-weight: 600;
+    color: #7bacd4; background: #f0f4f9; padding: 2px 8px;
+    border-radius: 4px; margin-top: 2px;
+  }
+
+  /* Request card */
+  .req-card { background: linear-gradient(180deg, #f7f9ff, #eef3ff); border: 1px solid #dde5f4; }
+  .req-card .plan-card-head { background: linear-gradient(135deg, #1e5096 0%, #2563eb 100%); }
+  .req-item {
+    padding: 12px 0; border-bottom: 1px solid #dde5f4;
+    font-size: 12.5px; color: #374151; line-height: 1.65;
+  }
+  .req-item:last-child { border-bottom: none; }
+  .req-item strong { color: #0d1f3c; display: block; margin-bottom: 4px; }
+  .req-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #1e5096; color: #fff; font-size: 10px; font-weight: 700;
+    margin-right: 8px; vertical-align: middle;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    background: #0d1f3c; color: rgba(255,255,255,0.55);
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 22px 44px; margin-top: 40px; font-size: 11px;
+    border-top: 3px solid #7bacd4;
+  }
+  .footer-right { text-align: right; }
+  .footer-dept { color: rgba(255,255,255,0.85); font-weight: 700; font-size: 12px; }
+  .footer-date { color: rgba(255,255,255,0.45); margin-top: 2px; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 960px) {
+    .init-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 800px) {
+    .plans-grid { grid-template-columns: 1fr; }
+    .hero { padding: 36px 24px 32px; }
+    .summary-card { margin: -16px 24px 0; padding: 22px 24px; }
+    .sec-header, .table-wrap, .init-grid, .plans-grid { padding-left: 24px; padding-right: 24px; }
+    .topbar { padding: 10px 24px; }
+    .footer { padding: 16px 24px; }
+  }
+  @media (max-width: 600px) {
+    .init-grid { grid-template-columns: 1fr; }
+    .hero-title { font-size: 24px; }
+    .summary-card { margin: -12px 16px 0; padding: 18px 20px; }
+    .sec-header, .table-wrap, .init-grid, .plans-grid { padding-left: 16px; padding-right: 16px; }
+    .topbar { padding: 10px 16px; }
+    .footer { flex-direction: column; gap: 12px; text-align: center; padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="nl">
+
+<!-- ===== TOP BAR ===== -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <img src="logo_newsletter.jpg" alt="신성오토텍">
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-label">Quarterly Newsletter</div>
+    <div class="topbar-dept">경영기획실 경영지원팀</div>
+  </div>
+</div>
+
+<!-- =====================================================
+     SECTION 1 : HERO + SUMMARY
+     ===================================================== -->
+<div class="hero">
+  <div class="hero-quarter">2026 &middot; Q1 Business Report</div>
+  <div class="hero-title">경영기획실<br><em>1분기 업무 뉴스레터</em></div>
+  <div class="hero-period">보고 기간 : 2026년 1월 &ndash; 3월 &nbsp;|&nbsp; 경영지원팀</div>
+</div>
+
+<div class="summary-card">
+  1분기 경영지원팀은 <strong>인사노무, 총무, 회계/세무, RPA 자동화, 안전보건/환경, ESG, 지원사업/컨설팅</strong> 등 폭넓은 영역에서 업무를 추진했습니다.
+  인사&middot;총무 업무 체계를 전면 업데이트하고, <strong>전사적 자동화</strong>(RPA 서버 구축, 대시보드 개발, 자동화 툴 확대)에 착수했으며,
+  <strong>ESG&middot;안전보건 체계</strong>를 강화했습니다. 외부 회계감사 완료, 임금채권부담금 감액 <span class="summary-highlight">연간 ~166만원 절감</span>,
+  디지털 융합 교육비 <span class="summary-highlight">100% 환급</span> 등 실질적 성과를 달성했습니다.
+  2분기에는 IATF/ISO 인증 준비, 보고 자동화, 경영진 대시보드 개발 등을 본격 추진할 예정입니다.
+</div>
+
+<!-- =====================================================
+     KEY INITIATIVES (카테고리별 핵심 요약 카드)
+     ===================================================== -->
+<div class="sec-header">
+  <h2>Key Initiatives <span class="sec-sub">&middot; 핵심 이니셔티브</span></h2>
+</div>
+<div class="init-grid">
+  <!-- Card 1 -->
+  <div class="init-card">
+    <div class="init-card-head">
+      <div class="init-num">INITIATIVE 01</div>
+      <div class="init-title">업무 체계 업데이트 &amp; 정비</div>
+    </div>
+    <div class="init-card-body">
+      <span class="init-tag">인사</span><span class="init-tag">총무</span><span class="init-tag">회계</span>
+      <ul style="margin-top:8px; padding-left:16px;">
+        <li>취업규칙 3차 개정 (선택근무제&rarr;노무사 검토&rarr;신고)</li>
+        <li>연말정산&middot;지급명세서&middot;원천세 신고 완료</li>
+        <li>외부 회계 감사 완료</li>
+        <li>연차관리, 결재&middot;비용&middot;비품 프로세스 정비</li>
+      </ul>
+    </div>
+  </div>
+  <!-- Card 2 -->
+  <div class="init-card">
+    <div class="init-card-head">
+      <div class="init-num">INITIATIVE 02</div>
+      <div class="init-title">전사적 자동화 착수</div>
+    </div>
+    <div class="init-card-body">
+      <span class="init-tag">RPA</span><span class="init-tag">대시보드</span><span class="init-tag">MES</span>
+      <ul style="margin-top:8px; padding-left:16px;">
+        <li>근태 RPA 서버 구축 &amp; 자동집계 검증</li>
+        <li>사무 자동화 대시보드 개발 진행</li>
+        <li>생산 공정 전산 고도화 (MES, LCA) 지원</li>
+        <li>노션&middot;클로드&middot;구글 등 자동화 툴 확대</li>
+      </ul>
+    </div>
+  </div>
+  <!-- Card 3 -->
+  <div class="init-card">
+    <div class="init-card-head">
+      <div class="init-num">INITIATIVE 03</div>
+      <div class="init-title">ESG &middot; 안전보건 강화</div>
+    </div>
+    <div class="init-card-body">
+      <span class="init-tag">ESG</span><span class="init-tag">안전</span><span class="init-tag">환경</span>
+      <ul style="margin-top:8px; padding-left:16px;">
+        <li>태양광 재생에너지 인증 3개월 연속 발급</li>
+        <li>협력사 4사 ESG 자가점검 완료</li>
+        <li>사출기&middot;압력용기 안전검사 합격</li>
+        <li>LCA 탄소관리 데이터 관리 &amp; 리포트</li>
+      </ul>
+    </div>
+  </div>
+  <!-- Card 4 -->
+  <div class="init-card">
+    <div class="init-card-head">
+      <div class="init-num">INITIATIVE 04</div>
+      <div class="init-title">2Q 핵심 예정 업무</div>
+    </div>
+    <div class="init-card-body">
+      <span class="init-tag">인증</span><span class="init-tag">자동화</span><span class="init-tag">원가</span>
+      <ul style="margin-top:8px; padding-left:16px;">
+        <li>IATF16949 &middot; ISO14001 인증 심사 준비</li>
+        <li>산업안전보건시스템 체계 구축</li>
+        <li>일간/주간/월간 보고 자동화 시스템</li>
+        <li>경영진 운영 대시보드 &amp; 원가 산출 정비</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- =====================================================
+     SECTION 2 : MONTHLY × CATEGORY TABLE
+     ===================================================== -->
+<div class="sec-header">
+  <h2>Monthly Overview <span class="sec-sub">&middot; 월별 &times; 카테고리 업무 현황</span></h2>
+</div>
+<div class="table-wrap">
+<table class="work-table">
+<thead>
+  <tr>
+    <th>카테고리</th>
+    <th>1월 <span class="th-sub">January</span></th>
+    <th>2월 <span class="th-sub">February</span></th>
+    <th>3월 <span class="th-sub">March</span></th>
+  </tr>
+</thead>
+<tbody>
+  <!-- HR -->
+  <tr>
+    <td rowspan="2">
+      <div class="cat-label">
+        <span class="dot dot-hr"></span>
+        <div>인사노무<span class="cat-en">HR &amp; Labor</span></div>
+      </div>
+    </td>
+    <td>
+      <ul>
+        <li>임금채권부담금 감액 신청 <span class="sub">(~166만원/년)</span> <span class="badge badge-done">완료</span></li>
+        <li>시급직 연봉전환 시뮬레이션 <span class="badge badge-done">완료</span></li>
+        <li>퇴직연금 명세서 정리 &middot; 회계팀 전달 <span class="badge badge-done">완료</span></li>
+        <li>배우자출산휴가 지원금 신청 <span class="sub">(160만원)</span> <span class="badge badge-done">완료</span></li>
+        <li>법정신고 <span class="sub">(지급명세서&middot;장애인고용)</span> <span class="badge badge-done">완료</span></li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li>2025년 연말정산 완료 <span class="badge badge-done">완료</span></li>
+        <li>과세자료 지급명세서 일괄 제출 <span class="badge badge-done">완료</span></li>
+        <li>고용&middot;산재보험 보수총액신고 <span class="badge badge-done">완료</span></li>
+        <li>연차관리 대장 각 도급사 배포 <span class="badge badge-done">완료</span></li>
+        <li>퇴직자 급여&middot;퇴직금 정산 <span class="badge badge-done">완료</span></li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li>노란봉투법 대응 방안 보고 <span class="badge badge-done">완료</span></li>
+        <li>연차 자동수집 데이터 검증 <span class="badge badge-done">완료</span></li>
+        <li>퇴직자 정산 &middot; 4대보험 처리 <span class="badge badge-done">완료</span></li>
+        <li>도급직 추가 채용 의뢰 <span class="sub">(조립4&middot;사출1)</span> <span class="badge badge-ing">진행중</span></li>
+      </ul>
+    </td>
+  </tr>
+  <tr class="consolidated">
+    <td colspan="3">
+      <ul>
+        <li><strong>취업규칙 개정</strong> &mdash; 1차(선택근무제, 1월) &rarr; 2차(노무사 검토, 2월) &rarr; 3차(직원 동의 확보, 3월) &rarr; 3/31 신고 예정 <span class="badge badge-ing">진행중</span></li>
+        <li><strong>월별 급여&middot;인건비 정산</strong> &mdash; 정규직&middot;도급직 급여 계산, 급여현황보고, 상여금 계산 등 매월 수행 <span class="badge badge-done">완료</span></li>
+      </ul>
+    </td>
+  </tr>
+
+  <!-- 총무 -->
+  <tr>
+    <td>
+      <div class="cat-label">
+        <span class="dot dot-ga"></span>
+        <div>총무<span class="cat-en">General Affairs</span></div>
+      </div>
+    </td>
+    <td>
+      <ul>
+        <li>연도 기초자료 정비 <span class="sub">(판관비율&middot;보험요율&middot;교육계획)</span> <span class="badge badge-done">완료</span></li>
+        <li>안전보건 예산 자료 작성 착수 <span class="badge badge-done">완료</span></li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li>법정의무교육 전원 이수 <span class="sub">(성희롱예방&middot;재난대비)</span> <span class="badge badge-done">완료</span></li>
+        <li>디지털 융합 직무교육 <span class="sub">(36명, 100% 환급)</span> <span class="badge badge-done">완료</span></li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li>3~6월 예상 인건비 산정 <span class="badge badge-done">완료</span></li>
+        <li>특근 식사 지원 운영 <span class="badge badge-done">완료</span></li>
+      </ul>
+    </td>
+  </tr>
+
+  <!-- 회계/세무 consolidated -->
+  <tr class="consolidated">
+    <td>
+      <div class="cat-label">
+        <span class="dot dot-acc"></span>
+        <div>회계 / 세무<span class="cat-en">Accounting</span></div>
+      </div>
+    </td>
+    <td colspan="3">
+      <ul>
+        <li><strong>월별 원천세&middot;특별징수 정기 신고</strong> <span class="sub">(12월분~2월분, 간이소득지급명세서 포함)</span> &mdash; 매월 기한 내 완료 <span class="badge badge-done">완료</span></li>
+        <li><strong>과세자료 지급명세서 (연말정산) 제출</strong> &mdash; 2월 완료 <span class="badge badge-done">완료</span></li>
+        <li><strong>외부 회계감사</strong> 진행 완료 <span class="badge badge-done">완료</span></li>
+      </ul>
+    </td>
+  </tr>
+
+  <!-- RPA -->
+  <tr>
+    <td>
+      <div class="cat-label">
+        <span class="dot dot-rpa"></span>
+        <div>RPA 자동화<span class="cat-en">Automation</span></div>
+      </div>
+    </td>
+    <td class="cell-empty">&mdash;</td>
+    <td class="cell-empty">&mdash;</td>
+    <td>
+      <ul>
+        <li>RPA 서버 PC 설치 <span class="sub">(본사 소회의실, 3/4)</span> <span class="badge badge-done">완료</span></li>
+        <li>근태 자동화 데이터 검증&middot;안정화 <span class="sub">(공용 구글ID 적용)</span> <span class="badge badge-ing">진행중</span></li>
+        <li>사무 자동화 대시보드 구축 <span class="badge badge-ing">진행중</span></li>
+      </ul>
+    </td>
+  </tr>
+
+  <!-- 안전보건/환경 -->
+  <tr>
+    <td rowspan="2">
+      <div class="cat-label">
+        <span class="dot dot-saf"></span>
+        <div>안전보건 / 환경<span class="cat-en">Safety &amp; Env.</span></div>
+      </div>
+    </td>
+    <td>
+      <ul>
+        <li>대기배출 반기 보고서 제출 <span class="badge badge-done">완료</span></li>
+        <li>비산배출 인허가 변경 착수 <span class="sub">(건조기 4대)</span> <span class="badge badge-ing">진행중</span></li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li>수전설비 정기검사 신청 <span class="sub">(4/4 실시)</span> <span class="badge badge-done">완료</span></li>
+        <li>폐기물처분부담금 감면 신청 <span class="badge badge-done">완료</span></li>
+        <li>비산배출 인허가 실사 <span class="sub">(화성공장)</span> <span class="badge badge-ing">진행중</span></li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li>비산배출 인허가 화성시 접수 <span class="sub">(4/7 심사)</span> <span class="badge badge-ing">진행중</span></li>
+        <li>LOTO 절차서&middot;안전표지 부착 <span class="badge badge-done">완료</span></li>
+        <li>ISO14001 비상사태 교육 보고서 <span class="badge badge-ing">진행중</span></li>
+        <li>안전보건 정기교육 자료 배포 <span class="badge badge-done">완료</span></li>
+        <li>안전보건 예산 자료 최종 완료 <span class="badge badge-done">완료</span></li>
+      </ul>
+    </td>
+  </tr>
+  <tr class="consolidated">
+    <td colspan="3">
+      <ul>
+        <li><strong>사출기&middot;압력용기 안전검사</strong> &mdash; 1월 신청 &rarr; 2/12 검사 합격 &rarr; 합격증명서 현장 부착 완료 <span class="badge badge-done">완료</span></li>
+      </ul>
+    </td>
+  </tr>
+
+  <!-- ESG -->
+  <tr>
+    <td rowspan="2">
+      <div class="cat-label">
+        <span class="dot dot-esg"></span>
+        <div>ESG<span class="cat-en">Sustainability</span></div>
+      </div>
+    </td>
+    <td class="cell-empty">&mdash;</td>
+    <td class="cell-empty">&mdash;</td>
+    <td>
+      <ul>
+        <li>협력사 ESG 자가점검 4사 완료 <span class="sub">(성진로지스 외)</span> <span class="badge badge-done">완료</span></li>
+        <li>KAP 탄소중립 웨비나 이수 <span class="badge badge-done">완료</span></li>
+        <li>동국실업 자가진단평가서 송부 <span class="badge badge-done">완료</span></li>
+      </ul>
+    </td>
+  </tr>
+  <tr class="consolidated">
+    <td colspan="3">
+      <ul>
+        <li><strong>태양광 재생에너지 인증서 월별 발급</strong> <span class="sub">(2025.12~2026.2월분)</span> &mdash; 3개월 연속 발급 완료 <span class="badge badge-done">완료</span></li>
+      </ul>
+    </td>
+  </tr>
+
+  <!-- 지원사업 / 컨설팅 -->
+  <tr>
+    <td>
+      <div class="cat-label">
+        <span class="dot dot-gov"></span>
+        <div>지원사업 / 컨설팅<span class="cat-en">Projects &amp; Consulting</span></div>
+      </div>
+    </td>
+    <td>
+      <ul>
+        <li>LCA 탄소관리 R&amp;D 자료 송부 <span class="sub">(생기원&middot;LG전자)</span> <span class="badge badge-ing">진행중</span></li>
+        <li>LG 한경협 컨설팅 검토 착수 <span class="sub">(조직구조&middot;인사평가)</span> <span class="badge badge-ing">진행중</span></li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li>구조혁신지원사업 신청&middot;현장진단 <span class="sub">(디지털혁신형)</span> <span class="badge badge-ing">진행중</span></li>
+        <li>LG 한경협 컨설팅 2회 진행 <span class="sub">(2/13, 2/20 조직개편 논의)</span> <span class="badge badge-done">완료</span></li>
+        <li>LCA R&amp;D 탄소배출값 송부 <span class="sub">(LG전자)</span> <span class="badge badge-ing">진행중</span></li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li>R&amp;D 지원사업 &amp; 기업인증 컨설팅 미팅 <span class="sub">(벤처&middot;메인비즈&middot;뿌리기업)</span> <span class="badge badge-ing">진행중</span></li>
+        <li>LG 한경협 컨설팅 <span class="sub">(연봉테이블&middot;임금피크제&middot;KPI)</span> <span class="badge badge-ing">진행중</span></li>
+        <li>스마트생태공장 효과보고서 제출 <span class="badge badge-ing">진행중</span></li>
+        <li>LCA R&amp;D Raw Data 작성 <span class="sub">(NDA 완료)</span> <span class="badge badge-ing">진행중</span></li>
+        <li>구조혁신 진단보고서 공유 <span class="sub">(4월 2차)</span> <span class="badge badge-ing">진행중</span></li>
+      </ul>
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<!-- =====================================================
+     SECTION 3 : 향후 계획 + 건의사항
+     ===================================================== -->
+<div class="sec-header">
+  <h2>What's Next <span class="sec-sub">&middot; 향후 계획 및 건의사항</span></h2>
+</div>
+<div class="plans-grid">
+
+  <!-- 진행중 & Q2 계획 -->
+  <div class="plan-card">
+    <div class="plan-card-head">
+      현재 진행중 &middot; Q2 계획
+      <div class="head-sub">CARRY-OVER &amp; UPCOMING</div>
+    </div>
+    <div class="plan-card-body">
+      <div class="plan-group-label">Immediate &middot; 3~4월 완료 예정</div>
+      <div class="plan-item">
+        <div class="pi-marker"></div>
+        <span class="pi-text">취업규칙 3차 개정 &mdash; 고용노동부 신고</span>
+        <span class="pi-date">3/31</span>
+      </div>
+      <div class="plan-item">
+        <div class="pi-marker"></div>
+        <span class="pi-text">근태 RPA 검증 완료 &rarr; 정식 운용 전환</span>
+        <span class="pi-date">4월</span>
+      </div>
+      <div class="plan-item">
+        <div class="pi-marker"></div>
+        <span class="pi-text">비산배출 인허가 변경 심사 완료</span>
+        <span class="pi-date">4/7</span>
+      </div>
+      <div class="plan-item">
+        <div class="pi-marker"></div>
+        <span class="pi-text">ISO14001 비상사태 교육 보고서 제출</span>
+        <span class="pi-date">4월 초</span>
+      </div>
+      <div class="plan-item">
+        <div class="pi-marker"></div>
+        <span class="pi-text">750kW 수전설비 정기검사 실시</span>
+        <span class="pi-date">4/4</span>
+      </div>
+
+      <div class="plan-group-label">Q2 Key Tasks &middot; 2분기 핵심 과제</div>
+      <div class="plan-item">
+        <div class="pi-marker" style="background:#7c3aed"></div>
+        <span class="pi-text">일간/주간/월간 <strong>보고 자동화 시스템</strong> 구축</span>
+        <span class="pi-date">Q2</span>
+      </div>
+      <div class="plan-item">
+        <div class="pi-marker" style="background:#7c3aed"></div>
+        <span class="pi-text">내부 <strong>경영진 운영 대시보드</strong> 개발</span>
+        <span class="pi-date">Q2</span>
+      </div>
+      <div class="plan-item">
+        <div class="pi-marker" style="background:#166534"></div>
+        <span class="pi-text"><strong>IATF16949 &middot; ISO14001</strong> 인증 심사 준비</span>
+        <span class="pi-date">4~12월</span>
+      </div>
+      <div class="plan-item">
+        <div class="pi-marker" style="background:#b45309"></div>
+        <span class="pi-text"><strong>산업안전보건시스템</strong> 체계 구축 &amp; 가동</span>
+        <span class="pi-date">Q2</span>
+      </div>
+      <div class="plan-item">
+        <div class="pi-marker" style="background:#1e40af"></div>
+        <span class="pi-text">구조혁신지원사업 2차 컨설팅 / LCA R&amp;D 후속</span>
+        <span class="pi-date">4월</span>
+      </div>
+      <div class="plan-item">
+        <div class="pi-marker"></div>
+        <span class="pi-text">원가 산출 &middot; 적정 인원 산출 프로세스 정비</span>
+        <span class="pi-date">Q2</span>
+      </div>
+      <div class="plan-item">
+        <div class="pi-marker"></div>
+        <span class="pi-text">법정 필수 &middot; 내부 교육 진행 / 하반기 사업계획</span>
+        <span class="pi-date">Q2</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 건의·제안 -->
+  <div class="plan-card req-card">
+    <div class="plan-card-head">
+      건의 &middot; 제안 사항
+      <div class="head-sub">REQUESTS &amp; PROPOSALS</div>
+    </div>
+    <div class="plan-card-body">
+      <div class="req-item">
+        <span class="req-num">1</span>
+        <strong>RPA 확대 적용 예산 검토 요청</strong>
+        근태 자동화 안정화 후, 급여 정산&middot;세무 신고 등 반복 업무로 확대 적용을 계획하고 있습니다. 추가 서버/라이선스 예산 사전 검토를 요청드립니다.
+      </div>
+      <div class="req-item">
+        <span class="req-num">2</span>
+        <strong>ESG 평가 대응 전사 협조 체계 구축</strong>
+        고객사(동국실업, LG전자 등) ESG 자가진단&middot;탄소관리 요구가 증가하고 있습니다. 각 부서의 데이터 적시 제공을 위한 협조 프로세스 정립을 제안합니다.
+      </div>
+      <div class="req-item">
+        <span class="req-num">3</span>
+        <strong>법정의무교육 이수 독려 협조</strong>
+        1분기 전원 이수 완료했으나, 매 분기 미이수자 독촉에 시간이 소요됩니다. 부서장님들의 선제적 독려 협조를 부탁드립니다.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  <div>데이터 출처 : 노션 경영지원 DB &middot; 주간보고 &nbsp;|&nbsp; 작성 : 임정인 &nbsp;|&nbsp; 검토 : 경영기획실장</div>
+  <div class="footer-right">
+    <div class="footer-dept">경영기획실 경영지원팀</div>
+    <div class="footer-date">2026년 3월 30일</div>
+  </div>
+</div>
+
+</div><!-- /.nl -->
+</body>
+</html>
