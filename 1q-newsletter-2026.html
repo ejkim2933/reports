@@ -354,13 +354,11 @@
       border-top: none !important;
     }
     .consolidated td { border-right: none !important; }
-    .consolidated td:first-child {
-      background: linear-gradient(135deg, #0d1f3c, #1a3a6e) !important;
-      border-bottom: none !important;
+    .consolidated td[colspan] {
+      padding: 12px 16px;
+      background: #fff !important;
+      color: #374151;
     }
-    .consolidated td:first-child .cat-label { color: #fff; }
-    .consolidated td:first-child .cat-label .cat-en { color: #7bacd4; }
-    .consolidated td[colspan] { padding: 12px 16px; }
     .consolidated li { line-height: 1.8; margin-bottom: 4px; word-break: keep-all; }
 
     /* 월 라벨 표시 */
