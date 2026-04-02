@@ -197,6 +197,29 @@
   .badge-ing  { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
   .cell-empty { color: #d1d5db; text-align: center; font-size: 11px; }
 
+  /* 카테고리별 구분 보더 */
+  .cat-mgmt td { border-left: 3px solid #0f766e; }
+  .cat-mgmt td:first-child { border-left: none; border-right: 3px solid #0f766e; }
+  .cat-hr td { border-left: 3px solid #1a3a6e; }
+  .cat-hr td:first-child { border-left: none; border-right: 3px solid #1a3a6e; }
+  .cat-ga td { border-left: 3px solid #374151; }
+  .cat-ga td:first-child { border-left: none; border-right: 3px solid #374151; }
+  .cat-acc td { border-left: 3px solid #155e75; }
+  .cat-acc td:first-child { border-left: none; border-right: 3px solid #155e75; }
+  .cat-rpa td { border-left: 3px solid #7c3aed; }
+  .cat-rpa td:first-child { border-left: none; border-right: 3px solid #7c3aed; }
+  .cat-saf td { border-left: 3px solid #b45309; }
+  .cat-saf td:first-child { border-left: none; border-right: 3px solid #b45309; }
+  .cat-esg td { border-left: 3px solid #166534; }
+  .cat-esg td:first-child { border-left: none; border-right: 3px solid #166534; }
+  .cat-gov td { border-left: 3px solid #1e40af; }
+  .cat-gov td:first-child { border-left: none; border-right: 3px solid #1e40af; }
+  /* 카테고리 간 구분선 */
+  .cat-mgmt td, .cat-hr td, .cat-ga td, .cat-acc td,
+  .cat-rpa td, .cat-saf td, .cat-esg td, .cat-gov td {
+    border-top: 2px solid #e5e9f0;
+  }
+
   /* Consolidated row */
   .consolidated td { background: #f8f9fe !important; border-bottom: 2px solid #e5e9f0 !important; }
   .consolidated td:first-child { background: #eef1f8 !important; }
@@ -414,7 +437,7 @@
     </div>
   </div>
   <div class="summary-next">
-    &#x1F680; <strong>2Q 예고</strong> &mdash; IATF/ISO 인증 심사 준비, 보고 자동화 시스템 구축, 경영진 운영 대시보드 개발, 산업안전보건시스템 가동
+    &#x1F680; <strong>2Q 예고</strong> &mdash; IATF/ISO 인증 심사 준비, 보고 자동화 시스템 구축, 원가 산출 정비 &amp; 재무 자동화 구축, 산업안전보건시스템 가동
   </div>
 </div>
 
@@ -450,7 +473,7 @@
     <div class="init-card-body">
       <span class="init-tag">RPA</span><span class="init-tag">대시보드</span><span class="init-tag">MES</span>
       <ul style="margin-top:8px; padding-left:16px;">
-        <li>근태 RPA 서버 구축 &amp; 자동집계 검증</li>
+        <li>전사 RPA 자동화 도입</li>
         <li>사무 자동화 대시보드 개발 진행</li>
         <li>생산 공정 전산 고도화 (MES, LCA) 지원</li>
         <li>노션&middot;클로드&middot;구글 등 자동화 툴 확대</li>
@@ -485,7 +508,7 @@
         <li>IATF16949, ISO14001 인증 심사 체계 정비 및 심사 준비</li>
         <li>산업안전보건시스템 체계 구축</li>
         <li>일간/주간/월간 보고 자동화 시스템</li>
-        <li>경영진 운영 대시보드 &amp; 원가 산출 정비</li>
+        <li>원가 산출 정비 &amp; 재무 자동화 구축</li>
         <li>2H 사업계획 준비</li>
       </ul>
     </div>
@@ -515,7 +538,7 @@
       </div>
       <div class="plan-item">
         <div class="pi-marker"></div>
-        <span class="pi-text">근태 RPA 검증 완료 &rarr; 정식 운용 전환</span>
+        <span class="pi-text">전사 RPA 자동화 도입 &mdash; RPA 교육 지원, RPA 서버 구축, 각 팀 개발 지원, 근태 RPA 검증 중</span>
         <span class="pi-date">4월</span>
       </div>
       <div class="plan-item">
@@ -658,8 +681,8 @@
 </thead>
 <tbody>
   <!-- 경영관리 -->
-  <tr class="consolidated">
-    <td>
+  <tr class="cat-mgmt">
+    <td rowspan="2">
       <div class="cat-label">
         <span class="dot dot-mgmt"></span>
         <div>경영관리<span class="cat-en">Management</span></div>
@@ -667,32 +690,32 @@
     </td>
     <td data-month="1월">
       <ul>
-        <li>상반기 사업계획 수립 <span class="sub">(ver1~fin)</span> <span class="badge badge-done">완료</span></li>
-        <li>MES 매출계획 셋팅 <span class="badge badge-done">완료</span></li>
-        <li>홈페이지 업데이트 &middot; 배포 <span class="badge badge-done">완료</span></li>
+        <li>상반기 사업계획 수립 <span class="sub">(ver1~fin)</span></li>
+        <li>홈페이지 업데이트 &middot; 배포</li>
       </ul>
     </td>
     <td data-month="2월">
       <ul>
-        <li>연말 재고조사 &middot; 원가마감 완료 <span class="badge badge-done">완료</span></li>
+        <li>연말 재고조사 &middot; 원가마감 완료</li>
       </ul>
     </td>
     <td data-month="3월">
       <ul>
-        <li>1Q 뉴스레터 제작 &middot; 전사 배포 <span class="badge badge-done">완료</span></li>
+        <li>1Q 뉴스레터 제작 &middot; 전사 배포</li>
+        <li>경영관리 대시보드 제작 <span class="sub">(손익, 인원)</span></li>
       </ul>
     </td>
   </tr>
-  <tr class="consolidated">
-    <td colspan="4" style="border-top:none; padding-top:0;">
+  <tr class="consolidated cat-mgmt">
+    <td colspan="3">
       <ul>
-        <li><strong>월 경영실적 보고</strong> &mdash; 매출&middot;영업이익&middot;KPI&middot;원가분석 등 월별 경영실적 종합 보고 매월 수행 <span class="badge badge-done">완료</span></li>
+        <li><strong>월 경영실적 보고</strong> &mdash; 매출&middot;영업이익&middot;KPI&middot;원가분석 등 월별 경영실적 종합 보고 매월 수행</li>
       </ul>
     </td>
   </tr>
 
   <!-- HR -->
-  <tr>
+  <tr class="cat-hr">
     <td rowspan="2">
       <div class="cat-label">
         <span class="dot dot-hr"></span>
@@ -701,39 +724,37 @@
     </td>
     <td data-month="1월">
       <ul>
-        <li>임금채권부담금 감액 신청 <span class="sub">(~166만원/년)</span> <span class="badge badge-done">완료</span></li>
-        <li>퇴직연금 명세서 정리 &middot; 회계팀 전달 <span class="badge badge-done">완료</span></li>
-        <li>배우자출산휴가 지원금 신청 <span class="sub">(160만원)</span> <span class="badge badge-done">완료</span></li>
-        <li>법정신고 <span class="sub">(지급명세서&middot;장애인고용)</span> <span class="badge badge-done">완료</span></li>
+        <li>임금채권부담금 감액 신청</li>
+        <li>퇴직연금 명세서 정리 &middot; 회계팀 전달</li>
+        <li>법정신고 <span class="sub">(지급명세서&middot;장애인고용&middot;배우자출산휴가 지원금)</span></li>
       </ul>
     </td>
     <td data-month="2월">
       <ul>
-        <li>2025년 연말정산 완료 <span class="badge badge-done">완료</span></li>
-        <li>과세자료 지급명세서 일괄 제출 <span class="badge badge-done">완료</span></li>
-        <li>고용&middot;산재보험 보수총액신고 <span class="badge badge-done">완료</span></li>
-        <li>연차관리 대장 각 도급사 배포 <span class="badge badge-done">완료</span></li>
-        <li>퇴직자 급여&middot;퇴직금 정산 <span class="badge badge-done">완료</span></li>
+        <li>2025년 연말정산 완료</li>
+        <li>과세자료 지급명세서 일괄 제출</li>
+        <li>고용&middot;산재보험 보수총액신고</li>
+        <li>각 도급사와 연차관리 프로세스 재정비</li>
       </ul>
     </td>
     <td data-month="3월">
       <ul>
-        <li>연차 자동수집 데이터 검증 <span class="badge badge-done">완료</span></li>
-        <li>퇴직자 정산 &middot; 4대보험 처리 <span class="badge badge-done">완료</span></li>
+        <li>연차 자동수집 데이터 검증</li>
+        <li>퇴직자 정산 &middot; 4대보험 처리</li>
       </ul>
     </td>
   </tr>
-  <tr class="consolidated">
+  <tr class="consolidated cat-hr">
     <td colspan="3">
       <ul>
-        <li><strong>취업규칙 개정</strong> &mdash; 선택근무제 반영 &middot; 노무사 검토 &middot; 고용노동부 신고 진행 <span class="badge badge-ing">진행중</span></li>
-        <li><strong>월별 급여&middot;인건비 정산</strong> &mdash; 정규직&middot;도급직 급여 계산, 급여현황보고, 상여금 계산 등 매월 수행 <span class="badge badge-done">완료</span></li>
+        <li><strong>취업규칙 개정</strong> &mdash; 선택근무제 반영 &middot; 노무사 검토 &middot; 고용노동부 신고 진행</li>
+        <li><strong>월별 급여&middot;인건비 정산</strong> &mdash; 정규직&middot;도급직 급여 계산, 급여현황보고, 상여금 계산 등 매월 수행</li>
       </ul>
     </td>
   </tr>
 
   <!-- 총무 -->
-  <tr>
+  <tr class="cat-ga">
     <td>
       <div class="cat-label">
         <span class="dot dot-ga"></span>
@@ -742,26 +763,26 @@
     </td>
     <td data-month="1월">
       <ul>
-        <li>연도 기초자료 정비 <span class="sub">(판관비율&middot;보험요율&middot;교육계획)</span> <span class="badge badge-done">완료</span></li>
-        <li>안전보건 예산 자료 작성 착수 <span class="badge badge-done">완료</span></li>
+        <li>연도 기초자료 정비 <span class="sub">(판관비율&middot;보험요율&middot;교육계획)</span></li>
+        <li>안전보건 예산 자료 작성 착수</li>
       </ul>
     </td>
     <td data-month="2월">
       <ul>
-        <li>법정의무교육 전원 이수 <span class="sub">(성희롱예방&middot;재난대비)</span> <span class="badge badge-done">완료</span></li>
-        <li>디지털 융합 직무교육 <span class="sub">(36명, 100% 환급)</span> <span class="badge badge-done">완료</span></li>
+        <li>법정의무교육 전원 이수 <span class="sub">(성희롱예방&middot;재난대비)</span></li>
+        <li>디지털 융합 직무교육 <span class="sub">(36명, 100% 환급)</span></li>
       </ul>
     </td>
     <td data-month="3월">
       <ul>
-        <li>3~6월 예상 인건비 산정 <span class="badge badge-done">완료</span></li>
-        <li>특근 식사 지원 운영 <span class="badge badge-done">완료</span></li>
+        <li>3~6월 예상 인건비 산정</li>
+        <li>특근 식사 지원 운영</li>
       </ul>
     </td>
   </tr>
 
   <!-- 회계/세무 consolidated -->
-  <tr class="consolidated">
+  <tr class="consolidated cat-acc">
     <td>
       <div class="cat-label">
         <span class="dot dot-acc"></span>
@@ -770,15 +791,15 @@
     </td>
     <td colspan="3">
       <ul>
-        <li><strong>월별 원천세&middot;특별징수 정기 신고</strong> <span class="sub">(12월분~2월분, 간이소득지급명세서 포함)</span> &mdash; 매월 기한 내 완료 <span class="badge badge-done">완료</span></li>
-        <li><strong>과세자료 지급명세서 (연말정산) 제출</strong> &mdash; 2월 완료 <span class="badge badge-done">완료</span></li>
-        <li><strong>외부 회계감사</strong> 진행 완료 <span class="badge badge-done">완료</span></li>
+        <li><strong>월별 원천세&middot;특별징수 정기 신고</strong> <span class="sub">(12월분~2월분, 간이소득지급명세서 포함)</span> &mdash; 매월 기한 내 완료</li>
+        <li><strong>과세자료 지급명세서 (연말정산) 제출</strong> &mdash; 2월 완료</li>
+        <li><strong>외부 회계감사</strong> 진행 완료</li>
       </ul>
     </td>
   </tr>
 
   <!-- RPA -->
-  <tr>
+  <tr class="cat-rpa">
     <td>
       <div class="cat-label">
         <span class="dot dot-rpa"></span>
@@ -789,15 +810,15 @@
     <td class="cell-empty">&mdash;</td>
     <td data-month="3월">
       <ul>
-        <li>RPA 서버 PC 설치 &middot; 환경 구축 <span class="badge badge-done">완료</span></li>
-        <li>근태 자동화 데이터 검증&middot;안정화 <span class="badge badge-ing">진행중</span></li>
-        <li>사무 자동화 대시보드 &middot; 직원 교육 <span class="badge badge-ing">진행중</span></li>
+        <li>RPA 서버 PC 설치 &middot; 환경 구축</li>
+        <li>근태 자동화 데이터 검증&middot;안정화</li>
+        <li>사무 자동화 대시보드 &middot; 직원 교육</li>
       </ul>
     </td>
   </tr>
 
   <!-- 안전보건/환경 -->
-  <tr>
+  <tr class="cat-saf">
     <td rowspan="2">
       <div class="cat-label">
         <span class="dot dot-saf"></span>
@@ -806,35 +827,36 @@
     </td>
     <td data-month="1월">
       <ul>
-        <li>대기배출 반기 보고서 제출 <span class="badge badge-done">완료</span></li>
+        <li>대기배출 반기 보고서 제출</li>
       </ul>
     </td>
     <td data-month="2월">
       <ul>
-        <li>수전설비 정기검사 신청 <span class="sub">(5/31 16시 변경)</span> <span class="badge badge-done">완료</span></li>
-        <li>폐기물처분부담금 감면 신청 <span class="badge badge-done">완료</span></li>
+        <li>수전설비 정기검사 신청 <span class="sub">(5/31 16시 변경)</span></li>
+        <li>폐기물처분부담금 감면 신청</li>
       </ul>
     </td>
     <td data-month="3월">
       <ul>
-        <li>LOTO 절차서&middot;안전표지 부착 <span class="badge badge-done">완료</span></li>
-        <li>ISO14001 비상사태 대응훈련 보고서 작성 <span class="badge badge-done">완료</span></li>
-        <li>안전보건 정기교육 자료 배포 <span class="badge badge-done">완료</span></li>
-        <li>안전보건 예산 자료 최종 완료 <span class="badge badge-done">완료</span></li>
+        <li>LOTO 절차서&middot;안전표지 부착</li>
+        <li>ISO14001 비상사태 대응훈련 보고서 작성</li>
+        <li>안전보건 정기교육 자료 배포</li>
+        <li>안전보건 예산 자료 최종 완료</li>
+        <li>IATF16949 내부심사원 교육 이수</li>
       </ul>
     </td>
   </tr>
-  <tr class="consolidated">
+  <tr class="consolidated cat-saf">
     <td colspan="3">
       <ul>
-        <li><strong>사출기&middot;압력용기 안전검사</strong> &mdash; 신청 &rarr; 검사 합격 &rarr; 합격증명서 현장 부착 완료 <span class="badge badge-done">완료</span></li>
-        <li><strong>비산배출 인허가 변경</strong> &mdash; 착수 &rarr; 현장 실사 &rarr; 화성시 접수 완료 <span class="sub">(4월 심사 예정)</span> <span class="badge badge-ing">진행중</span></li>
+        <li><strong>사출기&middot;압력용기 안전검사</strong> &mdash; 신청 &rarr; 검사 합격 &rarr; 합격증명서 현장 부착 완료</li>
+        <li><strong>비산배출 인허가 변경</strong> &mdash; 착수 &rarr; 현장 실사 &rarr; 화성시 접수 완료 <span class="sub">(4월 심사 예정)</span></li>
       </ul>
     </td>
   </tr>
 
   <!-- ESG -->
-  <tr>
+  <tr class="cat-esg">
     <td rowspan="2">
       <div class="cat-label">
         <span class="dot dot-esg"></span>
@@ -845,22 +867,22 @@
     <td class="cell-empty">&mdash;</td>
     <td data-month="3월">
       <ul>
-        <li>협력사 ESG 자가점검 4사 완료 <span class="sub">(성진로지스 외)</span> <span class="badge badge-done">완료</span></li>
-        <li>KAP 탄소중립 웨비나 이수 <span class="badge badge-done">완료</span></li>
-        <li>동국실업 자가진단평가서 송부 <span class="badge badge-done">완료</span></li>
+        <li>협력사 ESG 자가점검 4사 완료 <span class="sub">(성진로지스 외)</span></li>
+        <li>KAP 탄소중립 웨비나 이수</li>
+        <li>동국실업 자가진단평가서 송부</li>
       </ul>
     </td>
   </tr>
-  <tr class="consolidated">
+  <tr class="consolidated cat-esg">
     <td colspan="3">
       <ul>
-        <li><strong>태양광 재생에너지 인증서 월별 발급</strong> <span class="sub">(2025.12~2026.2월분)</span> &mdash; 3개월 연속 발급 완료 <span class="badge badge-done">완료</span></li>
+        <li><strong>태양광 재생에너지 인증서 월별 발급</strong> <span class="sub">(2025.12~2026.2월분)</span> &mdash; 3개월 연속 발급 완료</li>
       </ul>
     </td>
   </tr>
 
   <!-- 지원사업 / 컨설팅 -->
-  <tr>
+  <tr class="cat-gov">
     <td>
       <div class="cat-label">
         <span class="dot dot-gov"></span>
@@ -869,24 +891,24 @@
     </td>
     <td data-month="1월">
       <ul>
-        <li>LCA 탄소관리 R&amp;D 자료 송부 <span class="sub">(생기원&middot;LG전자)</span> <span class="badge badge-done">완료</span></li>
-        <li>LG 한경협 컨설팅 착수 <span class="sub">(조직구조&middot;인사평가)</span> <span class="badge badge-done">완료</span></li>
+        <li>LCA 탄소관리 R&amp;D 자료 송부 <span class="sub">(생기원&middot;LG전자)</span></li>
+        <li>LG 한경협 컨설팅 착수 <span class="sub">(조직구조&middot;인사평가)</span></li>
       </ul>
     </td>
     <td data-month="2월">
       <ul>
-        <li>구조혁신지원사업 신청&middot;현장진단 <span class="sub">(디지털혁신형)</span> <span class="badge badge-done">완료</span></li>
-        <li>LG 한경협 컨설팅 2회 진행 <span class="sub">(조직개편 논의)</span> <span class="badge badge-done">완료</span></li>
+        <li>구조혁신지원사업 신청&middot;현장진단 <span class="sub">(디지털혁신형)</span></li>
+        <li>LG 한경협 컨설팅 2회 진행 <span class="sub">(조직개편 논의)</span></li>
       </ul>
     </td>
     <td data-month="3월">
       <ul>
-        <li>R&amp;D 지원사업 &amp; 기업인증 컨설팅 미팅 <span class="badge badge-done">완료</span></li>
-        <li>LG 한경협 컨설팅 <span class="sub">(연봉테이블&middot;KPI)</span> <span class="badge badge-ing">진행중</span></li>
-        <li>스마트생태공장 효과보고서 제출 <span class="badge badge-done">완료</span></li>
-        <li>정부지원금 검토 보고 <span class="sub">(AI&middot;스마트공장 고도화&middot;제조혁신)</span> <span class="badge badge-done">완료</span></li>
-        <li>LCA R&amp;D Raw Data 작성 <span class="badge badge-ing">진행중</span></li>
-        <li>구조혁신 진단보고서 공유 <span class="sub">(4월 2차)</span> <span class="badge badge-ing">진행중</span></li>
+        <li>R&amp;D 지원사업 &amp; 기업인증 컨설팅 미팅</li>
+        <li>LG 한경협 컨설팅 <span class="sub">(KPI)</span></li>
+        <li>스마트생태공장 효과보고서 제출</li>
+        <li>정부지원금 검토 보고 <span class="sub">(AI&middot;스마트공장 고도화&middot;제조혁신)</span></li>
+        <li>LCA R&amp;D Raw Data 작성</li>
+        <li>구조혁신 진단보고서 공유 <span class="sub">(4월 2차)</span></li>
       </ul>
     </td>
   </tr>
@@ -898,10 +920,10 @@
 
 <!-- ===== FOOTER ===== -->
 <div class="footer">
-  <div>데이터 출처 : 노션 경영지원 DB &middot; 주간보고 &nbsp;|&nbsp; 작성 : 임정인 &nbsp;|&nbsp; 검토 : 경영기획실장</div>
+  <div>데이터 출처 : 노션 경영지원 DB &middot; 주간보고 &middot; 개인 업데이트</div>
   <div class="footer-right">
-    <div class="footer-dept">경영기획실 경영지원팀</div>
-    <div class="footer-date">2026년 3월 30일</div>
+    <div class="footer-dept">경영기획실</div>
+    <div class="footer-date">2026년 4월 2일</div>
   </div>
 </div>
 
