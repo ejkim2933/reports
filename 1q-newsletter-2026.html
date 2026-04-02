@@ -218,8 +218,8 @@
   }
 
   /* Consolidated row */
-  .consolidated td { background: #fff !important; border-bottom: 2px solid #e5e9f0 !important; }
-  .consolidated td:first-child { background: #f8f9fc !important; }
+  .consolidated td { background: #fff; border-bottom: 2px solid #e5e9f0; }
+  .consolidated td:first-child { background: #f8f9fc; }
 
   /* ===== PLANS SECTION ===== */
   .plans-grid {
@@ -323,8 +323,9 @@
     .work-table { border-radius: 0; box-shadow: none; background: transparent; }
     .work-table thead { display: none; }
     .work-table tbody tr {
-      background: #fff; border-radius: 12px; margin-bottom: 12px;
+      background: #fff; border-radius: 12px; margin-bottom: 16px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow: hidden;
+      border: 1px solid #e5e9f0;
     }
     .work-table tbody td {
       padding: 12px 16px; border-bottom: 1px solid #f0f2f6;
@@ -341,8 +342,14 @@
     .work-table tbody td.cell-empty { display: none; }
 
     /* consolidated 행 */
-    .consolidated { margin-bottom: 0 !important; border-radius: 0 0 12px 12px !important; margin-top: -12px; }
+    .consolidated { margin-bottom: 0 !important; border-radius: 0 0 12px 12px !important; margin-top: -17px; border-top: none !important; }
     .consolidated td { border-right: none !important; }
+    .consolidated td:first-child {
+      background: linear-gradient(135deg, #0d1f3c, #1a3a6e) !important;
+      border-bottom: none !important;
+    }
+    .consolidated td:first-child .cat-label { color: #fff; }
+    .consolidated td:first-child .cat-label .cat-en { color: #7bacd4; }
     .consolidated td[colspan] { padding: 12px 16px; }
     .consolidated li { line-height: 1.8; margin-bottom: 4px; word-break: keep-all; }
 
