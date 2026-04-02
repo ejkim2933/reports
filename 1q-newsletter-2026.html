@@ -145,10 +145,12 @@
     padding: 14px 16px; text-align: left; white-space: nowrap;
     position: sticky; top: 0;
   }
+  .work-table { table-layout: fixed; }
   .work-table thead th:first-child {
     width: 148px; border-radius: 12px 0 0 0;
     border-right: 1px solid rgba(255,255,255,0.1);
   }
+  .work-table thead th:not(:first-child) { width: calc((100% - 148px) / 3); }
   .work-table thead th:last-child { border-radius: 0 12px 0 0; }
   .work-table thead th .th-sub {
     font-size: 10px; font-weight: 400; color: #7bacd4; display: block; margin-top: 1px;
@@ -159,6 +161,7 @@
   .work-table tbody td {
     padding: 14px 14px; vertical-align: top;
     border-bottom: 1px solid #f0f2f6;
+    word-break: keep-all;
   }
   .work-table tbody tr:last-child td { border-bottom: none; }
   .work-table tbody td:first-child {
