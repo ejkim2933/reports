@@ -1097,9 +1097,7 @@ function getFilteredZones(){
 function renderPatrolZones(){
   const container = document.getElementById('patrol-zones');
   if(!container) return;
-  const R=20, C=2*Math.PI*R;
   const filtered = getFilteredZones();
-  // 항목 수 표시
   const totalItems = filtered.reduce((s,z)=>s+z.items.length, 0);
   const sub = document.getElementById('patrol-total-sub');
   if(sub) sub.textContent = `${filtered.length}개 카테고리 · ${totalItems}개 항목`;
