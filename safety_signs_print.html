@@ -477,11 +477,42 @@ body {
 @media print {
   .screen-controls, .grid-view { display: none !important; }
 
-  * {
+  *, *::before, *::after {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     color-adjust: exact !important;
   }
+
+  .sign-red .sign-header { border-top: 12mm solid #D32F2F !important; }
+  .sign-yellow .sign-header { border-top: 12mm solid #FFC107 !important; }
+  .sign-blue .sign-header { border-top: 12mm solid #1565C0 !important; }
+  .sign-green .sign-header { border-top: 12mm solid #2E7D32 !important; }
+  .sign-red .sign-title { color: #B71C1C !important; }
+  .sign-yellow .sign-title { color: #F57F17 !important; }
+  .sign-blue .sign-title { color: #0D47A1 !important; }
+  .sign-green .sign-title { color: #1B5E20 !important; }
+  .sign-red .rule { border-left: 4px solid #D32F2F !important; }
+  .sign-yellow .rule { border-left: 4px solid #F57F17 !important; }
+  .sign-blue .rule { border-left: 4px solid #1565C0 !important; }
+  .sign-green .rule { border-left: 4px solid #2E7D32 !important; }
+  .sign-red .rule-icon { background: #D32F2F !important; }
+  .sign-yellow .rule-icon { background: #F57F17 !important; }
+  .sign-blue .rule-icon { background: #1565C0 !important; }
+  .sign-green .rule-icon { background: #2E7D32 !important; }
+  .sign-red .sign-symbol { border-color: #D32F2F !important; }
+  .sign-red .sign-symbol::after { background: #D32F2F !important; }
+  .sign-blue .sign-symbol { background: #1565C0 !important; }
+  .sign-green .sign-symbol { background: #2E7D32 !important; }
+  .category-badge { color: #fff !important; }
+  .sign-red .category-badge { background: #D32F2F !important; }
+  .sign-yellow .category-badge { background: #F57F17 !important; }
+  .sign-blue .category-badge { background: #1565C0 !important; }
+  .sign-green .category-badge { background: #2E7D32 !important; }
+  .sign-red .sign-location { border-left-color: #D32F2F !important; }
+  .sign-yellow .sign-location { border-left-color: #F57F17 !important; }
+  .sign-blue .sign-location { border-left-color: #1565C0 !important; }
+  .sign-green .sign-location { border-left-color: #2E7D32 !important; }
+  .sign-footer { background: #1a1a2e !important; }
 
   body {
     background: #fff;
