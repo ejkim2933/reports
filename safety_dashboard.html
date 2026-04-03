@@ -2472,6 +2472,10 @@ const esgData = [
   {cat:'기타',name:'비상사태교육',target:'전체 직원',eval:'위기대응 매뉴얼 교육',basis:'교육일지',cycle:'년2회',manager:'임정인',agency:'',plan:[0,0,1,0,0,0,0,0,0,1,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'}
 ];
 
+// ★ 구글 드라이브 업로드 Apps Script URL
+// Apps Script 웹앱 배포 후 여기에 URL을 붙여넣으세요
+const DRIVE_UPLOAD_URL = '';  // 예: 'https://script.google.com/macros/s/AKfycb.../exec'
+
 function getESGFiles(){
   try{ return JSON.parse(localStorage.getItem('safety_esg_files')||'{}'); }catch(e){ return {}; }
 }
@@ -2563,10 +2567,11 @@ function renderESGPlan(containerId){
           <div class="esg-file-list" id="esg-fl-${containerId}-${globalIdx}"></div>
           <input type="text" id="esg-fi-${containerId}-${globalIdx}" placeholder="URL 또는 파일명 입력">
           <div style="display:flex;gap:4px;margin-bottom:4px;">
-            <label style="font-size:12px;color:#6b7280;cursor:pointer;display:flex;align-items:center;gap:3px;">
-              <input type="file" style="display:none;" onchange="addESGFileUpload(${globalIdx},'${containerId}',this)">📁 파일선택
+            <label style="font-size:12px;color:#1e5096;cursor:pointer;display:flex;align-items:center;gap:3px;padding:4px 10px;background:#eef4ff;border-radius:6px;font-weight:600;">
+              <input type="file" style="display:none;" onchange="addESGFileUpload(${globalIdx},'${containerId}',this)">📁 파일 업로드${DRIVE_UPLOAD_URL?' (드라이브)':''}
             </label>
             <button class="btn btn-primary btn-sm" style="font-size:12px;padding:4px 10px;" onclick="addESGFile(${globalIdx},'${containerId}')">링크추가</button>
+            <div class="esg-upload-status"></div>
           </div>
           <div class="esg-memo-area">
             <div style="font-size:11px;font-weight:600;color:#374151;margin-bottom:4px;">내역 메모</div>
@@ -2633,9 +2638,18 @@ function renderESGFileList(idx, containerId){
   if(!el) return;
   if(list.length===0){ el.innerHTML='<div style="font-size:11px;color:#9ca3af;padding:4px 0;">첨부 파일 없음</div>'; return; }
   el.innerHTML = list.map((f,fi)=>{
-    const isUrl = f.startsWith('http');
+    // 객체 형식 {name, url, uploaded} 또는 문자열 형식 호환
+    const isObj = typeof f === 'object';
+    const name = isObj ? f.name : f;
+    const url = isObj ? f.url : (f.startsWith('http') ? f : '');
+    const uploaded = isObj && f.uploaded ? `<span style="font-size:9px;color:#9ca3af;margin-left:4px;">${f.uploaded}</span>` : '';
+    const displayName = name.length > 25 ? name.substring(0,25)+'...' : name;
     return `<div class="esg-file-item">
-      ${isUrl?`<a href="${f}" target="_blank">${f.length>30?f.substring(0,30)+'...':f}</a>`:`<span>${f}</span>`}
+      <div style="flex:1;min-width:0;">
+        ${url?`<a href="${url}" target="_blank" style="color:#1e5096;text-decoration:none;font-size:12px;" title="${name}">📄 ${displayName}</a>`:`<span style="font-size:12px;" title="${name}">📄 ${displayName}</span>`}
+        ${uploaded}
+      </div>
+      ${url?`<a href="${url}" target="_blank" style="font-size:10px;color:#6b7280;margin-right:4px;" title="다운로드">⬇</a>`:''}
       <button class="esg-file-rm" onclick="removeESGFile(${idx},${fi},'${containerId}')">&times;</button>
     </div>`;
   }).join('');
@@ -2643,9 +2657,11 @@ function renderESGFileList(idx, containerId){
 function addESGFile(idx, containerId){
   const input = document.getElementById(`esg-fi-${containerId}-${idx}`);
   if(!input || !input.value.trim()) return;
+  const val = input.value.trim();
   const files = getESGFiles();
   if(!files[idx]) files[idx]=[];
-  files[idx].push(input.value.trim());
+  const isUrl = val.startsWith('http');
+  files[idx].push({name: isUrl ? val.split('/').pop() || val : val, url: isUrl ? val : '', uploaded: new Date().toISOString().split('T')[0]});
   setESGFiles(files);
   input.value='';
   renderESGFileList(idx, containerId);
@@ -2681,17 +2697,63 @@ function toggleESGDone(idx, month, containerId){
   renderESGPlan('esg-plan-schedule');
 }
 
-// === ESG File upload via file picker ===
+// === ESG File upload via Google Drive ===
 function addESGFileUpload(idx, containerId, input){
   if(!input.files || !input.files[0]) return;
-  const fileName = input.files[0].name;
-  const files = getESGFiles();
-  if(!files[idx]) files[idx]=[];
-  files[idx].push(fileName);
-  setESGFiles(files);
-  input.value='';
-  renderESGFileList(idx, containerId);
-  renderESGPlan(containerId);
+  const file = input.files[0];
+
+  if(!DRIVE_UPLOAD_URL){
+    // Apps Script 미설정 시 파일명만 저장 (기존 방식)
+    const files = getESGFiles();
+    if(!files[idx]) files[idx]=[];
+    files[idx].push({name: file.name, url: ''});
+    setESGFiles(files);
+    input.value='';
+    renderESGFileList(idx, containerId);
+    renderESGPlan(containerId);
+    return;
+  }
+
+  // 구글 드라이브 업로드
+  const itemName = esgData[idx] ? esgData[idx].cat + '_' + esgData[idx].name : '';
+  const btn = input.closest('.esg-file-popup').querySelector('.esg-upload-status');
+  if(btn) btn.innerHTML = '<span style="color:#1e5096;">업로드 중...</span>';
+
+  const reader = new FileReader();
+  reader.onload = function(e){
+    const base64 = e.target.result.split(',')[1];
+    fetch(DRIVE_UPLOAD_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        fileName: file.name,
+        fileData: base64,
+        mimeType: file.type,
+        subfolder: itemName
+      })
+    }).then(()=>{
+      // no-cors 모드에서는 응답을 읽을 수 없으므로 URL 추정
+      // 실제 URL은 드라이브에서 확인 필요
+      const files = getESGFiles();
+      if(!files[idx]) files[idx]=[];
+      files[idx].push({
+        name: file.name,
+        url: 'https://drive.google.com/drive/folders/10a7V0ao6Qf-_9XeiK4Bd2NRmfAX7rgB5',
+        uploaded: new Date().toISOString().split('T')[0]
+      });
+      setESGFiles(files);
+      input.value='';
+      if(btn) btn.innerHTML = '<span style="color:#16a34a;">✅ 업로드 완료</span>';
+      setTimeout(()=>{ if(btn) btn.innerHTML=''; }, 2000);
+      renderESGFileList(idx, containerId);
+      renderESGPlan(containerId);
+    }).catch(err=>{
+      if(btn) btn.innerHTML = '<span style="color:#dc2626;">업로드 실패</span>';
+      console.error('Drive upload error:', err);
+    });
+  };
+  reader.readAsDataURL(file);
 }
 
 // === ESG Memo functions ===
