@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&display=swap');
 </style>
 <style>
 /* ===== RESET & BASE ===== */
@@ -452,10 +452,10 @@ body {
   height: 36px;
 }
 
-/* ===== CHINESE FONT OVERRIDE ===== */
+/* ===== CHINESE FONT - 고딕체(黑体) 통일 ===== */
 .rule-cn, .sign-title-cn, .category-badge-cn, .sign-location-cn,
 [class*="-cn"] {
-  font-family: 'Noto Sans SC', sans-serif !important;
+  font-family: 'Noto Sans SC', 'Microsoft YaHei', 'PingFang SC', 'SimHei', sans-serif !important;
   -webkit-font-smoothing: antialiased;
 }
 
