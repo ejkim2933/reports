@@ -2312,12 +2312,22 @@ function renderDocMgr(){
     const urgentItems = missingWWS.filter(d=>['A-3-1~3','B-2-2','B-2-5','B-3-3','E-4-2','E-7-1','F-1-1~4'].some(c=>d.wwsCode===c||d.wwsCode.startsWith(c)));
     let html = '';
     if(urgentItems.length>0){
-      html += `<div class="alert danger" style="margin-bottom:8px;">🔴 <strong>긴급 확보 필요 ${urgentItems.length}건</strong><br>${urgentItems.map(d=>`• <strong>${d.wwsCode}</strong> ${d.name}`).join('<br>')}</div>`;
+      html += `<div class="alert danger" style="margin-bottom:12px;">
+        <div style="font-weight:700;margin-bottom:10px;">🔴 긴급 확보 필요 ${urgentItems.length}건</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          ${urgentItems.map(d=>`<span style="display:inline-block;padding:4px 10px;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.2);border-radius:6px;font-size:12px;line-height:1.4;"><strong>${d.wwsCode}</strong> ${d.name}</span>`).join('')}
+        </div>
+      </div>`;
     }
     if(missingWWS.length>0){
       const otherMissing = missingWWS.filter(d=>!urgentItems.includes(d));
       if(otherMissing.length>0){
-        html += `<div class="alert warning">⚠️ <strong>WWS 미이행 항목 ${otherMissing.length}건</strong><br>${otherMissing.map(d=>`• ${d.wwsCode} ${d.name}`).join('<br>')}</div>`;
+        html += `<div class="alert warning">
+          <div style="font-weight:700;margin-bottom:10px;">⚠️ WWS 미이행 항목 ${otherMissing.length}건</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            ${otherMissing.map(d=>`<span style="display:inline-block;padding:4px 10px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:6px;font-size:12px;line-height:1.4;">${d.wwsCode} ${d.name}</span>`).join('')}
+          </div>
+        </div>`;
       }
     }
     if(missingWWS.length===0){
