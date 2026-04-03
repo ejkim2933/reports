@@ -71,7 +71,7 @@ body{font-family:'Noto Sans KR','Noto Sans SC','Apple SD Gothic Neo','Malgun Got
 /* TABLE */
 .table-wrap{overflow-x:auto;border-radius:8px;border:1px solid #e8edf3;}
 table{width:100%;border-collapse:collapse;font-size:13px;}
-table th{background:#f8fafc;padding:10px 12px;text-align:left;font-size:12px;font-weight:600;color:#6b7280;border-bottom:1px solid #e8edf3;}
+table th{background:#f8fafc;padding:10px 12px;text-align:left;font-size:13px;font-weight:600;color:#6b7280;border-bottom:1px solid #e8edf3;}
 table td{padding:10px 12px;border-bottom:1px solid #f1f5f9;vertical-align:middle;}
 table tr:last-child td{border-bottom:none;}
 table tr:hover td{background:#f8fafc;}
@@ -2239,23 +2239,23 @@ function renderDocMgr(){
       const updatedText = d.updated ? `<span style="font-size:9px;color:#9ca3af;margin-left:6px;">${d.updated}</span>` : '';
       return `<tr${expiresWarn}>
         <td style="text-align:center;">${wwsBadge}</td>
-        <td style="font-weight:600;font-size:13px;">${d.name}</td>
-        <td style="font-size:11px;color:#6b7280;">
+        <td style="font-weight:600;font-size:14px;">${d.name}</td>
+        <td style="font-size:13px;color:#6b7280;">
           <div>${d.basis}</div>
           ${noteText}
         </td>
-        <td style="font-size:12px;text-align:center;">${d.period}</td>
+        <td style="font-size:13px;text-align:center;">${d.period}</td>
         <td>
-          <select class="badge ${sc}" style="border:none;cursor:pointer;font-size:11px;font-weight:600;" onchange="updateDMStatus('${d.id}','status',this.value)">
+          <select class="badge ${sc}" style="border:none;cursor:pointer;font-size:13px;font-weight:600;" onchange="updateDMStatus('${d.id}','status',this.value)">
             <option value="보유" ${d.status==='보유'?'selected':''}>✅ 보유</option>
             <option value="갱신필요" ${d.status==='갱신필요'?'selected':''}>⚠️ 갱신필요</option>
             <option value="미보유" ${d.status==='미보유'?'selected':''}>❌ 미보유</option>
           </select>
           ${updatedText}
         </td>
-        <td>${fileDisplay}<span id="dm-upload-status-${d.id}" style="font-size:9px;"></span></td>
+        <td style="font-size:13px;">${fileDisplay}<span id="dm-upload-status-${d.id}" style="font-size:10px;"></span></td>
         <td style="text-align:center;">
-          <button class="btn btn-outline btn-sm" onclick="dmNote('${d.id}')" style="font-size:10px;" title="메모 편집">✏️</button>
+          <button class="btn btn-outline btn-sm" onclick="dmNote('${d.id}')" style="font-size:12px;" title="메모 편집">✏️</button>
         </td>
       </tr>`;
     }).join('');
