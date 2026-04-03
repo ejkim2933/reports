@@ -404,15 +404,10 @@ table tr:hover td{background:#f8fafc;}
       </div>
 
       <!-- 필터 -->
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;">
-        <span style="font-size:12px;font-weight:700;">사업장:</span>
-        <button class="btn btn-sm" onclick="setPatrolFilter('site','all',this)" id="pf-site-all" style="background:#0d1f3c;color:#fff;font-size:11px;">전체</button>
-        <button class="btn btn-outline btn-sm" onclick="setPatrolFilter('site','suwon',this)" style="font-size:11px;">수원</button>
-        <button class="btn btn-outline btn-sm" onclick="setPatrolFilter('site','hwaseong',this)" style="font-size:11px;">화성</button>
-        <span style="font-size:12px;font-weight:700;margin-left:8px;">레벨:</span>
-        <button class="btn btn-sm" onclick="setPatrolFilter('level','all',this)" id="pf-level-all" style="background:#0d1f3c;color:#fff;font-size:11px;">전체</button>
-        <button class="btn btn-outline btn-sm" onclick="setPatrolFilter('level','manager',this)" style="font-size:11px;">공장장</button>
-        <button class="btn btn-outline btn-sm" onclick="setPatrolFilter('level','team',this)" style="font-size:11px;">팀별</button>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;background:#f8fafc;padding:12px 16px;border-radius:10px;">
+        <span style="font-size:13px;font-weight:700;color:#0d1f3c;">🏭 사업장 선택:</span>
+        <button class="pf-site btn btn-sm" onclick="setPatrolFilter('site','suwon',this)" style="background:#1e5096;color:#fff;font-size:12px;padding:8px 20px;">📍 수원 (사출·조립)</button>
+        <button class="pf-site btn btn-outline btn-sm" onclick="setPatrolFilter('site','hwaseong',this)" style="font-size:12px;padding:8px 20px;">📍 화성 (도색·화학)</button>
       </div>
 
       <!-- 패트롤 달력 -->
@@ -1003,8 +998,7 @@ setInterval(updateClock,1000); updateClock();
 // 패트롤 통합 체크리스트 (사업장별 + 레벨별 필터 지원)
 // site: 'all'=공통, 'suwon'=수원, 'hwaseong'=화성
 // level: 'manager'=공장장, 'team'=팀별
-let patrolSiteFilter = 'all';
-let patrolLevelFilter = 'all';
+let patrolSiteFilter = 'suwon';
 
 const patrolZones = [
   // ── 공통 · 공장장 ──
@@ -1117,23 +1111,16 @@ const patrolZones = [
 ];
 
 function setPatrolFilter(type, val, btn){
-  if(type==='site'){
-    patrolSiteFilter = val;
-    document.querySelectorAll('[id^="pf-site-"]').forEach(b=>{b.style.background='';b.style.color='';b.className='btn btn-outline btn-sm';});
-  } else {
-    patrolLevelFilter = val;
-    document.querySelectorAll('[id^="pf-level-"]').forEach(b=>{b.style.background='';b.style.color='';b.className='btn btn-outline btn-sm';});
-  }
-  if(btn){btn.style.background='#0d1f3c';btn.style.color='#fff';}
-  renderPatrolZones();
-  updatePatrolTotal();
+  patrolSiteFilter = val;
+  document.querySelectorAll('.pf-site').forEach(b=>{
+    b.style.background='#fff';b.style.color='#374151';b.style.border='1px solid #d1d5db';
+  });
+  if(btn){btn.style.background='#1e5096';btn.style.color='#fff';btn.style.border='1px solid #1e5096';}
 }
 
 function getFilteredZones(){
   return patrolZones.filter(z=>{
-    const siteOk = patrolSiteFilter==='all' || z.site==='all' || z.site===patrolSiteFilter;
-    const levelOk = patrolLevelFilter==='all' || z.level===patrolLevelFilter;
-    return siteOk && levelOk;
+    return z.site==='all' || z.site===patrolSiteFilter;
   });
 }
 
