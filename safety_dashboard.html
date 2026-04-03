@@ -6,9 +6,9 @@
 <title>산업안전보건 관리 시스템</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#f0f4f9;color:#374151;display:flex;min-height:100vh;}
+body{font-family:'Noto Sans KR','Noto Sans SC','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#f0f4f9;color:#374151;display:flex;min-height:100vh;}
 /* SIDEBAR */
 #sidebar{width:220px;min-height:100vh;background:linear-gradient(180deg, #0d1f3c 0%, #1a3a6e 100%);color:#fff;position:fixed;top:0;left:0;z-index:100;display:flex;flex-direction:column;}
 #sidebar .logo{padding:20px 16px;border-bottom:1px solid rgba(255,255,255,0.1);}
@@ -2532,10 +2532,10 @@ function cnPrint(id){
   const c=cnCards.find(x=>x.id===id);
   const w=window.open('','_blank','width=800,height=1100');
   w.document.write(`<html><head><meta charset="UTF-8"><style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;800;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
     @page{size:A4;margin:0;}
     *{margin:0;padding:0;box-sizing:border-box;}
-    html,body{width:210mm;height:297mm;font-family:'Noto Sans KR','Malgun Gothic',sans-serif;
+    html,body{width:210mm;height:297mm;font-family:'Noto Sans KR','Noto Sans SC','Malgun Gothic',sans-serif;
       -webkit-print-color-adjustment:exact !important;print-color-adjust:exact !important;color-adjust:exact !important;}
     .card{width:210mm;min-height:297mm;display:flex;flex-direction:column;}
     .header{padding:36px 32px 24px;background:${c.color};min-height:180px;position:relative;display:flex;flex-direction:column;justify-content:flex-end;
@@ -2620,10 +2620,10 @@ function ptPrint(id){
   const p=ptPosters.find(x=>x.id===id);
   const w=window.open('','_blank','width=800,height=1100');
   w.document.write(`<html><head><meta charset="UTF-8"><style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;800;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
     @page{size:A4;margin:0;}
     *{margin:0;padding:0;box-sizing:border-box;}
-    html,body{width:210mm;height:297mm;font-family:'Noto Sans KR','Malgun Gothic',sans-serif;
+    html,body{width:210mm;height:297mm;font-family:'Noto Sans KR','Noto Sans SC','Malgun Gothic',sans-serif;
       -webkit-print-color-adjustment:exact !important;print-color-adjust:exact !important;color-adjust:exact !important;}
     .poster{width:210mm;min-height:297mm;display:flex;flex-direction:column;overflow:hidden;}
     .header{padding:36px 32px 28px;background:${p.color};text-align:center;position:relative;min-height:200px;display:flex;flex-direction:column;justify-content:center;
