@@ -2595,12 +2595,24 @@ function renderESGPlan(containerId){
     </tr>`;
   });
 
-  tableHtml += `<tr class="esg-total-row"><td colspan="22" style="text-align:right;padding-right:12px;">연간 총 비용</td><td style="text-align:right;font-size:13px;font-weight:800;color:#1e5096;white-space:nowrap;">32,350,000원</td></tr>`;
+  // 필터된 항목의 비용 합산
+  let filteredTotal = 0;
+  filteredData.forEach(item => {
+    const costNum = parseInt((item.cost||'').replace(/[^0-9]/g,''), 10);
+    if(!isNaN(costNum) && costNum > 0) filteredTotal += costNum;
+  });
+  const totalAll = 32350000;
+  const displayTotal = activeFilter === 'all' ? totalAll : filteredTotal;
+  const formattedTotal = displayTotal.toLocaleString('ko-KR') + '원';
+  const totalLabel = activeFilter === 'all' ? '연간 총 비용' : `${activeFilter} 영역 비용`;
+
+  tableHtml += `<tr class="esg-total-row"><td colspan="22" style="text-align:right;padding-right:12px;font-weight:700;">${totalLabel}</td><td style="text-align:right;font-size:14px;font-weight:800;color:#1e5096;white-space:nowrap;">${formattedTotal}</td></tr>`;
   tableHtml += `</tbody></table></div>`;
 
+  const summaryLabel = activeFilter === 'all' ? '총 연간 예산' : `${activeFilter} 영역 예산`;
   let summaryHtml = `<div class="esg-summary">
-    <div><span class="esg-budget">총 연간 예산: 32,350,000원</span></div>
-    <div class="esg-note">● 시행완료 &nbsp; ○ 계획 &nbsp; - 해당없음 &nbsp;|&nbsp; 총 ${esgData.length}개 항목</div>
+    <div><span class="esg-budget">${summaryLabel}: ${formattedTotal}</span>${activeFilter!=='all'?`<span style="font-size:12px;color:#6b7280;margin-left:12px;">(전체: ${totalAll.toLocaleString('ko-KR')}원)</span>`:''}</div>
+    <div class="esg-note">● 시행완료 &nbsp; ○ 계획 &nbsp; - 해당없음 &nbsp;|&nbsp; ${activeFilter==='all'?'전체':''+activeFilter} ${filteredData.length}개 항목</div>
   </div>`;
 
   el.innerHTML = filterHtml + tableHtml + summaryHtml;
