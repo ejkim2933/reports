@@ -357,6 +357,19 @@ table tr:hover td{background:#f8fafc;}
   <div id="section-dashboard" class="section active">
     <div id="dashboard-alerts" style="margin-bottom:16px;"></div>
 
+    <!-- 일일 현장관리 5대 항목 (최상단) -->
+    <div class="daily5-card" id="daily5-card">
+      <div class="daily5-header">
+        <h4>🛡️ 일일 현장관리 5대 필수항목</h4>
+        <span class="daily5-date" id="daily5-date"></span>
+      </div>
+      <div class="daily5-progress">
+        <div class="d5p-bar"><div class="d5p-fill" id="daily5-fill" style="width:0%"></div></div>
+        <div class="d5p-pct" id="daily5-pct">0/5</div>
+      </div>
+      <div class="daily5-list" id="daily5-list"></div>
+    </div>
+
     <!-- 주요 이행현황 헤더 카드 -->
     <div class="dash-hero">
       <h3>📊 주요 이행현황</h3>
@@ -382,19 +395,6 @@ table tr:hover td{background:#f8fafc;}
           <div class="dhs-lbl" id="stat-accident-sub">건 (이번달)</div>
         </div>
       </div>
-    </div>
-
-    <!-- 일일 현장관리 5대 항목 -->
-    <div class="daily5-card" id="daily5-card">
-      <div class="daily5-header">
-        <h4>🛡️ 일일 현장관리 5대 필수항목</h4>
-        <span class="daily5-date" id="daily5-date"></span>
-      </div>
-      <div class="daily5-progress">
-        <div class="d5p-bar"><div class="d5p-fill" id="daily5-fill" style="width:0%"></div></div>
-        <div class="d5p-pct" id="daily5-pct">0/5</div>
-      </div>
-      <div class="daily5-list" id="daily5-list"></div>
     </div>
 
     <!-- 중간 3컬럼: 나의 현황 / WWS 이행현황 / 캘린더 -->
@@ -2523,18 +2523,18 @@ function renderESGPlan(containerId){
 
   let tableHtml = `<div class="esg-table-wrap"><table class="esg-table">
     <thead><tr>
-      <th style="width:36px;">No</th>
-      <th style="width:50px;">영역</th>
+      <th style="width:34px;">No</th>
+      <th style="width:48px;">영역</th>
       <th style="min-width:150px;">세부항목</th>
-      <th style="min-width:160px;">대상</th>
+      <th style="min-width:170px;">대상</th>
       <th style="min-width:160px;">평가내용</th>
       <th style="min-width:140px;">준수근거</th>
-      <th style="width:65px;">주기</th>
-      <th style="width:80px;">담당자</th>
-      <th style="min-width:140px;">시행기관</th>
+      <th style="width:75px;white-space:nowrap;">주기</th>
+      <th style="width:90px;">담당자</th>
+      <th style="min-width:110px;">시행기관</th>
       ${months.map(m=>`<th class="col-month">${m}</th>`).join('')}
       <th style="width:90px;">연간비용</th>
-      <th style="width:60px;">서류</th>
+      <th style="width:55px;">서류</th>
     </tr></thead><tbody>`;
 
   let currentCat = '';
@@ -2558,8 +2558,8 @@ function renderESGPlan(containerId){
       <td>${item.target}</td>
       <td>${item.eval}</td>
       <td>${item.basis}</td>
-      <td style="text-align:center;">${item.cycle}</td>
-      <td>${item.manager}</td>
+      <td style="text-align:center;white-space:nowrap;">${item.cycle}</td>
+      <td style="white-space:nowrap;">${item.manager}</td>
       <td style="font-size:12px;">${item.agency}</td>
       ${item.plan.map((p,mi)=>{
         const d = isESGDone(globalIdx, mi);
