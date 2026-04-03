@@ -373,112 +373,155 @@ table tr:hover td{background:#f8fafc;}
 
   <!-- TBM 일지 삭제 — 패트롤 체크리스트에 통합 -->
 
-  <!-- ===== 패트롤+TBM 통합 (한 페이지) ===== -->
+  <!-- ===== 패트롤+TBM (배너 → 달력 → 체크리스트 표) ===== -->
   <div id="section-patrol" class="section">
 
-    <!-- ① TBM 달력 -->
-    <div class="card" style="margin-bottom:16px;border-left:5px solid #1e5096;">
-      <div class="card-title">🌅 TBM 이번달 현황 <span style="font-size:11px;font-weight:400;color:#6b7280;">— 매일 작업 전 실시 | 날짜 클릭 → 체크 + 사진 + 메모</span></div>
-      <div id="tbm-today-theme" style="background:#eef4ff;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;border-left:4px solid #1e5096;"></div>
-      <div id="tbm-calendar" style="margin-bottom:12px;"></div>
-      <!-- 선택된 날짜 TBM 입력 -->
-      <div id="tbm-day-form" style="display:none;background:#f8fafc;border-radius:10px;padding:16px;margin-top:12px;border:1px solid #e8edf3;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-          <div style="font-size:14px;font-weight:700;color:#0d1f3c;" id="tbm-day-title">TBM 기록</div>
-          <button class="btn btn-outline btn-sm" onclick="document.getElementById('tbm-day-form').style.display='none'">닫기</button>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>TBM 실시 확인</label>
-            <div style="display:flex;gap:12px;align-items:center;">
-              <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" id="tbm-day-done" style="width:20px;height:20px;accent-color:#16a34a;"> 실시 완료</label>
+    <!-- 두 개의 큰 배너 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <!-- 패트롤 배너 -->
+      <div onclick="showPatrolView('patrol')" style="background:linear-gradient(135deg,#0d1f3c,#1e5096);border-radius:16px;padding:28px 24px;color:#fff;cursor:pointer;transition:transform 0.15s;position:relative;overflow:hidden;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform=''">
+        <div style="font-size:48px;margin-bottom:8px;">🔍</div>
+        <div style="font-size:20px;font-weight:900;">현장 패트롤 점검</div>
+        <div style="font-size:13px;opacity:0.8;margin-top:4px;">관리감독자(공장장) · 주간 순회점검</div>
+        <div style="position:absolute;bottom:12px;right:16px;font-size:12px;opacity:0.6;">달력에서 날짜 선택 →</div>
+        <div id="patrol-banner-stat" style="margin-top:12px;font-size:12px;opacity:0.9;"></div>
+      </div>
+      <!-- TBM 배너 -->
+      <div onclick="showPatrolView('tbm')" style="background:linear-gradient(135deg,#065f46,#10b981);border-radius:16px;padding:28px 24px;color:#fff;cursor:pointer;transition:transform 0.15s;position:relative;overflow:hidden;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform=''">
+        <div style="font-size:48px;margin-bottom:8px;">🌅</div>
+        <div style="font-size:20px;font-weight:900;">TBM 일지</div>
+        <div style="font-size:13px;opacity:0.8;margin-top:4px;">매일 작업 전 5~10분 · 전원 참석</div>
+        <div style="position:absolute;bottom:12px;right:16px;font-size:12px;opacity:0.6;">달력에서 날짜 선택 →</div>
+        <div id="tbm-banner-stat" style="margin-top:12px;font-size:12px;opacity:0.9;"></div>
+      </div>
+    </div>
+
+    <!-- 패트롤 뷰 (달력 + 체크리스트 표) -->
+    <div id="patrol-view" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3 style="font-size:16px;font-weight:800;color:#0d1f3c;">🔍 현장 패트롤 점검</h3>
+        <button class="btn btn-outline btn-sm" onclick="showPatrolView('home')">← 돌아가기</button>
+      </div>
+
+      <!-- 필터 -->
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;">
+        <span style="font-size:12px;font-weight:700;">사업장:</span>
+        <button class="btn btn-sm" onclick="setPatrolFilter('site','all',this)" id="pf-site-all" style="background:#0d1f3c;color:#fff;font-size:11px;">전체</button>
+        <button class="btn btn-outline btn-sm" onclick="setPatrolFilter('site','suwon',this)" style="font-size:11px;">수원</button>
+        <button class="btn btn-outline btn-sm" onclick="setPatrolFilter('site','hwaseong',this)" style="font-size:11px;">화성</button>
+        <span style="font-size:12px;font-weight:700;margin-left:8px;">레벨:</span>
+        <button class="btn btn-sm" onclick="setPatrolFilter('level','all',this)" id="pf-level-all" style="background:#0d1f3c;color:#fff;font-size:11px;">전체</button>
+        <button class="btn btn-outline btn-sm" onclick="setPatrolFilter('level','manager',this)" style="font-size:11px;">공장장</button>
+        <button class="btn btn-outline btn-sm" onclick="setPatrolFilter('level','team',this)" style="font-size:11px;">팀별</button>
+      </div>
+
+      <!-- 패트롤 달력 -->
+      <div class="card" style="margin-bottom:16px;">
+        <div id="patrol-calendar"></div>
+      </div>
+
+      <!-- 패트롤 체크리스트 표 (날짜 클릭 시 표시) -->
+      <div id="patrol-checklist-form" style="display:none;">
+        <div class="card" style="margin-bottom:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:2px solid #0d1f3c;margin-bottom:12px;">
+            <div>
+              <div style="font-size:18px;font-weight:900;color:#0d1f3c;" id="patrol-form-title">현장 패트롤 점검표</div>
+              <div style="font-size:12px;color:#6b7280;margin-top:2px;" id="patrol-form-date"></div>
+            </div>
+            <div style="text-align:right;font-size:11px;color:#6b7280;">
+              <div>점검자: <input type="text" id="p-inspector" placeholder="이름" style="border:none;border-bottom:1px solid #d1d5db;width:80px;font-size:11px;padding:2px 4px;"></div>
+              <div style="margin-top:4px;">날씨: <select id="p-weather" style="border:none;border-bottom:1px solid #d1d5db;font-size:11px;padding:2px;"><option>맑음</option><option>흐림</option><option>비</option><option>눈</option></select></div>
             </div>
           </div>
-          <div class="form-group"><label>TBM 사진 업로드</label>
-            <input type="file" id="tbm-day-photo" accept="image/*" style="width:100%;padding:6px;border:1px solid #d1d5db;border-radius:8px;font-size:12px;" onchange="previewTbmDayPhoto(this)">
+
+          <!-- 체크리스트 표 -->
+          <div class="table-wrap">
+            <table id="patrol-check-table" style="font-size:13px;">
+              <thead><tr style="background:#0d1f3c;color:#fff;">
+                <th style="width:30%;padding:10px 12px;">점검사항</th>
+                <th style="width:40%;padding:10px 12px;">점검내용</th>
+                <th style="width:50px;padding:10px;text-align:center;">점검</th>
+                <th style="width:25%;padding:10px 12px;">비고</th>
+              </tr></thead>
+              <tbody id="patrol-check-tbody"></tbody>
+            </table>
+          </div>
+
+          <!-- 조치사항 -->
+          <div style="margin-top:16px;padding-top:12px;border-top:2px solid #e8edf3;">
+            <div style="font-size:13px;font-weight:700;color:#0d1f3c;margin-bottom:8px;">조치 사항</div>
+            <textarea id="p-issues" placeholder="특이사항, 불량/개선 필요 사항, 조치 완료 사항 기재" style="width:100%;min-height:60px;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;"></textarea>
+          </div>
+
+          <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
+            <button class="btn btn-outline" onclick="clearPatrol()">초기화</button>
+            <button class="btn btn-success" onclick="savePatrolDay()">💾 점검 저장</button>
           </div>
         </div>
-        <div id="tbm-day-photo-preview" style="margin-bottom:8px;"></div>
-        <div class="form-group"><label>논의 주제 / 아젠다 (선택사항)</label>
-          <textarea id="tbm-day-agenda" placeholder="오늘 TBM에서 논의한 주요 내용 (필요시에만 기재)" style="min-height:50px;"></textarea>
-        </div>
-        <div style="display:flex;gap:8px;justify-content:flex-end;">
-          <button class="btn btn-success btn-sm" onclick="saveTbmDay()">💾 TBM 저장</button>
+      </div>
+
+      <!-- 패트롤 이력 -->
+      <div class="card">
+        <div class="card-title">📜 패트롤 이력</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>날짜</th><th>사업장</th><th>점검자</th><th>점검</th><th>불량</th><th>작업</th></tr></thead>
+          <tbody id="patrol-history-body"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- TBM 뷰 (달력 + 간단 체크) -->
+    <div id="tbm-view" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3 style="font-size:16px;font-weight:800;color:#0d1f3c;">🌅 TBM 일지</h3>
+        <button class="btn btn-outline btn-sm" onclick="showPatrolView('home')">← 돌아가기</button>
+      </div>
+      <div id="tbm-today-theme" style="background:#eef4ff;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;border-left:4px solid #1e5096;"></div>
+
+      <!-- TBM 달력 -->
+      <div class="card" style="margin-bottom:16px;">
+        <div id="tbm-calendar"></div>
+      </div>
+
+      <!-- TBM 입력 폼 (날짜 클릭 시) -->
+      <div id="tbm-day-form" style="display:none;">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:2px solid #065f46;margin-bottom:12px;">
+            <div>
+              <div style="font-size:18px;font-weight:900;color:#0d1f3c;" id="tbm-day-title">TBM 기록</div>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table style="font-size:13px;">
+              <thead><tr style="background:#065f46;color:#fff;">
+                <th style="width:35%;padding:10px 12px;">점검사항</th>
+                <th style="width:35%;padding:10px 12px;">내용</th>
+                <th style="width:50px;padding:10px;text-align:center;">점검</th>
+                <th style="width:25%;padding:10px 12px;">비고</th>
+              </tr></thead>
+              <tbody>
+                <tr><td style="font-weight:600;">TBM 실시</td><td>작업 전 안전회의 실시 여부</td><td style="text-align:center;"><input type="checkbox" id="tbm-day-done" style="width:20px;height:20px;accent-color:#16a34a;"></td><td></td></tr>
+                <tr><td style="font-weight:600;">건강상태 확인</td><td>음주·체온·약물 이상 없음</td><td style="text-align:center;"><input type="checkbox" id="tbm-health" style="width:20px;height:20px;accent-color:#16a34a;"></td><td></td></tr>
+                <tr><td style="font-weight:600;">보호구 착용</td><td>안전모·안전화·보안경 등</td><td style="text-align:center;"><input type="checkbox" id="tbm-ppe" style="width:20px;height:20px;accent-color:#16a34a;"></td><td></td></tr>
+                <tr><td style="font-weight:600;">위험요인 공유</td><td>금일 작업 위험요인·대책 공유</td><td style="text-align:center;"><input type="checkbox" id="tbm-risk" style="width:20px;height:20px;accent-color:#16a34a;"></td><td></td></tr>
+                <tr><td style="font-weight:600;">TBM 사진</td><td colspan="2"><input type="file" id="tbm-day-photo" accept="image/*" style="width:100%;padding:4px;border:1px solid #d1d5db;border-radius:6px;font-size:11px;" onchange="previewTbmDayPhoto(this)"></td><td id="tbm-day-photo-preview"></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="margin-top:12px;">
+            <div style="font-size:13px;font-weight:700;color:#0d1f3c;margin-bottom:6px;">논의 주제 / 특이사항</div>
+            <textarea id="tbm-day-agenda" placeholder="오늘 TBM에서 논의한 내용 (필요시에만 기재)" style="width:100%;min-height:50px;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;"></textarea>
+          </div>
+
+          <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
+            <button class="btn btn-success" onclick="saveTbmDay()">💾 TBM 저장</button>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- ② 패트롤 점검 정보 -->
-    <div class="card" style="margin-bottom:16px;">
-      <div class="card-title">🔍 현장 패트롤 점검 <span class="badge blue" style="font-size:11px;">관리감독자(공장장)</span></div>
-      <div class="form-row-3">
-        <div class="form-group"><label>점검일자</label><input type="date" id="p-date"></div>
-        <div class="form-group"><label>점검시간</label><input type="time" id="p-time"></div>
-        <div class="form-group"><label>점검자</label><input type="text" id="p-inspector" placeholder="공장장 이름"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>점검 구분</label>
-          <select id="p-type"><option>일상 순회점검</option><option>주간 정기점검</option><option>월간 안전점검</option><option>특별 점검</option></select>
-        </div>
-        <div class="form-group"><label>날씨</label>
-          <select id="p-weather"><option>맑음</option><option>흐림</option><option>비</option><option>눈</option><option>더위</option></select>
-        </div>
-      </div>
-    </div>
-
-    <!-- ③ 필터: 사업장 + 레벨 -->
-    <div class="card" style="margin-bottom:16px;padding:14px 18px;">
-      <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;">
-        <div style="font-size:13px;font-weight:700;color:#0d1f3c;">🏭 사업장</div>
-        <div style="display:flex;gap:6px;">
-          <button class="btn btn-sm" onclick="setPatrolFilter('site','all',this)" id="pf-site-all" style="background:#0d1f3c;color:#fff;">전체</button>
-          <button class="btn btn-outline btn-sm" onclick="setPatrolFilter('site','suwon',this)">수원 (사출·조립)</button>
-          <button class="btn btn-outline btn-sm" onclick="setPatrolFilter('site','hwaseong',this)">화성 (도색·레이저·화학)</button>
-        </div>
-        <div style="width:1px;height:24px;background:#e5e7eb;"></div>
-        <div style="font-size:13px;font-weight:700;color:#0d1f3c;">👤 레벨</div>
-        <div style="display:flex;gap:6px;">
-          <button class="btn btn-sm" onclick="setPatrolFilter('level','all',this)" id="pf-level-all" style="background:#0d1f3c;color:#fff;">전체</button>
-          <button class="btn btn-outline btn-sm" onclick="setPatrolFilter('level','manager',this)">공장장</button>
-          <button class="btn btn-outline btn-sm" onclick="setPatrolFilter('level','team',this)">팀별</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ④ 전체 달성률 바 -->
-    <div class="patrol-total" id="patrol-total">
-      <div>
-        <h3>🔍 전체 점검 진행률</h3>
-        <div style="font-size:12px;opacity:0.8;margin-top:4px;" id="patrol-total-sub">항목을 체크하여 점검을 시작하세요</div>
-      </div>
-      <div class="patrol-total-bar">
-        <div class="ptb-track"><div class="ptb-fill" id="patrol-total-fill" style="width:0%"></div></div>
-      </div>
-      <div class="patrol-total-pct" id="patrol-total-pct">0%</div>
-    </div>
-
-    <!-- ⑤ 점검 항목 (탭 없이 전체 펼침) -->
-    <div id="patrol-zones"></div>
-
-    <!-- ⑥ 종합 의견 + 저장 -->
-    <div class="card" style="margin-top:16px;">
-      <div class="card-title">📝 종합 의견 및 조치 필요 사항</div>
-      <div class="form-group"><label>불량/개선 필요 사항</label><textarea id="p-issues" placeholder="위치 및 내용 상세 기재"></textarea></div>
-      <div class="form-group"><label>즉시 조치 완료 사항</label><textarea id="p-actions" placeholder="현장에서 즉시 조치한 사항"></textarea></div>
-      <div class="form-group"><label>추가 조치 필요 사항 (담당자/기한)</label><textarea id="p-followup" placeholder="예) 천장주행크레인 체인 교체 - 홍길동 / 2026-04-30"></textarea></div>
-      <div style="display:flex;gap:8px;justify-content:flex-end;">
-        <button class="btn btn-outline" onclick="clearPatrol()">초기화</button>
-        <button class="btn btn-success" onclick="savePatrol()">💾 패트롤 기록 저장</button>
-      </div>
-    </div>
-
-    <!-- ⑦ 패트롤 이력 (항상 표시) -->
-    <div class="card" style="margin-top:16px;">
-      <div class="card-title">📜 패트롤 이력</div>
-      <div class="table-wrap"><table>
-        <thead><tr><th>날짜</th><th>사업장</th><th>점검자</th><th>점검구분</th><th>총점검</th><th>불량</th><th>작업</th></tr></thead>
-        <tbody id="patrol-history-body"></tbody>
-      </table></div>
-    </div>
   </div>
 
   <!-- ===== 교육 관리 ===== -->
@@ -913,7 +956,7 @@ function showSection(id){
   if(id==='dashboard') renderDashboard();
   if(id==='docmgr') renderDocMgr();
   if(id==='schedule') renderSchedule();
-  if(id==='patrol') { renderTbmCalendar(); renderHistories('patrol'); }
+  if(id==='patrol') { showPatrolView('home'); }
   if(id==='signs') renderSigns();
   if(id==='risk') renderRiskStatus();
 }
@@ -1135,7 +1178,162 @@ function renderPatrolZones(){
   }).join('');
 }
 
-// toggleZone 제거됨 — 모든 카테고리 항상 펼침
+// ============================================================
+// 패트롤/TBM 뷰 전환
+// ============================================================
+function showPatrolView(view){
+  document.getElementById('patrol-view').style.display = view==='patrol'?'block':'none';
+  document.getElementById('tbm-view').style.display = view==='tbm'?'block':'none';
+  if(view==='patrol'){ renderPatrolCalendar(); renderHistories('patrol'); }
+  if(view==='tbm'){ renderTbmCalendar(); renderTBMTheme(); }
+}
+
+// 패트롤 달력 렌더링
+function renderPatrolCalendar(){
+  const el = document.getElementById('patrol-calendar');
+  if(!el) return;
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const todayDate = now.getDate();
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  const dayNames = ['일','월','화','수','목','금','토'];
+  const patrolData = DB.getObj('patrolCalendar');
+  const monthKey = `${year}-${String(month+1).padStart(2,'0')}`;
+
+  let doneCount = 0;
+  for(let d=1;d<=daysInMonth;d++){
+    const key = `${monthKey}-${String(d).padStart(2,'0')}`;
+    if(patrolData[key] && patrolData[key].done) doneCount++;
+  }
+
+  let html = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+    <span style="font-size:14px;font-weight:700;color:#0d1f3c;">${year}년 ${month+1}월 패트롤</span>
+    <span style="font-size:12px;color:#6b7280;">실시: <strong style="color:#1e5096;">${doneCount}</strong>회</span>
+  </div>`;
+  html += '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;font-size:12px;">';
+  dayNames.forEach((d,i)=> html += `<div style="font-weight:700;color:${i===0?'#dc2626':'#6b7280'};padding:4px 0;">${d}</div>`);
+  for(let i=0;i<firstDay;i++) html += '<div></div>';
+  for(let d=1;d<=daysInMonth;d++){
+    const dow = (firstDay + d - 1) % 7;
+    const key = `${monthKey}-${String(d).padStart(2,'0')}`;
+    const dayData = patrolData[key];
+    const isDone = dayData && dayData.done;
+    const isToday = d === todayDate;
+    const bg = isDone ? '#dcfce7' : isToday ? '#eef4ff' : '#fff';
+    const border = isToday ? '2px solid #1e5096' : '1px solid #e8edf3';
+    const icon = isDone ? '✅' : '';
+    html += `<div onclick="openPatrolDay(${d})" style="padding:6px 2px;border-radius:8px;background:${bg};border:${border};cursor:pointer;min-height:44px;transition:all 0.15s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform=''">
+      <div style="font-size:12px;font-weight:${isToday?'800':'500'};color:${dow===0?'#dc2626':'#374151'};">${d}</div>
+      <div style="font-size:13px;margin-top:1px;">${icon}</div>
+    </div>`;
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+// 패트롤 날짜 클릭 → 체크리스트 표 표시
+function openPatrolDay(day){
+  const now = new Date();
+  const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const key = `${monthKey}-${String(day).padStart(2,'0')}`;
+  const dayNames = ['일','월','화','수','목','금','토'];
+  const dateObj = new Date(now.getFullYear(), now.getMonth(), day);
+  const dayName = dayNames[dateObj.getDay()];
+
+  document.getElementById('patrol-form-title').textContent = '현장 패트롤 점검표';
+  document.getElementById('patrol-form-date').textContent = `${key} (${dayName}) | 관리감독자(공장장)`;
+  document.getElementById('patrol-checklist-form').style.display = 'block';
+  document.getElementById('patrol-checklist-form').dataset.key = key;
+
+  // 체크리스트 표 렌더링
+  const filtered = getFilteredZones();
+  const patrolData = DB.getObj('patrolCalendar');
+  const saved = patrolData[key] || {};
+  const tbody = document.getElementById('patrol-check-tbody');
+  let rows = '';
+  filtered.forEach(zone=>{
+    const icon = zone.name.match(/^(\S+)/)?.[1]||'';
+    const label = zone.name.replace(/^(\S+)\s*/,'');
+    // 카테고리 헤더 행
+    rows += `<tr style="background:#f1f5f9;"><td colspan="4" style="padding:8px 12px;font-weight:800;font-size:13px;color:#0d1f3c;">${icon} ${label}</td></tr>`;
+    zone.items.forEach((item,i)=>{
+      const itemKey = `${zone.id}_${i}`;
+      const checked = saved[itemKey] ? 'checked' : '';
+      const memo = saved[`${itemKey}_memo`] || '';
+      rows += `<tr>
+        <td style="padding:6px 12px;font-size:12px;color:#374151;border-bottom:1px solid #f5f7fa;" colspan="2">${item}</td>
+        <td style="text-align:center;border-bottom:1px solid #f5f7fa;"><input type="checkbox" ${checked} data-key="${itemKey}" style="width:18px;height:18px;accent-color:#1e5096;" onchange="updatePatrolDayProgress()"></td>
+        <td style="border-bottom:1px solid #f5f7fa;"><input type="text" value="${memo}" data-memo="${itemKey}" placeholder="" style="width:100%;border:none;font-size:11px;padding:4px;color:#6b7280;"></td>
+      </tr>`;
+    });
+  });
+  tbody.innerHTML = rows;
+
+  // 기존 저장된 특이사항 복원
+  const issuesEl = document.getElementById('p-issues');
+  if(issuesEl) issuesEl.value = saved.issues || '';
+  const inspectorEl = document.getElementById('p-inspector');
+  if(inspectorEl) inspectorEl.value = saved.inspector || '';
+
+  updatePatrolDayProgress();
+  // 스크롤 이동
+  document.getElementById('patrol-checklist-form').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function updatePatrolDayProgress(){
+  const checks = document.querySelectorAll('#patrol-check-tbody input[type=checkbox]');
+  const total = checks.length;
+  const checked = Array.from(checks).filter(c=>c.checked).length;
+  const pct = total>0 ? Math.round(checked/total*100) : 0;
+  // 배너 통계 업데이트
+  const stat = document.getElementById('patrol-banner-stat');
+  if(stat) stat.textContent = `이번달 실시: ${DB.getObj('patrolCalendar') ? Object.values(DB.getObj('patrolCalendar')).filter(v=>v&&v.done).length : 0}회`;
+}
+
+function savePatrolDay(){
+  const form = document.getElementById('patrol-checklist-form');
+  const key = form.dataset.key;
+  if(!key) return;
+  const patrolData = DB.getObj('patrolCalendar');
+  const dayData = {};
+  // 체크 상태 수집
+  let totalChecked = 0, totalItems = 0;
+  document.querySelectorAll('#patrol-check-tbody input[type=checkbox]').forEach(cb=>{
+    dayData[cb.dataset.key] = cb.checked;
+    totalItems++;
+    if(cb.checked) totalChecked++;
+  });
+  document.querySelectorAll('#patrol-check-tbody input[data-memo]').forEach(inp=>{
+    if(inp.value) dayData[inp.dataset.memo+'_memo'] = inp.value;
+  });
+  dayData.done = totalChecked > 0;
+  dayData.totalChecked = totalChecked;
+  dayData.totalItems = totalItems;
+  dayData.issues = document.getElementById('p-issues')?.value || '';
+  dayData.inspector = document.getElementById('p-inspector')?.value || '';
+  dayData.weather = document.getElementById('p-weather')?.value || '';
+  dayData.siteFilter = patrolSiteFilter;
+  dayData.savedAt = new Date().toISOString();
+  patrolData[key] = dayData;
+  DB.set('patrolCalendar', patrolData);
+
+  // patrol 이력에도 저장
+  const existing = DB.get('patrol');
+  const filtered = existing.filter(r=>r.date!==key);
+  filtered.unshift({
+    id:Date.now(), date:key, inspector:dayData.inspector, type:'패트롤 점검',
+    weather:dayData.weather, siteFilter:patrolSiteFilter,
+    totalChecked, totalItems, badCount:totalItems-totalChecked,
+    issues:dayData.issues, createdAt:new Date().toISOString()
+  });
+  DB.set('patrol', filtered);
+
+  alert(`✅ ${key} 패트롤 저장! (${totalChecked}/${totalItems} 점검)`);
+  renderPatrolCalendar();
+  renderHistories('patrol');
+}
 
 function checkAllZone(zoneId){
   const zone = patrolZones.find(z=>z.id===zoneId);
