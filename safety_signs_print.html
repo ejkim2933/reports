@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>신성오토텍 안전표지판 - Printable A4 Safety Signs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --red: #D32F2F;
+  --red-dark: #B71C1C;
+  --yellow: #FFC107;
+  --yellow-dark: #F57F17;
+  --blue: #1565C0;
+  --blue-dark: #0D47A1;
+  --green: #2E7D32;
+  --green-dark: #1B5E20;
+  --page-w: 210mm;
+  --page-h: 297mm;
+}
+
+body {
+  font-family: 'Noto Sans KR', 'Noto Sans SC', sans-serif;
+  background: #f0f0f0;
+  color: #222;
+}
+
+/* ===== SCREEN-ONLY CONTROLS ===== */
+.screen-controls {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #1a1a2e;
+  color: #fff;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+
+.screen-controls h1 {
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+}
+
+.screen-controls .subtitle {
+  font-size: 13px;
+  color: #aaa;
+  font-weight: 400;
+}
+
+.btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.btn-print { background: #4CAF50; color: #fff; }
+.btn-print:hover { background: #388E3C; }
+.btn-filter { background: #37474F; color: #fff; }
+.btn-filter:hover { background: #546E7A; }
+.btn-filter.active { outline: 2px solid #fff; }
+
+/* ===== THUMBNAIL GRID ===== */
+.grid-view {
+  max-width: 1400px;
+  margin: 24px auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.grid-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: all 0.25s;
+  border: 3px solid transparent;
+}
+
+.grid-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.grid-card.type-red { border-color: var(--red); }
+.grid-card.type-yellow { border-color: var(--yellow-dark); }
+.grid-card.type-blue { border-color: var(--blue); }
+.grid-card.type-green { border-color: var(--green); }
+
+.grid-card-header {
+  padding: 16px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.type-red .grid-card-header { background: var(--red); }
+.type-yellow .grid-card-header { background: var(--yellow-dark); }
+.type-blue .grid-card-header { background: var(--blue); }
+.type-green .grid-card-header { background: var(--green); }
+
+.grid-card-header .card-id {
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(255,255,255,0.25);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.grid-card-header .card-title {
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.grid-card-header .card-type {
+  margin-left: auto;
+  font-size: 11px;
+  background: rgba(0,0,0,0.2);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.grid-card-body {
+  padding: 14px 16px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #555;
+  min-height: 80px;
+}
+
+.grid-card-body .loc {
+  font-size: 11px;
+  color: #999;
+  margin-bottom: 6px;
+}
+
+.grid-card-footer {
+  padding: 10px 16px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.grid-card-footer .print-one {
+  font-size: 12px;
+  color: #1565C0;
+  font-weight: 700;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: inherit;
+}
+
+.grid-card-footer .print-one:hover { text-decoration: underline; }
+
+/* ===== SIGN PAGES (Full A4) ===== */
+.sign-page {
+  width: var(--page-w);
+  min-height: var(--page-h);
+  margin: 30px auto;
+  background: #fff;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ===== SIGN HEADER ===== */
+.sign-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 18mm 10mm 12mm;
+  position: relative;
+}
+
+.sign-id {
+  position: absolute;
+  top: 6mm;
+  right: 8mm;
+  font-size: 10pt;
+  font-weight: 700;
+  color: rgba(0,0,0,0.3);
+}
+
+.sign-title {
+  font-size: 32pt;
+  font-weight: 900;
+  letter-spacing: -1px;
+  margin-top: 8mm;
+  text-align: center;
+}
+
+/* ===== ISO SYMBOLS (CSS ONLY) ===== */
+.sign-symbol {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* RED: prohibition circle */
+.sign-red .sign-symbol {
+  width: 90px;
+  height: 90px;
+  border: 8px solid var(--red);
+  border-radius: 50%;
+  background: #fff;
+  position: relative;
+}
+
+.sign-red .sign-symbol::after {
+  content: '';
+  position: absolute;
+  width: 80%;
+  height: 8px;
+  background: var(--red);
+  border-radius: 4px;
+  transform: rotate(-45deg);
+}
+
+.sign-red .sign-symbol .sym-inner {
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--red);
+  z-index: 0;
+}
+
+/* YELLOW: warning triangle */
+.sign-yellow .sign-symbol {
+  width: 0;
+  height: 0;
+  border-left: 52px solid transparent;
+  border-right: 52px solid transparent;
+  border-bottom: 90px solid #222;
+  position: relative;
+}
+
+.sign-yellow .sign-symbol::before {
+  content: '';
+  position: absolute;
+  top: 9px;
+  left: -46px;
+  width: 0;
+  height: 0;
+  border-left: 46px solid transparent;
+  border-right: 46px solid transparent;
+  border-bottom: 80px solid var(--yellow);
+}
+
+.sign-yellow .sign-symbol::after {
+  content: '!';
+  position: absolute;
+  top: 30px;
+  left: -10px;
+  font-size: 42px;
+  font-weight: 900;
+  color: #222;
+  z-index: 1;
+}
+
+/* BLUE: mandatory circle */
+.sign-blue .sign-symbol {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign-blue .sign-symbol .sym-inner {
+  font-size: 40px;
+  font-weight: 900;
+  color: #fff;
+}
+
+/* GREEN: safety rectangle */
+.sign-green .sign-symbol {
+  width: 110px;
+  height: 80px;
+  background: var(--green);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign-green .sign-symbol .sym-inner {
+  font-size: 36px;
+  font-weight: 900;
+  color: #fff;
+}
+
+/* ===== HEADER COLOR BANDS ===== */
+.sign-red .sign-header { border-top: 12mm solid var(--red); }
+.sign-yellow .sign-header { border-top: 12mm solid var(--yellow); }
+.sign-blue .sign-header { border-top: 12mm solid var(--blue); }
+.sign-green .sign-header { border-top: 12mm solid var(--green); }
+
+.sign-red .sign-title { color: var(--red-dark); }
+.sign-yellow .sign-title { color: var(--yellow-dark); }
+.sign-blue .sign-title { color: var(--blue-dark); }
+.sign-green .sign-title { color: var(--green-dark); }
+
+/* ===== SIGN BODY ===== */
+.sign-body {
+  flex: 1;
+  padding: 4mm 12mm 8mm;
+  display: flex;
+  flex-direction: column;
+}
+
+.sign-location {
+  font-size: 11pt;
+  color: #777;
+  font-weight: 700;
+  margin-bottom: 5mm;
+  padding: 3mm 5mm;
+  background: #f5f5f5;
+  border-radius: 4px;
+  border-left: 4px solid #ccc;
+}
+
+.sign-red .sign-location { border-left-color: var(--red); }
+.sign-yellow .sign-location { border-left-color: var(--yellow-dark); }
+.sign-blue .sign-location { border-left-color: var(--blue); }
+.sign-green .sign-location { border-left-color: var(--green); }
+
+.sign-rules {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4mm;
+}
+
+.rule {
+  display: flex;
+  align-items: flex-start;
+  gap: 4mm;
+  padding: 3mm 4mm;
+  border-radius: 4px;
+  background: #fafafa;
+}
+
+.sign-red .rule { border-left: 4px solid var(--red); }
+.sign-yellow .rule { border-left: 4px solid var(--yellow-dark); }
+.sign-blue .rule { border-left: 4px solid var(--blue); }
+.sign-green .rule { border-left: 4px solid var(--green); }
+
+.rule-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 900;
+  color: #fff;
+  margin-top: 2px;
+}
+
+.sign-red .rule-icon { background: var(--red); }
+.sign-yellow .rule-icon { background: var(--yellow-dark); }
+.sign-blue .rule-icon { background: var(--blue); }
+.sign-green .rule-icon { background: var(--green); }
+
+.rule-text { flex: 1; }
+
+.rule-kr {
+  font-size: 14pt;
+  font-weight: 900;
+  line-height: 1.4;
+  color: #222;
+}
+
+.rule-cn {
+  font-size: 11pt;
+  font-weight: 400;
+  color: #888;
+  line-height: 1.4;
+  font-family: 'Noto Sans SC', 'Noto Sans KR', sans-serif;
+}
+
+/* ===== SIGN FOOTER ===== */
+.sign-footer {
+  padding: 5mm 12mm;
+  text-align: center;
+  border-top: 1px solid #ddd;
+  background: #fafafa;
+}
+
+.sign-footer .footer-kr {
+  font-size: 11pt;
+  font-weight: 900;
+  color: #333;
+}
+
+.sign-footer .footer-en {
+  font-size: 9pt;
+  font-weight: 700;
+  color: #999;
+  letter-spacing: 1px;
+}
+
+.sign-footer .footer-date {
+  font-size: 8pt;
+  color: #bbb;
+  margin-top: 2px;
+}
+
+/* ===== CATEGORY BADGE ===== */
+.category-badge {
+  display: inline-block;
+  font-size: 12pt;
+  font-weight: 900;
+  color: #fff;
+  padding: 2mm 5mm;
+  border-radius: 4px;
+  margin-bottom: 3mm;
+}
+
+.sign-red .category-badge { background: var(--red); }
+.sign-yellow .category-badge { background: var(--yellow-dark); }
+.sign-blue .category-badge { background: var(--blue); }
+.sign-green .category-badge { background: var(--green); }
+
+/* ===== PRINT STYLES ===== */
+@media print {
+  .screen-controls, .grid-view { display: none !important; }
+
+  body {
+    background: #fff;
+    margin: 0;
+    padding: 0;
+  }
+
+  .sign-page {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    box-shadow: none;
+    page-break-after: always;
+    page-break-inside: avoid;
+    border: none;
+  }
+
+  .sign-page:last-child {
+    page-break-after: auto;
+  }
+
+  .sign-page.hidden-for-print {
+    display: none !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+}
+
+/* ===== SCREEN: HIDE SIGN PAGES BY DEFAULT (show grid) ===== */
+@media screen {
+  .sign-page {
+    display: none;
+  }
+
+  .sign-page.visible-on-screen {
+    display: flex;
+  }
+}
+
+/* ===== FILTER HIDDEN ===== */
+.grid-card.filter-hidden {
+  display: none;
+}
+</style>
+</head>
+<body>
+
+<!-- ===== SCREEN CONTROLS ===== -->
+<div class="screen-controls">
+  <div>
+    <h1>신성오토텍 안전표지판 <span class="subtitle">| Safety Signs (KS S ISO 3864-1)</span></h1>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-filter active" data-filter="all" onclick="filterSigns('all', this)">전체 (16)</button>
+    <button class="btn btn-filter" data-filter="red" onclick="filterSigns('red', this)" style="background:#D32F2F">금지/방화</button>
+    <button class="btn btn-filter" data-filter="yellow" onclick="filterSigns('yellow', this)" style="background:#F57F17">경고</button>
+    <button class="btn btn-filter" data-filter="blue" onclick="filterSigns('blue', this)" style="background:#1565C0">지시</button>
+    <button class="btn btn-filter" data-filter="green" onclick="filterSigns('green', this)" style="background:#2E7D32">안전</button>
+    <button class="btn btn-print" onclick="printAll()">전체 인쇄 (16장)</button>
+  </div>
+</div>
+
+<!-- ===== THUMBNAIL GRID ===== -->
+<div class="grid-view" id="gridView">
+  <!-- Populated by JS -->
+</div>
+
+<!-- ===== FULL A4 SIGN PAGES ===== -->
+
+<!-- s01 -->
+<div class="sign-page sign-red" data-id="s01" data-type="red">
+  <div class="sign-header">
+    <span class="sign-id">s01</span>
+    <div class="sign-symbol"><span class="sym-inner"></span></div>
+    <div class="category-badge">금지</div>
+    <div class="sign-title">크레인 구역</div>
+  </div>
+  <div class="sign-body">
+    <div class="sign-location">설치위치: 천장주행크레인 / 크레인 구역</div>
+    <div class="sign-rules">
+      <div class="rule">
+        <span class="rule-icon">1</span>
+        <div class="rule-text">
+          <div class="rule-kr">최대하중 초과 금지</div>
+          <div class="rule-cn">禁止超过最大载荷</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">2</span>
+        <div class="rule-text">
+          <div class="rule-kr">사람 키 이상 운반 금지</div>
+          <div class="rule-cn">禁止运输超过人高物品</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">3</span>
+        <div class="rule-text">
+          <div class="rule-kr">안전모 필수 착용</div>
+          <div class="rule-cn">必须佩戴安全帽</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sign-footer">
+    <div class="footer-kr">신성오토텍 안전보건관리</div>
+    <div class="footer-en">SHINSUNG AUTOTECH EHS</div>
+    <div class="footer-date">ISO 45001 / KS S ISO 3864-1</div>
+  </div>
+</div>
+
+<!-- s02 -->
+<div class="sign-page sign-blue" data-id="s02" data-type="blue">
+  <div class="sign-header">
+    <span class="sign-id">s02</span>
+    <div class="sign-symbol"><span class="sym-inner">!</span></div>
+    <div class="category-badge">지시</div>
+    <div class="sign-title">금형 취급 구역</div>
+  </div>
+  <div class="sign-body">
+    <div class="sign-location">설치위치: 금형 보관대 / 금형 취급 구역</div>
+    <div class="sign-rules">
+      <div class="rule">
+        <span class="rule-icon">1</span>
+        <div class="rule-text">
+          <div class="rule-kr">금형 취급 시 2인 1조 필수</div>
+          <div class="rule-cn">模具操作必须两人一组</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">2</span>
+        <div class="rule-text">
+          <div class="rule-kr">신호수 배치</div>
+          <div class="rule-cn">配置信号员</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">3</span>
+        <div class="rule-text">
+          <div class="rule-kr">안전화 · 안전모 착용</div>
+          <div class="rule-cn">佩戴安全鞋·安全帽</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">4</span>
+        <div class="rule-text">
+          <div class="rule-kr">안전블록 삽입</div>
+          <div class="rule-cn">插入安全块</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sign-footer">
+    <div class="footer-kr">신성오토텍 안전보건관리</div>
+    <div class="footer-en">SHINSUNG AUTOTECH EHS</div>
+    <div class="footer-date">ISO 45001 / KS S ISO 3864-1</div>
+  </div>
+</div>
+
+<!-- s04 -->
+<div class="sign-page sign-red" data-id="s04" data-type="red">
+  <div class="sign-header">
+    <span class="sign-id">s04</span>
+    <div class="sign-symbol"><span class="sym-inner"></span></div>
+    <div class="category-badge">금지</div>
+    <div class="sign-title">분전반 / 전기 패널함</div>
+  </div>
+  <div class="sign-body">
+    <div class="sign-location">설치위치: 분전반 / 전기 패널함</div>
+    <div class="sign-rules">
+      <div class="rule">
+        <span class="rule-icon">1</span>
+        <div class="rule-text">
+          <div class="rule-kr">허가자 외 접근 금지</div>
+          <div class="rule-cn">非授权人员禁止靠近</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">2</span>
+        <div class="rule-text">
+          <div class="rule-kr">작업 전 반드시 잠금 · 태깅(LOTO) 실시</div>
+          <div class="rule-cn">作业前必须实施锁定·挂牌(LOTO)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sign-footer">
+    <div class="footer-kr">신성오토텍 안전보건관리</div>
+    <div class="footer-en">SHINSUNG AUTOTECH EHS</div>
+    <div class="footer-date">ISO 45001 / KS S ISO 3864-1</div>
+  </div>
+</div>
+
+<!-- s05 -->
+<div class="sign-page sign-blue" data-id="s05" data-type="blue">
+  <div class="sign-header">
+    <span class="sign-id">s05</span>
+    <div class="sign-symbol"><span class="sym-inner">i</span></div>
+    <div class="category-badge">지시</div>
+    <div class="sign-title">공장 입구</div>
+  </div>
+  <div class="sign-body">
+    <div class="sign-location">설치위치: 공장 입구</div>
+    <div class="sign-rules">
+      <div class="rule">
+        <span class="rule-icon">1</span>
+        <div class="rule-text">
+          <div class="rule-kr">안전모 · 안전화 착용 후 입장</div>
+          <div class="rule-cn">佩戴安全帽·安全鞋后入场</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">2</span>
+        <div class="rule-text">
+          <div class="rule-kr">방문자는 안전담당자에게 신고</div>
+          <div class="rule-cn">访客须向安全负责人报告</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sign-footer">
+    <div class="footer-kr">신성오토텍 안전보건관리</div>
+    <div class="footer-en">SHINSUNG AUTOTECH EHS</div>
+    <div class="footer-date">ISO 45001 / KS S ISO 3864-1</div>
+  </div>
+</div>
+
+<!-- s06 -->
+<div class="sign-page sign-red" data-id="s06" data-type="red">
+  <div class="sign-header">
+    <span class="sign-id">s06</span>
+    <div class="sign-symbol"><span class="sym-inner"></span></div>
+    <div class="category-badge">금지</div>
+    <div class="sign-title">지게차 이동 통로</div>
+  </div>
+  <div class="sign-body">
+    <div class="sign-location">설치위치: 지게차 이동 통로</div>
+    <div class="sign-rules">
+      <div class="rule">
+        <span class="rule-icon">1</span>
+        <div class="rule-text">
+          <div class="rule-kr">지게차 전용 통로</div>
+          <div class="rule-cn">叉车专用通道</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">2</span>
+        <div class="rule-text">
+          <div class="rule-kr">보행자 진입 금지</div>
+          <div class="rule-cn">行人禁止进入</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">3</span>
+        <div class="rule-text">
+          <div class="rule-kr">지게차 키 분리보관 필수</div>
+          <div class="rule-cn">叉车钥匙须分开保管</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sign-footer">
+    <div class="footer-kr">신성오토텍 안전보건관리</div>
+    <div class="footer-en">SHINSUNG AUTOTECH EHS</div>
+    <div class="footer-date">ISO 45001 / KS S ISO 3864-1</div>
+  </div>
+</div>
+
+<!-- s07 -->
+<div class="sign-page sign-yellow" data-id="s07" data-type="yellow">
+  <div class="sign-header">
+    <span class="sign-id">s07</span>
+    <div class="sign-symbol"></div>
+    <div class="category-badge">경고</div>
+    <div class="sign-title">화학물질 보관소</div>
+  </div>
+  <div class="sign-body">
+    <div class="sign-location">설치위치: 화학물질 보관소</div>
+    <div class="sign-rules">
+      <div class="rule">
+        <span class="rule-icon">1</span>
+        <div class="rule-text">
+          <div class="rule-kr">MSDS 비치</div>
+          <div class="rule-cn">配备MSDS</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">2</span>
+        <div class="rule-text">
+          <div class="rule-kr">보호구(장갑 · 마스크) 착용 필수</div>
+          <div class="rule-cn">必须佩戴防护用品(手套·口罩)</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">3</span>
+        <div class="rule-text">
+          <div class="rule-kr">화기 금지</div>
+          <div class="rule-cn">禁止火源</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sign-footer">
+    <div class="footer-kr">신성오토텍 안전보건관리</div>
+    <div class="footer-en">SHINSUNG AUTOTECH EHS</div>
+    <div class="footer-date">ISO 45001 / KS S ISO 3864-1</div>
+  </div>
+</div>
+
+<!-- s08 -->
+<div class="sign-page sign-green" data-id="s08" data-type="green">
+  <div class="sign-header">
+    <span class="sign-id">s08</span>
+    <div class="sign-symbol"><span class="sym-inner">EXIT</span></div>
+    <div class="category-badge">안전</div>
+    <div class="sign-title">비상구</div>
+  </div>
+  <div class="sign-body">
+    <div class="sign-location">설치위치: 비상구</div>
+    <div class="sign-rules">
+      <div class="rule">
+        <span class="rule-icon">1</span>
+        <div class="rule-text">
+          <div class="rule-kr">비상구 — 화재 시 이곳으로 대피</div>
+          <div class="rule-cn">紧急出口 — 火灾时从此处疏散</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">2</span>
+        <div class="rule-text">
+          <div class="rule-kr">장애물 절대 금지</div>
+          <div class="rule-cn">严禁堆放障碍物</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sign-footer">
+    <div class="footer-kr">신성오토텍 안전보건관리</div>
+    <div class="footer-en">SHINSUNG AUTOTECH EHS</div>
+    <div class="footer-date">ISO 45001 / KS S ISO 3864-1</div>
+  </div>
+</div>
+
+<!-- s09 -->
+<div class="sign-page sign-red" data-id="s09" data-type="red">
+  <div class="sign-header">
+    <span class="sign-id">s09</span>
+    <div class="sign-symbol"><span class="sym-inner"></span></div>
+    <div class="category-badge">방화</div>
+    <div class="sign-title">소화기 위치</div>
+  </div>
+  <div class="sign-body">
+    <div class="sign-location">설치위치: 소화기 비치 위치</div>
+    <div class="sign-rules">
+      <div class="rule">
+        <span class="rule-icon">1</span>
+        <div class="rule-text">
+          <div class="rule-kr">소화기 비치</div>
+          <div class="rule-cn">灭火器放置处</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">2</span>
+        <div class="rule-text">
+          <div class="rule-kr">사용법: 안전핀 제거 → 호스 조준 → 손잡이 압착</div>
+          <div class="rule-cn">使用方法: 拔出安全销 → 对准火源 → 按压把手</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sign-footer">
+    <div class="footer-kr">신성오토텍 안전보건관리</div>
+    <div class="footer-en">SHINSUNG AUTOTECH EHS</div>
+    <div class="footer-date">ISO 45001 / KS S ISO 3864-1</div>
+  </div>
+</div>
+
+<!-- s10 -->
+<div class="sign-page sign-red" data-id="s10" data-type="red">
+  <div class="sign-header">
+    <span class="sign-id">s10</span>
+    <div class="sign-symbol"><span class="sym-inner"></span></div>
+    <div class="category-badge">금지</div>
+    <div class="sign-title">휴게공간</div>
+  </div>
+  <div class="sign-body">
+    <div class="sign-location">설치위치: 휴게공간</div>
+    <div class="sign-rules">
+      <div class="rule">
+        <span class="rule-icon">1</span>
+        <div class="rule-text">
+          <div class="rule-kr">작업복 탈의 후 휴식</div>
+          <div class="rule-cn">脱下工作服后休息</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">2</span>
+        <div class="rule-text">
+          <div class="rule-kr">구역 내 금연</div>
+          <div class="rule-cn">区域内禁止吸烟</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sign-footer">
+    <div class="footer-kr">신성오토텍 안전보건관리</div>
+    <div class="footer-en">SHINSUNG AUTOTECH EHS</div>
+    <div class="footer-date">ISO 45001 / KS S ISO 3864-1</div>
+  </div>
+</div>
+
+<!-- s11 -->
+<div class="sign-page sign-yellow" data-id="s11" data-type="yellow">
+  <div class="sign-header">
+    <span class="sign-id">s11</span>
+    <div class="sign-symbol"></div>
+    <div class="category-badge">경고</div>
+    <div class="sign-title">운반대차 구역</div>
+  </div>
+  <div class="sign-body">
+    <div class="sign-location">설치위치: 운반대차 구역</div>
+    <div class="sign-rules">
+      <div class="rule">
+        <span class="rule-icon">1</span>
+        <div class="rule-text">
+          <div class="rule-kr">운반대차 적재 하중 준수</div>
+          <div class="rule-cn">遵守搬运车载荷限制</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">2</span>
+        <div class="rule-text">
+          <div class="rule-kr">이동 시 전방 주시</div>
+          <div class="rule-cn">移动时注视前方</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">3</span>
+        <div class="rule-text">
+          <div class="rule-kr">경사로 이동 금지</div>
+          <div class="rule-cn">禁止在斜坡上移动</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">4</span>
+        <div class="rule-text">
+          <div class="rule-kr">2인 이상 운반</div>
+          <div class="rule-cn">重物须两人以上搬运</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sign-footer">
+    <div class="footer-kr">신성오토텍 안전보건관리</div>
+    <div class="footer-en">SHINSUNG AUTOTECH EHS</div>
+    <div class="footer-date">ISO 45001 / KS S ISO 3864-1</div>
+  </div>
+</div>
+
+<!-- s12 -->
+<div class="sign-page sign-red" data-id="s12" data-type="red">
+  <div class="sign-header">
+    <span class="sign-id">s12</span>
+    <div class="sign-symbol"><span class="sym-inner"></span></div>
+    <div class="category-badge">금지</div>
+    <div class="sign-title">래핑기 작업 구역</div>
+  </div>
+  <div class="sign-body">
+    <div class="sign-location">설치위치: 래핑기 작업 구역</div>
+    <div class="sign-rules">
+      <div class="rule">
+        <span class="rule-icon">1</span>
+        <div class="rule-text">
+          <div class="rule-kr">래핑기 작동 중 손 · 신체 접근 금지</div>
+          <div class="rule-cn">缠绕机运行中禁止手·身体靠近</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">2</span>
+        <div class="rule-text">
+          <div class="rule-kr">보안경 · 안전장갑 착용</div>
+          <div class="rule-cn">佩戴护目镜·安全手套</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">3</span>
+        <div class="rule-text">
+          <div class="rule-kr">비상정지 위치 숙지</div>
+          <div class="rule-cn">熟知紧急停止位置</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sign-footer">
+    <div class="footer-kr">신성오토텍 안전보건관리</div>
+    <div class="footer-en">SHINSUNG AUTOTECH EHS</div>
+    <div class="footer-date">ISO 45001 / KS S ISO 3864-1</div>
+  </div>
+</div>
+
+<!-- s13 -->
+<div class="sign-page sign-blue" data-id="s13" data-type="blue">
+  <div class="sign-header">
+    <span class="sign-id">s13</span>
+    <div class="sign-symbol"><span class="sym-inner">!</span></div>
+    <div class="category-badge">지시</div>
+    <div class="sign-title">사출기 작업 구역</div>
+  </div>
+  <div class="sign-body">
+    <div class="sign-location">설치위치: 사출기 작업 구역</div>
+    <div class="sign-rules">
+      <div class="rule">
+        <span class="rule-icon">1</span>
+        <div class="rule-text">
+          <div class="rule-kr">사출기 안전문 닫힘 확인 후 작동</div>
+          <div class="rule-cn">确认注塑机安全门关闭后操作</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">2</span>
+        <div class="rule-text">
+          <div class="rule-kr">방열장갑 · 보안경 착용 필수</div>
+          <div class="rule-cn">必须佩戴隔热手套·护目镜</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">3</span>
+        <div class="rule-text">
+          <div class="rule-kr">금형 체결 상태 확인</div>
+          <div class="rule-cn">确认模具锁紧状态</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sign-footer">
+    <div class="footer-kr">신성오토텍 안전보건관리</div>
+    <div class="footer-en">SHINSUNG AUTOTECH EHS</div>
+    <div class="footer-date">ISO 45001 / KS S ISO 3864-1</div>
+  </div>
+</div>
+
+<!-- s14 -->
+<div class="sign-page sign-yellow" data-id="s14" data-type="yellow">
+  <div class="sign-header">
+    <span class="sign-id">s14</span>
+    <div class="sign-symbol"></div>
+    <div class="category-badge">경고</div>
+    <div class="sign-title">건조기 구역</div>
+  </div>
+  <div class="sign-body">
+    <div class="sign-location">설치위치: 건조기 구역</div>
+    <div class="sign-rules">
+      <div class="rule">
+        <span class="rule-icon">1</span>
+        <div class="rule-text">
+          <div class="rule-kr">건조기 작동 중 개방 금지</div>
+          <div class="rule-cn">干燥机运行中禁止打开</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">2</span>
+        <div class="rule-text">
+          <div class="rule-kr">고온 주의</div>
+          <div class="rule-cn">注意高温</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">3</span>
+        <div class="rule-text">
+          <div class="rule-kr">방열장갑 착용 필수</div>
+          <div class="rule-cn">必须佩戴隔热手套</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sign-footer">
+    <div class="footer-kr">신성오토텍 안전보건관리</div>
+    <div class="footer-en">SHINSUNG AUTOTECH EHS</div>
+    <div class="footer-date">ISO 45001 / KS S ISO 3864-1</div>
+  </div>
+</div>
+
+<!-- s15 -->
+<div class="sign-page sign-red" data-id="s15" data-type="red">
+  <div class="sign-header">
+    <span class="sign-id">s15</span>
+    <div class="sign-symbol"><span class="sym-inner"></span></div>
+    <div class="category-badge">금지</div>
+    <div class="sign-title">컨베이어 구역</div>
+  </div>
+  <div class="sign-body">
+    <div class="sign-location">설치위치: 컨베이어 구역</div>
+    <div class="sign-rules">
+      <div class="rule">
+        <span class="rule-icon">1</span>
+        <div class="rule-text">
+          <div class="rule-kr">컨베이어 가동 중 접촉 금지</div>
+          <div class="rule-cn">输送带运行中禁止触碰</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">2</span>
+        <div class="rule-text">
+          <div class="rule-kr">끼임 주의</div>
+          <div class="rule-cn">注意夹伤</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">3</span>
+        <div class="rule-text">
+          <div class="rule-kr">긴 머리카락 · 옷자락 말림 주의</div>
+          <div class="rule-cn">注意长发·衣角卷入</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">4</span>
+        <div class="rule-text">
+          <div class="rule-kr">비상정지 위치 숙지</div>
+          <div class="rule-cn">熟知紧急停止位置</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sign-footer">
+    <div class="footer-kr">신성오토텍 안전보건관리</div>
+    <div class="footer-en">SHINSUNG AUTOTECH EHS</div>
+    <div class="footer-date">ISO 45001 / KS S ISO 3864-1</div>
+  </div>
+</div>
+
+<!-- s16 -->
+<div class="sign-page sign-red" data-id="s16" data-type="red">
+  <div class="sign-header">
+    <span class="sign-id">s16</span>
+    <div class="sign-symbol"><span class="sym-inner"></span></div>
+    <div class="category-badge">금지</div>
+    <div class="sign-title">리프트 구역</div>
+  </div>
+  <div class="sign-body">
+    <div class="sign-location">설치위치: 리프트 구역</div>
+    <div class="sign-rules">
+      <div class="rule">
+        <span class="rule-icon">1</span>
+        <div class="rule-text">
+          <div class="rule-kr">리프트 최대 하중 준수</div>
+          <div class="rule-cn">遵守升降机最大载荷</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">2</span>
+        <div class="rule-text">
+          <div class="rule-kr">탑승 금지</div>
+          <div class="rule-cn">禁止搭乘</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">3</span>
+        <div class="rule-text">
+          <div class="rule-kr">상 · 하부 동시 작업 금지</div>
+          <div class="rule-cn">禁止上下同时作业</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">4</span>
+        <div class="rule-text">
+          <div class="rule-kr">안전바 설치 확인</div>
+          <div class="rule-cn">确认安全杆安装</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sign-footer">
+    <div class="footer-kr">신성오토텍 안전보건관리</div>
+    <div class="footer-en">SHINSUNG AUTOTECH EHS</div>
+    <div class="footer-date">ISO 45001 / KS S ISO 3864-1</div>
+  </div>
+</div>
+
+<!-- NOTE: That is 15 signs (s01,s02,s04-s16). The spec listed 15 unique IDs but said 16 signs.
+     Adding s03 as the 16th sign to complete the set. -->
+
+<!-- s03 - 고소작업 구역 (YELLOW 경고) - additional sign to reach 16 -->
+<div class="sign-page sign-yellow" data-id="s03" data-type="yellow">
+  <div class="sign-header">
+    <span class="sign-id">s03</span>
+    <div class="sign-symbol"></div>
+    <div class="category-badge">경고</div>
+    <div class="sign-title">고소작업 구역</div>
+  </div>
+  <div class="sign-body">
+    <div class="sign-location">설치위치: 고소작업 구역 / 사다리 사용 구역</div>
+    <div class="sign-rules">
+      <div class="rule">
+        <span class="rule-icon">1</span>
+        <div class="rule-text">
+          <div class="rule-kr">안전대 착용 필수</div>
+          <div class="rule-cn">必须佩戴安全带</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">2</span>
+        <div class="rule-text">
+          <div class="rule-kr">추락 위험 — 안전난간 확인</div>
+          <div class="rule-cn">坠落危险 — 确认安全护栏</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">3</span>
+        <div class="rule-text">
+          <div class="rule-kr">2인 1조 작업 실시</div>
+          <div class="rule-cn">实施两人一组作业</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sign-footer">
+    <div class="footer-kr">신성오토텍 안전보건관리</div>
+    <div class="footer-en">SHINSUNG AUTOTECH EHS</div>
+    <div class="footer-date">ISO 45001 / KS S ISO 3864-1</div>
+  </div>
+</div>
+
+<script>
+// ===== Sign metadata for grid cards =====
+const signMeta = {
+  s01: { title: '크레인 구역', type: 'red', label: '금지', loc: '천장주행크레인 / 크레인 구역', summary: '최대하중 초과 금지, 안전모 필수 착용' },
+  s02: { title: '금형 취급 구역', type: 'blue', label: '지시', loc: '금형 보관대 / 금형 취급 구역', summary: '2인 1조 필수, 안전화·안전모 착용' },
+  s03: { title: '고소작업 구역', type: 'yellow', label: '경고', loc: '고소작업 구역 / 사다리 사용 구역', summary: '안전대 착용 필수, 추락 위험' },
+  s04: { title: '분전반 / 전기 패널함', type: 'red', label: '금지', loc: '분전반 / 전기 패널함', summary: '허가자 외 접근 금지, LOTO 실시' },
+  s05: { title: '공장 입구', type: 'blue', label: '지시', loc: '공장 입구', summary: '안전모·안전화 착용 후 입장' },
+  s06: { title: '지게차 이동 통로', type: 'red', label: '금지', loc: '지게차 이동 통로', summary: '보행자 진입 금지, 키 분리보관' },
+  s07: { title: '화학물질 보관소', type: 'yellow', label: '경고', loc: '화학물질 보관소', summary: 'MSDS 비치, 보호구 착용 필수' },
+  s08: { title: '비상구', type: 'green', label: '안전', loc: '비상구', summary: '비상구, 장애물 절대 금지' },
+  s09: { title: '소화기 위치', type: 'red', label: '방화', loc: '소화기 비치 위치', summary: '소화기 비치 및 사용법 안내' },
+  s10: { title: '휴게공간', type: 'red', label: '금지', loc: '휴게공간', summary: '작업복 탈의 후 휴식, 금연' },
+  s11: { title: '운반대차 구역', type: 'yellow', label: '경고', loc: '운반대차 구역', summary: '적재 하중 준수, 2인 이상 운반' },
+  s12: { title: '래핑기 작업 구역', type: 'red', label: '금지', loc: '래핑기 작업 구역', summary: '작동 중 접근 금지, 보안경 착용' },
+  s13: { title: '사출기 작업 구역', type: 'blue', label: '지시', loc: '사출기 작업 구역', summary: '안전문 닫힘 확인, 방열장갑 착용' },
+  s14: { title: '건조기 구역', type: 'yellow', label: '경고', loc: '건조기 구역', summary: '작동 중 개방 금지, 고온 주의' },
+  s15: { title: '컨베이어 구역', type: 'red', label: '금지', loc: '컨베이어 구역', summary: '가동 중 접촉 금지, 끼임 주의' },
+  s16: { title: '리프트 구역', type: 'red', label: '금지', loc: '리프트 구역', summary: '최대 하중 준수, 탑승 금지' }
+};
+
+const signOrder = ['s01','s02','s03','s04','s05','s06','s07','s08','s09','s10','s11','s12','s13','s14','s15','s16'];
+
+// ===== Build Grid =====
+function buildGrid() {
+  const grid = document.getElementById('gridView');
+  grid.innerHTML = '';
+  signOrder.forEach(id => {
+    const m = signMeta[id];
+    const card = document.createElement('div');
+    card.className = `grid-card type-${m.type}`;
+    card.dataset.type = m.type;
+    card.dataset.id = id;
+    card.onclick = () => printSingle(id);
+    card.innerHTML = `
+      <div class="grid-card-header">
+        <span class="card-id">${id.toUpperCase()}</span>
+        <span class="card-title">${m.title}</span>
+        <span class="card-type">${m.label}</span>
+      </div>
+      <div class="grid-card-body">
+        <div class="loc">${m.loc}</div>
+        ${m.summary}
+      </div>
+      <div class="grid-card-footer">
+        <button class="print-one" onclick="event.stopPropagation(); printSingle('${id}')">인쇄</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ===== Filter =====
+function filterSigns(type, btn) {
+  document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  document.querySelectorAll('.grid-card').forEach(card => {
+    if (type === 'all' || card.dataset.type === type) {
+      card.classList.remove('filter-hidden');
+    } else {
+      card.classList.add('filter-hidden');
+    }
+  });
+}
+
+// ===== Print All =====
+function printAll() {
+  document.querySelectorAll('.sign-page').forEach(p => {
+    p.classList.remove('hidden-for-print');
+  });
+  window.print();
+}
+
+// ===== Print Single =====
+function printSingle(id) {
+  document.querySelectorAll('.sign-page').forEach(p => {
+    if (p.dataset.id === id) {
+      p.classList.remove('hidden-for-print');
+    } else {
+      p.classList.add('hidden-for-print');
+    }
+  });
+  window.print();
+  // restore
+  setTimeout(() => {
+    document.querySelectorAll('.sign-page').forEach(p => p.classList.remove('hidden-for-print'));
+  }, 1000);
+}
+
+// Init
+buildGrid();
+</script>
+</body>
+</html>
