@@ -695,10 +695,11 @@ table tr:hover td{background:#f8fafc;}
         <table>
           <thead><tr>
             <th style="width:7%;">코드</th>
-            <th style="width:35%;">서류명</th>
-            <th style="width:7%;">주기</th>
-            <th style="width:12%;">상태</th>
-            <th style="width:28%;">파일</th>
+            <th style="width:22%;">서류명</th>
+            <th style="width:18%;">법적근거 / 비고</th>
+            <th style="width:6%;">주기</th>
+            <th style="width:10%;">상태</th>
+            <th style="width:22%;">파일</th>
             <th style="width:5%;"></th>
           </tr></thead>
           <tbody id="dm-table-body"></tbody>
@@ -2238,9 +2239,9 @@ function renderDocMgr(){
       const updatedText = d.updated ? `<span style="font-size:9px;color:#9ca3af;margin-left:6px;">${d.updated}</span>` : '';
       return `<tr${expiresWarn}>
         <td style="text-align:center;">${wwsBadge}</td>
-        <td>
-          <div style="font-weight:600;font-size:13px;">${d.name}</div>
-          <div style="font-size:11px;color:#6b7280;margin-top:2px;">${d.basis} ${d.period?'· '+d.period:''}</div>
+        <td style="font-weight:600;font-size:13px;">${d.name}</td>
+        <td style="font-size:11px;color:#6b7280;">
+          <div>${d.basis}</div>
           ${noteText}
         </td>
         <td style="font-size:12px;text-align:center;">${d.period}</td>
