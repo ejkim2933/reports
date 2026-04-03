@@ -694,16 +694,12 @@ table tr:hover td{background:#f8fafc;}
       <div class="table-wrap">
         <table>
           <thead><tr>
-            <th style="width:80px;">WWS코드</th>
+            <th style="width:70px;">WWS코드</th>
             <th>서류명</th>
-            <th style="width:80px;">법적 근거</th>
             <th style="width:60px;">주기</th>
             <th style="width:90px;">보유 상태</th>
-            <th style="width:100px;">최종 업데이트</th>
-            <th style="width:100px;">만료/갱신일</th>
-            <th style="width:120px;">파일</th>
-            <th style="width:130px;">비고</th>
-            <th style="width:110px;">관리</th>
+            <th style="width:150px;">파일</th>
+            <th style="width:50px;">관리</th>
           </tr></thead>
           <tbody id="dm-table-body"></tbody>
         </table>
@@ -2238,25 +2234,27 @@ function renderDocMgr(){
         if(diff<0) expiresWarn = ' style="background:#fee2e2;"';
         else if(diff<30) expiresWarn = ' style="background:#fef9c3;"';
       }
+      const noteText = d.note ? `<div style="font-size:10px;color:#9ca3af;margin-top:2px;">${d.note}</div>` : '';
+      const updatedText = d.updated ? `<span style="font-size:9px;color:#9ca3af;margin-left:6px;">${d.updated}</span>` : '';
       return `<tr${expiresWarn}>
         <td style="text-align:center;">${wwsBadge}</td>
-        <td style="font-weight:600;font-size:12px;">${d.name}</td>
-        <td style="font-size:11px;color:#6b7280;">${d.basis}</td>
-        <td style="font-size:11px;">${d.period}</td>
+        <td>
+          <div style="font-weight:600;font-size:13px;">${d.name}</div>
+          <div style="font-size:11px;color:#6b7280;margin-top:2px;">${d.basis} ${d.period?'· '+d.period:''}</div>
+          ${noteText}
+        </td>
+        <td style="font-size:12px;text-align:center;">${d.period}</td>
         <td>
           <select class="badge ${sc}" style="border:none;cursor:pointer;font-size:11px;font-weight:600;" onchange="updateDMStatus('${d.id}','status',this.value)">
             <option value="보유" ${d.status==='보유'?'selected':''}>✅ 보유</option>
             <option value="갱신필요" ${d.status==='갱신필요'?'selected':''}>⚠️ 갱신필요</option>
             <option value="미보유" ${d.status==='미보유'?'selected':''}>❌ 미보유</option>
           </select>
+          ${updatedText}
         </td>
-        <td><input type="date" value="${d.updated||''}" style="border:1px solid #e8edf3;border-radius:6px;padding:3px 6px;font-size:11px;width:100%;" onchange="updateDMStatus('${d.id}','updated',this.value)"></td>
-        <td><input type="date" value="${d.expires||''}" style="border:1px solid #e8edf3;border-radius:6px;padding:3px 6px;font-size:11px;width:100%;" onchange="updateDMStatus('${d.id}','expires',this.value)"></td>
-        <td>${fileDisplay}</td>
-        <td style="font-size:10px;color:#6b7280;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${(d.note||'').replace(/"/g,'&quot;')}">${d.note||''}</td>
-        <td style="display:flex;gap:3px;flex-wrap:wrap;align-items:center;">
+        <td>${fileDisplay}<span id="dm-upload-status-${d.id}" style="font-size:9px;"></span></td>
+        <td style="text-align:center;">
           <button class="btn btn-outline btn-sm" onclick="dmNote('${d.id}')" style="font-size:10px;" title="메모 편집">✏️</button>
-          <span id="dm-upload-status-${d.id}" style="font-size:9px;color:#6b7280;"></span>
         </td>
       </tr>`;
     }).join('');
