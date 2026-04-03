@@ -382,7 +382,7 @@ table tr:hover td{background:#f8fafc;}
       <div onclick="showPatrolView('patrol')" style="background:linear-gradient(135deg,#0d1f3c,#1e5096);border-radius:16px;padding:28px 24px;color:#fff;cursor:pointer;transition:transform 0.15s;position:relative;overflow:hidden;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform=''">
         <div style="font-size:48px;margin-bottom:8px;">🔍</div>
         <div style="font-size:20px;font-weight:900;">현장 패트롤 점검</div>
-        <div style="font-size:13px;opacity:0.8;margin-top:4px;">관리감독자(공장장) · 주간 순회점검</div>
+        <div style="font-size:13px;opacity:0.8;margin-top:4px;">담당자 · 주간 순회점검</div>
         <div style="position:absolute;bottom:12px;right:16px;font-size:12px;opacity:0.6;">달력에서 날짜 선택 →</div>
         <div id="patrol-banner-stat" style="margin-top:12px;font-size:12px;opacity:0.9;"></div>
       </div>
@@ -1230,7 +1230,7 @@ function openPatrolDay(day){
   const dayName = dayNames[dateObj.getDay()];
 
   document.getElementById('patrol-form-title').textContent = '현장 패트롤 점검표';
-  document.getElementById('patrol-form-date').textContent = `${key} (${dayName}) | 관리감독자(공장장)`;
+  document.getElementById('patrol-form-date').textContent = `${key} (${dayName})`;
   document.getElementById('patrol-checklist-form').style.display = 'block';
   document.getElementById('patrol-checklist-form').dataset.key = key;
 
