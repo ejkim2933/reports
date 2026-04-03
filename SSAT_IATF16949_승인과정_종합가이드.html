@@ -3,9 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <title>SSAT IATF 16949 — 승인 과정 종합 가이드</title>
 <style>*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Malgun Gothic','맑은 고딕',sans-serif;background:#EEF2F7;color:#1A1A2E;display:flex;min-height:100vh;font-size:13px;min-font-size:10px;}
+body{font-family:'Noto Sans KR','Malgun Gothic','맑은 고딕',sans-serif;background:#EEF2F7;color:#1A1A2E;display:flex;min-height:100vh;font-size:13px;min-font-size:10px;}
 
 /* ── 사이드바 ── */
 .sidebar{width:220px;min-height:100vh;background:#0F1B2D;color:#CBD5E1;display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;border-right:none;box-shadow:2px 0 8px rgba(0,0,0,.15);}
@@ -1626,109 +1629,105 @@ document.addEventListener('DOMContentLoaded',renderFCTable);
 
         <!-- W1 -->
         <div class="flow-week" style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:14px">
-          <div style="font-size:11px;font-weight:700;color:#1B2A4A;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #1B2A4A">📅 Week 1 · 3/31~4/4 &nbsp;<span style="font-weight:400;color:#64748B">기반 정리</span></div>
-          <div class="fi" data-id="w1t1" data-next="w1t2" data-msg="다음: 폴더 구조를 재정비해 주세요 (4/4까지)">
+          <div style="font-size:11px;font-weight:700;color:#1B2A4A;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #1B2A4A">📅 Week 1 · 4/13~4/18 &nbsp;<span style="font-weight:400;color:#64748B">기반 정리 + 착수</span></div>
+          <div class="fi" data-id="w1t1" data-next="w1t2" data-msg="다음: 폴더 구조를 재정비해 주세요 (4/16까지)">
             <label><input type="checkbox" class="fc" data-id="w1t1"> <span>🟢 중복 파일 3개 Archive 이동</span></label>
-            <div class="fi-team">경영기획실 · 4/2</div>
+            <div class="fi-team">경영기획실 · 4/14</div>
           </div>
-          <div class="fi" data-id="w1t2" data-next="w1t3" data-msg="다음: 팀별 담당 파일 목록을 공식 배포해 주세요 (4/4까지)">
+          <div class="fi" data-id="w1t2" data-next="w1t3" data-msg="다음: 팀별 담당 파일 목록을 공식 배포해 주세요 (4/18까지)">
             <label><input type="checkbox" class="fc" data-id="w1t2"> <span>🟢 폴더 구조 재정비</span></label>
-            <div class="fi-team">경영기획실 · 4/4</div>
+            <div class="fi-team">경영기획실 · 4/16</div>
           </div>
-          <div class="fi" data-id="w1t3" data-next="w2t1,w2t3,w1t4" data-msg="Week 2 착수: ① MSA 계획서 작성 (품질팀) ② PPAP 양식 작성 (개발팀) ③ COP-03 생산관리 개정 착수 (생산팀)">
-            <label><input type="checkbox" class="fc" data-id="w1t3"> <span>🟢 팀별 담당 파일 목록 배포</span></label>
-            <div class="fi-team">경영기획실 · 4/4</div>
-          </div>
-          <div class="fi" data-id="w1t4" data-next="w2t4" data-msg="다음: 영업팀에서 고객 PPAP Level 확인 후 개발팀에 공유해 주세요 (4/7까지)">
-            <label><input type="checkbox" class="fc" data-id="w1t4"> <span>🟢 PPAP Level 파악 요청 (영업팀)</span></label>
-            <div class="fi-team">영업팀 · 4/7</div>
-          </div>
-        </div>
-
-        <!-- W2 -->
-        <div class="flow-week" style="background:#FFF5F5;border:1px solid #FECACA;border-radius:10px;padding:14px">
-          <div style="font-size:11px;font-weight:700;color:#1E40AF;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #B91C1C">📅 Week 2 · 4/7~4/11 &nbsp;<span style="font-weight:400;color:#64748B">누락 착수</span></div>
-          <div class="fi" data-id="w2t1" data-next="w3t1" data-msg="다음: 4/13까지 MSA 계획서를 최종 확정하고 SP-13에 탭을 추가해 주세요">
-            <label><input type="checkbox" class="fc" data-id="w2t1"> <span>🔴 MSA 실시 계획서 초안 (품질팀)</span></label>
-            <div class="fi-team">품질팀 · 4/11</div>
-          </div>
-          <div class="fi" data-id="w2t2" data-next="w3t2" data-msg="다음: 4/13까지 SPC 대상 공정에서 데이터 수집을 시작해 주세요 (생산팀과 협업)">
-            <label><input type="checkbox" class="fc" data-id="w2t2"> <span>🔴 SPC 대상 공정 선정 + 양식 확정 (품질팀)</span></label>
-            <div class="fi-team">품질팀 · 4/11</div>
-          </div>
-          <div class="fi" data-id="w2t3" data-next="w4t4" data-msg="다음: PPAP 체크리스트 양식을 완성하고 4/30까지 COP-02에 탭을 추가해 주세요">
-            <label><input type="checkbox" class="fc" data-id="w2t3"> <span>🔴 PPAP 체크리스트 양식 초안 (개발팀)</span></label>
-            <div class="fi-team">개발팀 · 4/11</div>
-          </div>
-          <div class="fi" data-id="w2t4" data-next="w4t1" data-msg="다음: 개발팀 COP-02 개정 계획서를 접수하고, 4월 30일 PPAP 탭 추가를 확인해 주세요">
-            <label><input type="checkbox" class="fc" data-id="w2t4"> <span>🟡 COP-02 개정 계획서 제출 (개발팀)</span></label>
-            <div class="fi-team">개발팀 · 4/11</div>
-          </div>
-          <div class="fi" data-id="w2t5" data-next="w3t3" data-msg="다음: SP-08 설비보전관리 개정 착수 (4/14 목표)">
-            <label><input type="checkbox" class="fc" data-id="w2t5"> <span>🟡 COP-03 생산관리 개정 착수 (생산팀)</span></label>
-            <div class="fi-team">생산팀 · 4/7</div>
-          </div>
-        </div>
-
-        <!-- W3 -->
-        <div class="flow-week" style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:10px;padding:14px">
-          <div style="font-size:11px;font-weight:700;color:#D97706;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #D97706">📅 Week 3 · 4/14~4/18 &nbsp;<span style="font-weight:400;color:#64748B">1차 마감</span></div>
-          <div class="fi" data-id="w3t1" data-next="w4t3" data-msg="다음: MSA 계획서 최종 확정 완료(4/18)! SP-13에 탭 추가 후 5~6월 실측 일정 확정하세요">
-            <label><input type="checkbox" class="fc" data-id="w3t1"> <span>🔴 MSA 계획서 최종 확정 (품질팀)</span></label>
-            <div class="fi-team">품질팀 · 4/13</div>
-          </div>
-          <div class="fi" data-id="w3t2" data-next="w4t5" data-msg="다음: 데이터가 3개월 누적되면 (7월) 관리도 분석 및 결과 보고서 작성으로 이어집니다">
-            <label><input type="checkbox" class="fc" data-id="w3t2"> <span>🔴 SPC 데이터 수집 시작 (생산·품질팀)</span></label>
-            <div class="fi-team">생산팀·품질팀 · 4/13</div>
-          </div>
-          <div class="fi" data-id="w3t3" data-next="w4t6" data-msg="다음: SP-09 금형관리 개정 착수 (4/21 시작)">
-            <label><input type="checkbox" class="fc" data-id="w3t3"> <span>🟡 SP-08 설비보전관리 개정 착수 (생산팀)</span></label>
-            <div class="fi-team">생산팀 · 4/14</div>
-          </div>
-          <div class="fi" data-id="w3t4" data-next="w4t2" data-msg="다음: MP-03(33탭)은 5월로 이동! MP-02 완료 직후 MP-03 착수 → 5/16 목표. 4월 남은 기간은 QM 검토에 집중하세요">
-            <label><input type="checkbox" class="fc" data-id="w3t4"> <span>🟡 MP-02 경영검토 개정 완료 (경영기획실)</span></label>
+          <div class="fi" data-id="w1t3" data-next="w2t1,w2t3" data-msg="Week 2 착수: ① MSA 계획서 작성 (품질팀) ② PPAP 양식 작성 (개발팀) ③ 생산팀 개정 착수">
+            <label><input type="checkbox" class="fc" data-id="w1t3"> <span>🟢 팀별 담당 파일 목록 배포 + 팀장 브리핑</span></label>
             <div class="fi-team">경영기획실 · 4/18</div>
           </div>
-          <div class="fi" data-id="w3t5" data-next="w4t3" data-msg="다음: SP-16 검사구관리 개정, SP-13 MSA 탭 추가를 4/25까지 완료해 주세요">
-            <label><input type="checkbox" class="fc" data-id="w3t5"> <span>🟡 SP-14 시험실관리 개정 완료 (품질팀)</span></label>
-            <div class="fi-team">품질팀 · 4/18</div>
-          </div>
-          <div class="fi" data-id="w3t6" data-next="w4t7" data-msg="다음: SP-11 고객재산관리 개정을 4/25까지 완료해 주세요">
-            <label><input type="checkbox" class="fc" data-id="w3t6"> <span>🟡 COP-07 고객만족도 개정 완료 (영업팀)</span></label>
+          <div class="fi" data-id="w1t4" data-next="w2t4" data-msg="다음: 영업팀에서 고객 PPAP Level 확인 후 개발팀에 공유해 주세요 (4/21까지)">
+            <label><input type="checkbox" class="fc" data-id="w1t4"> <span>🟢 PPAP Level 파악 요청 (영업팀)</span></label>
             <div class="fi-team">영업팀 · 4/18</div>
           </div>
         </div>
 
-        <!-- W4 -->
+        <!-- W2 -->
         <div class="flow-week" style="background:#EFF6FF;border:1px solid #93C5FD;border-radius:10px;padding:14px">
-          <div style="font-size:11px;font-weight:700;color:#15803D;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #15803D">📅 Week 4 · 4/21~4/30 &nbsp;<span style="font-weight:400;color:#64748B">최종 마감</span></div>
-          <div class="fi" data-id="w4t1" data-next="done" data-msg="🏁 4월 목표 완료! → 5~6월: COP-02 전면 개정 완료, MSA 실측 진행으로 이어집니다">
-            <label><input type="checkbox" class="fc" data-id="w4t1"> <span>🔴 COP-02 내 PPAP 탭 추가 (개발팀)</span></label>
-            <div class="fi-team">개발팀 · 4/30</div>
-          </div>
-          <div class="fi" data-id="w4t2" data-next="done" data-msg="🏁 경영기획실 5월 목표 완료! → 6~7월: 상반기 경영검토 실시로 이어집니다">
-            <label><input type="checkbox" class="fc" data-id="w4t2"> <span>🗓️ MP-03·05 개정 완료 (경영기획실 — 5월 목표)</span></label>
-            <div class="fi-team">경영기획실 · 4/25</div>
-          </div>
-          <div class="fi" data-id="w4t3" data-next="done" data-msg="🏁 4월 품질팀 목표 완료! → 5~6월: MSA 실측 + SPC 관리도 3개월 데이터 누적으로 이어집니다">
-            <label><input type="checkbox" class="fc" data-id="w4t3"> <span>🟡 SP-16 검사구관리 개정 + SP-13 MSA 탭 (품질팀)</span></label>
+          <div style="font-size:11px;font-weight:700;color:#1E40AF;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #1E40AF">📅 Week 2 · 4/21~4/25 &nbsp;<span style="font-weight:400;color:#64748B">Core Tools 누락 착수</span></div>
+          <div class="fi" data-id="w2t1" data-next="w3t1" data-msg="다음: MSA 계획서 최종 확정 후 SP-13에 탭 추가 (5/2까지)">
+            <label><input type="checkbox" class="fc" data-id="w2t1"> <span>🔴 MSA 실시 계획서 초안 (품질팀)</span></label>
             <div class="fi-team">품질팀 · 4/25</div>
           </div>
-          <div class="fi" data-id="w4t4" data-next="w4t1" data-msg="다음: PPAP 체크리스트를 COP-02에 탭으로 추가해 주세요 (4/30)">
-            <label><input type="checkbox" class="fc" data-id="w4t4"> <span>🔴 PPAP 체크리스트 양식 최종 확정 (개발팀)</span></label>
+          <div class="fi" data-id="w2t2" data-next="w3t2" data-msg="다음: SPC 대상 공정에서 데이터 수집을 시작해 주세요 (생산팀과 협업)">
+            <label><input type="checkbox" class="fc" data-id="w2t2"> <span>🔴 SPC 대상 공정 선정 + 양식 확정 (품질팀)</span></label>
+            <div class="fi-team">품질팀 · 4/25</div>
+          </div>
+          <div class="fi" data-id="w2t3" data-next="w3t4" data-msg="다음: PPAP 체크리스트 양식을 완성하고 COP-02에 탭 추가 (5월 중)">
+            <label><input type="checkbox" class="fc" data-id="w2t3"> <span>🔴 PPAP 체크리스트 양식 초안 (개발팀)</span></label>
             <div class="fi-team">개발팀 · 4/25</div>
           </div>
-          <div class="fi" data-id="w4t5" data-next="done" data-msg="⏳ 7월까지 3개월 데이터 누적 → 관리 한계선 분석 → 8~9월 내부심사 증빙으로 활용">
-            <label><input type="checkbox" class="fc" data-id="w4t5"> <span>📊 SPC 데이터 수집 중 (생산팀 지속)</span></label>
+          <div class="fi" data-id="w2t4" data-next="w3t4" data-msg="다음: COP-02 개정 계획서 접수 후 5~6월 전면 개정으로 이어집니다">
+            <label><input type="checkbox" class="fc" data-id="w2t4"> <span>🟡 COP-02 개정 계획서 제출 (개발팀)</span></label>
+            <div class="fi-team">개발팀 · 4/25</div>
+          </div>
+          <div class="fi" data-id="w2t5" data-next="w3t3" data-msg="다음: SP-08 설비보전관리 개정 착수 (4/28 목표)">
+            <label><input type="checkbox" class="fc" data-id="w2t5"> <span>🟡 COP-03 생산관리 개정 착수 (생산팀)</span></label>
+            <div class="fi-team">생산팀 · 4/21</div>
+          </div>
+        </div>
+
+        <!-- W3 -->
+        <div class="flow-week" style="background:#EEF2FF;border:1px solid #C7D2FE;border-radius:10px;padding:14px">
+          <div style="font-size:11px;font-weight:700;color:#3730A3;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #3730A3">📅 Week 3 · 4/28~5/2 &nbsp;<span style="font-weight:400;color:#64748B">1차 확정 + 수집 시작</span></div>
+          <div class="fi" data-id="w3t1" data-next="w4t3" data-msg="MSA 계획서 확정! SP-13에 탭 추가 후 5~6월 실측 일정 확정하세요">
+            <label><input type="checkbox" class="fc" data-id="w3t1"> <span>🔴 MSA 계획서 최종 확정 + SP-13 탭 추가 (품질팀)</span></label>
+            <div class="fi-team">품질팀 · 5/2</div>
+          </div>
+          <div class="fi" data-id="w3t2" data-next="w4t5" data-msg="3개월 누적 시 (7~8월) 관리도 분석 및 결과 보고서 작성으로 이어집니다">
+            <label><input type="checkbox" class="fc" data-id="w3t2"> <span>🔴 SPC 데이터 수집 시작 (생산·품질팀)</span></label>
+            <div class="fi-team">생산팀·품질팀 · 4/28</div>
+          </div>
+          <div class="fi" data-id="w3t3" data-next="w4t6" data-msg="다음: SP-09 금형관리 개정 착수 (5월 중)">
+            <label><input type="checkbox" class="fc" data-id="w3t3"> <span>🟡 SP-08 설비보전관리 개정 착수 (생산팀)</span></label>
+            <div class="fi-team">생산팀 · 4/28</div>
+          </div>
+          <div class="fi" data-id="w3t4" data-next="w4t1" data-msg="다음: PPAP 체크리스트를 COP-02에 탭으로 추가 (5월 중)">
+            <label><input type="checkbox" class="fc" data-id="w3t4"> <span>🔴 PPAP 체크리스트 양식 최종 확정 (개발팀)</span></label>
+            <div class="fi-team">개발팀 · 5/2</div>
+          </div>
+          <div class="fi" data-id="w3t5" data-next="w4t2" data-msg="다음: MP-03(33탭) 착수 → 5월 말 목표">
+            <label><input type="checkbox" class="fc" data-id="w3t5"> <span>🟡 MP-02 경영검토 개정 완료 (경영기획실)</span></label>
+            <div class="fi-team">경영기획실 · 5/2</div>
+          </div>
+          <div class="fi" data-id="w3t6" data-next="w4t7" data-msg="다음: SP-11 고객재산관리 개정 (5월 중)">
+            <label><input type="checkbox" class="fc" data-id="w3t6"> <span>🟡 COP-07 고객만족도 · SP-14 시험실관리 개정 (영업·품질)</span></label>
+            <div class="fi-team">영업팀·품질팀 · 5/2</div>
+          </div>
+        </div>
+
+        <!-- W4 -->
+        <div class="flow-week" style="background:#F0F9FF;border:1px solid #BAE6FD;border-radius:10px;padding:14px">
+          <div style="font-size:11px;font-weight:700;color:#0F172A;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #0F172A">📅 Week 4 · 5/5~5/9 &nbsp;<span style="font-weight:400;color:#64748B">4월 마감 확인 + 5월 전환</span></div>
+          <div class="fi" data-id="w4t1" data-next="done" data-msg="🏁 PPAP 착수 완료! → 5~6월: COP-02 전면 개정 + PPAP 패키지 구성으로 이어집니다">
+            <label><input type="checkbox" class="fc" data-id="w4t1"> <span>🔴 COP-02 내 PPAP 탭 추가 (개발팀)</span></label>
+            <div class="fi-team">개발팀 · 5/9</div>
+          </div>
+          <div class="fi" data-id="w4t2" data-next="done" data-msg="🏁 MP-03·05 5월 말 완료 목표! → 7월: 상반기 경영검토 실시로 이어집니다">
+            <label><input type="checkbox" class="fc" data-id="w4t2"> <span>🗓️ MP-03·05 개정 착수 (경영기획실 — 5월 말 목표)</span></label>
+            <div class="fi-team">경영기획실 · 5/5 착수</div>
+          </div>
+          <div class="fi" data-id="w4t3" data-next="done" data-msg="🏁 품질팀 기반 완료! → 5~6월: MSA 실측 + SPC 3개월 데이터 누적으로 이어집니다">
+            <label><input type="checkbox" class="fc" data-id="w4t3"> <span>🟡 SP-16 검사구관리 개정 완료 (품질팀)</span></label>
+            <div class="fi-team">품질팀 · 5/9</div>
+          </div>
+          <div class="fi" data-id="w4t5" data-next="done" data-msg="⏳ 7~8월까지 3개월 데이터 누적 → 관리도 분석 → 10월 내부심사 증빙으로 활용">
+            <label><input type="checkbox" class="fc" data-id="w4t5"> <span>📊 SPC 데이터 수집 진행 중 (생산팀 지속)</span></label>
             <div class="fi-team">생산팀 · 계속</div>
           </div>
-          <div class="fi" data-id="w4t6" data-next="done" data-msg="🏁 생산팀 4월 착수 완료! → 5월: SP-09 금형관리·SP-10 JIG관리 개정 완료, COP-03 완료 목표">
+          <div class="fi" data-id="w4t6" data-next="done" data-msg="🏁 생산팀 착수 완료! → 5~7월: SP-09·SP-10·COP-03 개정 완료 목표">
             <label><input type="checkbox" class="fc" data-id="w4t6"> <span>🟡 SP-09 금형관리 개정 착수 (생산팀)</span></label>
-            <div class="fi-team">생산팀 · 4/21 착수</div>
+            <div class="fi-team">생산팀 · 5/5 착수</div>
           </div>
-          <div class="fi" data-id="w4t7" data-next="done" data-msg="🏁 4월 영업팀 목표 완료! → 6~7월: 고객만족도 상반기 조사 실시로 이어집니다">
+          <div class="fi" data-id="w4t7" data-next="done" data-msg="🏁 영업팀 기반 완료! → 6~7월: 고객만족도 상반기 조사로 이어집니다">
             <label><input type="checkbox" class="fc" data-id="w4t7"> <span>🟡 SP-11 고객재산관리 개정 완료 (영업팀)</span></label>
-            <div class="fi-team">영업팀 · 4/25</div>
+            <div class="fi-team">영업팀 · 5/9</div>
           </div>
         </div>
       </div>
