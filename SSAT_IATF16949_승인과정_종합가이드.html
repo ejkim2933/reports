@@ -5,20 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SSAT IATF 16949 — 승인 과정 종합 가이드</title>
 <style>*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Malgun Gothic','맑은 고딕',sans-serif;background:#EEF2F7;color:#1A1A2E;display:flex;min-height:100vh;font-size:13px;}
+body{font-family:'Malgun Gothic','맑은 고딕',sans-serif;background:#EEF2F7;color:#1A1A2E;display:flex;min-height:100vh;font-size:13px;min-font-size:10px;}
 
 /* ── 사이드바 ── */
 .sidebar{width:220px;min-height:100vh;background:#0F1B2D;color:#CBD5E1;display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;border-right:none;box-shadow:2px 0 8px rgba(0,0,0,.15);}
 .sb-logo{padding:22px 20px 16px;border-bottom:1px solid rgba(255,255,255,.08);}
-.sb-logo .co{font-size:10px;color:#64748B;margin-bottom:3px;letter-spacing:.5px;}
+.sb-logo .co{font-size:10px;color:#64748B;margin-bottom:3px;letter-spacing:.4px;}
 .sb-logo .title{font-size:12.5px;font-weight:700;line-height:1.5;color:#E2E8F0;}
-.sb-logo .badge{display:inline-block;background:#2563EB;border-radius:4px;padding:3px 9px;font-size:9px;margin-top:6px;font-weight:600;color:#fff;}
-.sb-section{padding:16px 20px 6px;font-size:9px;text-transform:uppercase;color:#475569;letter-spacing:1px;font-weight:600;}
+.sb-logo .badge{display:inline-block;background:#2563EB;border-radius:4px;padding:3px 9px;font-size:10px;margin-top:6px;font-weight:600;color:#fff;}
+.sb-section{padding:16px 20px 6px;font-size:10px;text-transform:uppercase;color:#475569;letter-spacing:1px;font-weight:600;}
 .sb-item{display:flex;align-items:center;gap:9px;padding:9px 20px;font-size:11.5px;color:#94A3B8;cursor:pointer;transition:all .15s;border-left:3px solid transparent;}
 .sb-item:hover{background:rgba(255,255,255,.05);color:#E2E8F0;}
 .sb-item.active{background:rgba(37,99,235,.15);color:#60A5FA;border-left-color:#3B82F6;font-weight:600;}
 .sb-item .ic{width:15px;text-align:center;font-size:12px;opacity:.8;}
-.sb-footer{margin-top:auto;padding:14px 20px;font-size:9px;color:#475569;border-top:1px solid rgba(255,255,255,.06);}
+.sb-footer{margin-top:auto;padding:14px 20px;font-size:10px;color:#475569;border-top:1px solid rgba(255,255,255,.06);}
 
 /* ── 메인 ── */
 .main{flex:1;display:flex;flex-direction:column;min-width:0;}
@@ -39,17 +39,17 @@ body{font-family:'Malgun Gothic','맑은 고딕',sans-serif;background:#EEF2F7;c
 .kc{flex:1;min-width:130px;background:#fff;border-radius:10px;padding:16px 14px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-top:3px solid;}
 .kc-num{font-size:26px;font-weight:700;margin:6px 0 2px;}
 .kc-lbl{font-size:10px;color:#475569;font-weight:600;}
-.kc-sub{font-size:9px;color:#94A3B8;margin-top:3px;}
+.kc-sub{font-size:10px;color:#94A3B8;margin-top:3px;}
 
 /* ── 테이블 ── */
-.tbl{width:100%;border-collapse:collapse;font-size:11.5px;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #E2E8F0;}
+.tbl{width:100%;border-collapse:collapse;font-size:11.5px;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #E2E8F0;table-layout:fixed;}
 .tbl th{padding:10px 14px;background:#F1F5F9;color:#1E293B;text-align:left;white-space:nowrap;font-size:10.5px;font-weight:600;border-bottom:2px solid #E2E8F0;}
-.tbl td{padding:10px 14px;border-bottom:1px solid #F1F5F9;vertical-align:top;color:#334155;line-height:1.6;}
+.tbl td{padding:10px 14px;border-bottom:1px solid #F1F5F9;vertical-align:top;color:#334155;line-height:1.6;word-wrap:break-word;overflow-wrap:break-word;}
 .tbl tr:last-child td{border-bottom:none;}
 .tbl tr:nth-child(even) td{background:#F8FAFC;}
 
 /* ── 뱃지 ── */
-.tag{display:inline-block;border-radius:4px;padding:2px 8px;font-size:9px;font-weight:600;margin:2px 1px;}
+.tag{display:inline-block;border-radius:4px;padding:2px 8px;font-size:10px;font-weight:600;margin:2px 1px;}
 .tag-red{background:#FEE2E2;color:#B91C1C;}
 .tag-orange{background:#DBEAFE;color:#1E40AF;}
 .tag-blue{background:#DBEAFE;color:#1D4ED8;}
@@ -78,7 +78,7 @@ body{font-family:'Malgun Gothic','맑은 고딕',sans-serif;background:#EEF2F7;c
 .flow-body{padding:14px 18px;display:flex;flex-wrap:wrap;gap:10px;}
 .doc-card{border-radius:8px;padding:12px 14px;font-size:11.5px;flex:1;min-width:200px;border-left:3px solid #3B82F6;background:#F8FAFC;box-shadow:0 1px 3px rgba(0,0,0,.04);}
 .doc-card .dc-title{font-weight:600;margin-bottom:4px;}
-.doc-card .dc-meta{font-size:9px;color:#64748B;}
+.doc-card .dc-meta{font-size:10px;color:#64748B;}
 .step-arrow{text-align:center;font-size:16px;color:#CBD5E1;padding:3px 0;}
 
 /* ── 인포박스 ── */
@@ -101,7 +101,7 @@ body{font-family:'Malgun Gothic','맑은 고딕',sans-serif;background:#EEF2F7;c
 .tl-dot{position:absolute;left:-16px;top:14px;width:10px;height:10px;border-radius:50%;background:#3B82F6;border:2px solid #fff;box-shadow:0 0 0 2px #3B82F6;}
 .tl-card{background:#fff;border-radius:10px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #E2E8F0;font-size:11.5px;line-height:1.8;}
 .tl-month{font-size:13px;font-weight:700;color:#0F172A;margin-bottom:6px;}
-.tl-badge{display:inline-block;border-radius:4px;padding:2px 9px;font-size:9px;font-weight:600;color:#fff;margin-bottom:6px;}
+.tl-badge{display:inline-block;border-radius:4px;padding:2px 9px;font-size:10px;font-weight:600;color:#fff;margin-bottom:6px;}
 
 /* ── 스텝 ── */
 .steps{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
@@ -132,7 +132,7 @@ body{font-family:'Malgun Gothic','맑은 고딕',sans-serif;background:#EEF2F7;c
 .fi input[type=checkbox]{margin-top:2px;cursor:pointer;accent-color:#2563EB;width:14px;height:14px;flex-shrink:0}
 .fi.done{opacity:.5;background:#EFF6FF;border-color:#93C5FD}
 .fi.done span{text-decoration:line-through;color:#64748B}
-.fi-team{font-size:9px;color:#64748B;margin-top:3px;margin-left:22px}
+.fi-team{font-size:10px;color:#64748B;margin-top:3px;margin-left:22px}
 .flow-week{transition:box-shadow .2s}
 .flow-week:hover{box-shadow:0 4px 14px rgba(0,0,0,.08)}
 
@@ -150,14 +150,14 @@ body{font-family:'Malgun Gothic','맑은 고딕',sans-serif;background:#EEF2F7;c
   .topbar{padding:0 16px;height:44px;flex-wrap:wrap;gap:6px;}
   .topbar h1{font-size:12px;}
   .topbar .sub{display:none;}
-  .tb-badge{font-size:8px;padding:2px 6px;}
+  .tb-badge{font-size:10px;padding:2px 6px;}
   .content{padding:16px;}
   .sec-title{font-size:14px;margin-bottom:14px;}
   .kpi-row{gap:8px;}
   .kc{min-width:calc(50% - 8px);padding:12px 10px;}
   .kc-num{font-size:20px;}
   .card-grid{grid-template-columns:1fr;}
-  .tbl{font-size:10.5px;display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .tbl{font-size:10.5px;display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;table-layout:auto;}
   .tbl th,.tbl td{padding:8px 10px;min-width:80px;}
   .tbl th{font-size:9.5px;}
   .flow-body{flex-direction:column;}
@@ -168,7 +168,7 @@ body{font-family:'Malgun Gothic','맑은 고딕',sans-serif;background:#EEF2F7;c
   .tl-item{padding-left:14px;}
   .alert{padding:10px 12px;font-size:10.5px;}
   .info-box{padding:12px;font-size:10.5px;}
-  .tag{font-size:8px;padding:2px 6px;}
+  .tag{font-size:10px;padding:2px 6px;}
 }
 @media(max-width:480px){
   .kc{min-width:100%;}
@@ -1068,29 +1068,29 @@ body{font-family:'Malgun Gothic','맑은 고딕',sans-serif;background:#EEF2F7;c
         <span>|</span><span><strong>XLS/XLSX:</strong> 38개</span>
         <span><strong>PPT/PPTX:</strong> 5개</span>
         <span><strong>총 탭:</strong> 477개</span>
-        <span style="margin-left:auto;font-size:9px;color:#6B7280">※ 파일 추가·변경 시 "파일 대조 업데이트해줘" 요청</span>
+        <span style="margin-left:auto;font-size:10px;color:#6B7280">※ 파일 추가·변경 시 "파일 대조 업데이트해줘" 요청</span>
       </div>
 
       <div class="kpi-row" style="margin-bottom:18px">
-        <div class="kc" style="border-color:#22C55E"><div class="kc-lbl">현행</div><div class="kc-num" style="color:#22C55E">15</div><div class="kc-sub">최근 3년 내 개정</div></div>
-        <div class="kc" style="border-color:#F59E0B"><div class="kc-lbl">검토 권고</div><div class="kc-num" style="color:#F59E0B">10</div><div class="kc-sub">4~6년 미개정</div></div>
-        <div class="kc" style="border-color:#EF4444"><div class="kc-lbl">개정 필요</div><div class="kc-num" style="color:#EF4444">1</div><div class="kc-sub">IATF:2016 미반영</div></div>
-        <div class="kc" style="border-color:#7F1D1D"><div class="kc-lbl">긴급 (7년+)</div><div class="kc-num" style="color:#7F1D1D">14</div><div class="kc-sub">즉시 개정 필요</div></div>
+        <div class="kc" style="border-color:#3B82F6"><div class="kc-lbl">현행</div><div class="kc-num" style="color:#3B82F6">15</div><div class="kc-sub">최근 3년 내 개정</div></div>
+        <div class="kc" style="border-color:#6366F1"><div class="kc-lbl">검토 권고</div><div class="kc-num" style="color:#6366F1">10</div><div class="kc-sub">4~6년 미개정</div></div>
+        <div class="kc" style="border-color:#1E40AF"><div class="kc-lbl">개정 필요</div><div class="kc-num" style="color:#1E40AF">1</div><div class="kc-sub">IATF:2016 미반영</div></div>
+        <div class="kc" style="border-color:#0F172A"><div class="kc-lbl">긴급 (7년+)</div><div class="kc-num" style="color:#0F172A">14</div><div class="kc-sub">즉시 개정 필요</div></div>
         <div class="kc" style="border-color:#3B82F6"><div class="kc-lbl">총 파일</div><div class="kc-num" style="color:#3B82F6">43</div><div class="kc-sub">XLS·XLSX·PPT 포함</div></div>
-        <div class="kc" style="border-color:#8B5CF6"><div class="kc-lbl">총 탭(양식)</div><div class="kc-num" style="color:#8B5CF6">477</div><div class="kc-sub">Excel 내 탭 전체</div></div>
+        <div class="kc" style="border-color:#4F46E5"><div class="kc-lbl">총 탭(양식)</div><div class="kc-num" style="color:#4F46E5">477</div><div class="kc-sub">Excel 내 탭 전체</div></div>
       </div>
 
 
       <div class="sec-sub">📂 탭 역할 분류 범례</div>
       <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;background:#fff;padding:12px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.06);font-size:10px;align-items:center">
         <span style="color:#64748B;font-weight:600">탭 역할:</span>
-        <span><span style="background:#DBEAFE;color:#1E40AF;padding:1px 5px;border-radius:3px;font-weight:600;font-size:9px">📋 작업표준서</span> 작업표준서·지침서 역할</span>
-        <span><span style="background:#E0E7FF;color:#3730A3;padding:1px 5px;border-radius:3px;font-weight:600;font-size:9px">🔧 Core Tool</span> 관리계획서·PFMEA 등</span>
-        <span><span style="background:#E0E7FF;color:#312E81;padding:1px 5px;border-radius:3px;font-weight:600;font-size:9px">✅ 체크리스트</span> 점검표·체크리스트</span>
-        <span><span style="background:#DBEAFE;color:#1D4ED8;padding:1px 5px;border-radius:3px;font-size:9px">📁 기록</span> 관리대장·이력</span>
-        <span><span style="background:#EEF2FF;color:#3730A3;padding:1px 5px;border-radius:3px;font-size:9px">📅 계획서</span> 계획서·일정</span>
-        <span><span style="background:#EEF2FF;color:#4338CA;padding:1px 5px;border-radius:3px;font-size:9px">📊 보고서</span> 결과보고서</span>
-        <span><span style="background:#F3F4F6;color:#374151;padding:1px 5px;border-radius:3px;font-size:9px">📝 양식</span> 서식·양식</span>
+        <span><span style="background:#DBEAFE;color:#1E40AF;padding:1px 5px;border-radius:3px;font-weight:600;font-size:10px">📋 작업표준서</span> 작업표준서·지침서 역할</span>
+        <span><span style="background:#E0E7FF;color:#3730A3;padding:1px 5px;border-radius:3px;font-weight:600;font-size:10px">🔧 Core Tool</span> 관리계획서·PFMEA 등</span>
+        <span><span style="background:#E0E7FF;color:#312E81;padding:1px 5px;border-radius:3px;font-weight:600;font-size:10px">✅ 체크리스트</span> 점검표·체크리스트</span>
+        <span><span style="background:#DBEAFE;color:#1D4ED8;padding:1px 5px;border-radius:3px;font-size:10px">📁 기록</span> 관리대장·이력</span>
+        <span><span style="background:#EEF2FF;color:#3730A3;padding:1px 5px;border-radius:3px;font-size:10px">📅 계획서</span> 계획서·일정</span>
+        <span><span style="background:#EEF2FF;color:#4338CA;padding:1px 5px;border-radius:3px;font-size:10px">📊 보고서</span> 결과보고서</span>
+        <span><span style="background:#F3F4F6;color:#374151;padding:1px 5px;border-radius:3px;font-size:10px">📝 양식</span> 서식·양식</span>
         <span style="color:#94A3B8">※ 표지·프로세스맵 등 구조탭 제외</span>
       </div>
       <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
@@ -1102,20 +1102,20 @@ body{font-family:'Malgun Gothic','맑은 고딕',sans-serif;background:#EEF2F7;c
         <button onclick="fcFilter('SP')"     class="fc-btn" id="fc-SP">SP 지원</button>
         <button onclick="fcFilter('EM')"     class="fc-btn" id="fc-EM">EM 환경</button>
         <button onclick="fcFilter('urgent')" class="fc-btn" style="background:#EFF6FF;color:#1E3A5F;border-color:#93C5FD" id="fc-urgent">🚨 긴급만</button>
-        <span style="margin-left:auto;font-size:9px;color:#9CA3AF" id="fc-count">43개 표시</span>
+        <span style="margin-left:auto;font-size:10px;color:#9CA3AF" id="fc-count">43개 표시</span>
       </div>
 
       <table class="tbl" style="margin-bottom:20px">
         <thead>
           <tr>
-            <th style="width:34px">No</th>
-            <th style="width:52px">구분</th>
-            <th>파일명 (프로세스)</th>
-            <th style="width:60px">최근개정</th>
-            <th style="width:56px">상태</th>
-            <th style="width:72px">탭수</th>
-            <th>탭 목록 / IATF 체크포인트</th>
-            <th style="width:60px">담당</th>
+            <th style="width:3%">No</th>
+            <th style="width:6%">구분</th>
+            <th style="width:18%">파일명 (프로세스)</th>
+            <th style="width:7%;white-space:nowrap">최근개정</th>
+            <th style="width:6%;white-space:nowrap">상태</th>
+            <th style="width:5%;white-space:nowrap">탭수</th>
+            <th style="width:48%">탭 목록 / IATF 체크포인트</th>
+            <th style="width:7%;white-space:nowrap">담당</th>
           </tr>
         </thead>
         <tbody id="fc-tbody"></tbody>
@@ -1132,16 +1132,16 @@ body{font-family:'Malgun Gothic','맑은 고딕',sans-serif;background:#EEF2F7;c
         <table class="tbl">
           <thead>
             <tr>
-              <th style="width:80px">IATF 조항</th>
-              <th style="width:120px">Core Tool</th>
-              <th>누락 내용</th>
-              <th>조치 방안</th>
+              <th style="width:8%">IATF 조항</th>
+              <th style="width:12%">Core Tool</th>
+              <th style="width:40%">누락 내용</th>
+              <th style="width:40%">조치 방안</th>
             </tr>
           </thead>
           <tbody>
             <tr style="background:#EFF6FF">
               <td style="text-align:center;font-weight:700;color:#DC2626">AIAG</td>
-              <td style="font-weight:700;color:#DC2626">MSA<br><span style="font-size:9px;font-weight:400">(측정시스템분석)</span></td>
+              <td style="font-weight:700;color:#DC2626">MSA<br><span style="font-size:10px;font-weight:400">(측정시스템분석)</span></td>
               <td style="font-size:11px">
                 측정장비·검사원·환경 변동이 측정값에 미치는 영향 분석 기록.<br>
                 SP-13(계측장비관리) 파일 내에도 MSA 관련 탭·기록 없음.
@@ -1154,7 +1154,7 @@ body{font-family:'Malgun Gothic','맑은 고딕',sans-serif;background:#EEF2F7;c
             </tr>
             <tr style="background:#EFF6FF">
               <td style="text-align:center;font-weight:700;color:#DC2626">AIAG</td>
-              <td style="font-weight:700;color:#DC2626">SPC<br><span style="font-size:9px;font-weight:400">(통계적 공정관리)</span></td>
+              <td style="font-weight:700;color:#DC2626">SPC<br><span style="font-size:10px;font-weight:400">(통계적 공정관리)</span></td>
               <td style="font-size:11px">
                 관리도(X-bar, R chart 등) 운영 기록 없음.<br>
                 SP-14(시험실관리), COP-04(검사업무) 어디에도 SPC 탭 미확인.
@@ -1167,7 +1167,7 @@ body{font-family:'Malgun Gothic','맑은 고딕',sans-serif;background:#EEF2F7;c
             </tr>
             <tr style="background:#EFF6FF">
               <td style="text-align:center;font-weight:700;color:#DC2626">AIAG</td>
-              <td style="font-weight:700;color:#DC2626">PPAP<br><span style="font-size:9px;font-weight:400">(양산부품 승인)</span></td>
+              <td style="font-weight:700;color:#DC2626">PPAP<br><span style="font-size:10px;font-weight:400">(양산부품 승인)</span></td>
               <td style="font-size:11px">
                 COP-02(개발업무, 45탭)에 PPAP 관련 탭이 없음.<br>
                 고객 납품 시 요구하는 PPAP 패키지 제출 기록 없음.
@@ -1190,11 +1190,11 @@ const FC_DATA = [{"file": "00.SSATQ-01 품질경영매뉴얼_20221202.xls", "pro
 const PROC_COLOR = {QM:'#1E40AF',COP:'#2563EB',MP:'#3B82F6',SP:'#60A5FA',EM:'#6366F1'};
 const PROC_LABEL = {QM:'매뉴얼',COP:'COP',MP:'MP',SP:'SP',EM:'EM'};
 const STATUS_HTML = {
-  '현행':'<span style="background:#DBEAFE;color:#1E40AF;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700">✅ 현행</span>',
-  '검토':'<span style="background:#E0E7FF;color:#3730A3;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700">🔶 검토</span>',
-  '개정':'<span style="background:#C7D2FE;color:#312E81;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700">🔴 개정</span>',
-  '긴급':'<span style="background:#0F172A;color:#E0E7FF;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700">🚨 긴급</span>',
-  '확인필요':'<span style="background:#F1F5F9;color:#475569;padding:2px 7px;border-radius:4px;font-size:9px">❓ 확인</span>',
+  '현행':'<span style="background:#DBEAFE;color:#1E40AF;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">✅ 현행</span>',
+  '검토':'<span style="background:#E0E7FF;color:#3730A3;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">🔶 검토</span>',
+  '개정':'<span style="background:#C7D2FE;color:#312E81;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">🔴 개정</span>',
+  '긴급':'<span style="background:#0F172A;color:#E0E7FF;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">🚨 긴급</span>',
+  '확인필요':'<span style="background:#F1F5F9;color:#475569;padding:2px 7px;border-radius:4px;font-size:10px">❓ 확인</span>',
 };
 function clsTab(n){
   n=n.toLowerCase().replace(/ /g,'');
@@ -1233,24 +1233,24 @@ function renderFCTable(){
     const tabsHtml=d.tabs.length>0
       ?`<details><summary style="cursor:pointer;font-size:10px;color:#3B82F6;font-weight:600;padding:2px 0">▶ 탭 펼치기 (${d.tab_count})</summary>
          <div style="padding:5px 0;display:flex;flex-wrap:wrap;gap:2px;margin-top:3px">
-           ${d.tabs.map(t=>{const[c,cl]=clsTab(t);return`<span style="font-size:9px;background:${cl}22;color:${cl};border:1px solid ${cl}44;border-radius:3px;padding:1px 4px">${c} ${t}</span>`;}). join('')}
+           ${d.tabs.map(t=>{const[c,cl]=clsTab(t);return`<span style="font-size:10px;background:${cl}22;color:${cl};border:1px solid ${cl}44;border-radius:3px;padding:1px 4px">${c} ${t}</span>`;}). join('')}
          </div></details>`
-      :'<span style="font-size:9px;color:#9CA3AF">PPT — 탭 없음</span>';
+      :'<span style="font-size:10px;color:#9CA3AF">PPT — 탭 없음</span>';
     const checkHtml=d.checks.length>0
       ?`<div style="margin-top:5px;padding:5px 8px;background:#FFFBEB;border-left:3px solid #F59E0B;border-radius:0 4px 4px 0">
-          <div style="font-size:9px;font-weight:700;color:#92400E;margin-bottom:2px">🔍 체크포인트</div>
-          ${d.checks.map(c=>`<div style="font-size:9px;color:#78350F;line-height:1.65">· ${c}</div>`).join('')}
+          <div style="font-size:10px;font-weight:700;color:#92400E;margin-bottom:2px">🔍 체크포인트</div>
+          ${d.checks.map(c=>`<div style="font-size:10px;color:#78350F;line-height:1.65">· ${c}</div>`).join('')}
         </div>`:'';
-    const noteHtml=d.note?`<span style="font-size:8px;color:#6B7280;display:block;margin-top:2px">💬 ${d.note}</span>`:'';
+    const noteHtml=d.note?`<span style="font-size:10px;color:#6B7280;display:block;margin-top:2px">💬 ${d.note}</span>`:'';
     return `<tr style="background:${rowBg}">
       <td style="text-align:center;font-weight:700;color:#6B7280">${i+1}</td>
-      <td style="text-align:center"><span style="background:${color};color:#fff;padding:2px 6px;border-radius:3px;font-size:9px;font-weight:700">${lbl}</span></td>
+      <td style="text-align:center"><span style="background:${color};color:#fff;padding:2px 6px;border-radius:3px;font-size:10px;font-weight:700">${lbl}</span></td>
       <td style="font-weight:600;font-size:11px">${d.file.replace(/^\d+\.\s*/,'')}${noteHtml}</td>
       <td style="text-align:center;font-size:10px">${d.revised}</td>
       <td style="text-align:center">${statH}</td>
       <td style="text-align:center;font-size:10px;font-weight:700;color:${d.tab_count>=20?'#2563EB':d.tab_count>=10?'#374151':'#9CA3AF'}">${d.tab_count>0?d.tab_count+'탭':'-'}</td>
       <td>${tabsHtml}${checkHtml}</td>
-      <td style="font-size:9px;text-align:center">${d.owner||'-'}</td>
+      <td style="font-size:10px;text-align:center">${d.owner||'-'}</td>
     </tr>`;
   }).join('');
 }
@@ -1325,10 +1325,10 @@ document.addEventListener('DOMContentLoaded',renderFCTable);
       <div class="sec-title">🔴 갭 분석 — 신규 작성 · 긴급 개정 대상</div>
 
       <div class="kpi-row">
-        <div class="kc" style="border-color:#EF4444"><div class="kc-lbl">신규 문서 (없음)</div><div class="kc-num" style="color:#EF4444">8종</div><div class="kc-sub">즉시~단기 작성 필요</div></div>
-        <div class="kc" style="border-color:#F59E0B"><div class="kc-lbl">긴급 개정 (8년)</div><div class="kc-num" style="color:#F59E0B">6종</div><div class="kc-sub">IATF:2016 이전 문서</div></div>
+        <div class="kc" style="border-color:#1E40AF"><div class="kc-lbl">신규 문서 (없음)</div><div class="kc-num" style="color:#1E40AF">8종</div><div class="kc-sub">즉시~단기 작성 필요</div></div>
+        <div class="kc" style="border-color:#6366F1"><div class="kc-lbl">긴급 개정 (8년)</div><div class="kc-num" style="color:#6366F1">6종</div><div class="kc-sub">IATF:2016 이전 문서</div></div>
         <div class="kc" style="border-color:#3B82F6"><div class="kc-lbl">검토 권고 (4~6년)</div><div class="kc-num" style="color:#3B82F6">6종</div><div class="kc-sub">부분 보완 권장</div></div>
-        <div class="kc" style="border-color:#22C55E"><div class="kc-lbl">현행 유지 (최신)</div><div class="kc-num" style="color:#22C55E">4종</div><div class="kc-sub">이상 없음</div></div>
+        <div class="kc" style="border-color:#3B82F6"><div class="kc-lbl">현행 유지 (최신)</div><div class="kc-num" style="color:#3B82F6">4종</div><div class="kc-sub">이상 없음</div></div>
       </div>
 
       <div class="sec-sub">🚨 신규 작성 필요 문서 (코어툴 4종 포함)</div>
@@ -1481,8 +1481,8 @@ document.addEventListener('DOMContentLoaded',renderFCTable);
         <tbody>
           <tr style="background:#EFF6FF">
             <td style="text-align:center;font-weight:700;color:#DC2626">🔴 1순위</td>
-            <td style="font-weight:700;color:#DC2626">MSA<br><span style="font-size:9px;font-weight:400">(측정시스템분석)</span></td>
-            <td>7.1.5.1.1<br><span style="font-size:9px">계측기 관리 + MSA</span></td>
+            <td style="font-weight:700;color:#DC2626">MSA<br><span style="font-size:10px;font-weight:400">(측정시스템분석)</span></td>
+            <td>7.1.5.1.1<br><span style="font-size:10px">계측기 관리 + MSA</span></td>
             <td>
               SP-13(계측장비관리) 파일 내에도 MSA 관련 탭·기록 없음.<br>
               Gage R&amp;R 실시 기록 전무 — 심사 시 Major 부적합 직결.
@@ -1495,8 +1495,8 @@ document.addEventListener('DOMContentLoaded',renderFCTable);
           </tr>
           <tr style="background:#EFF6FF">
             <td style="text-align:center;font-weight:700;color:#DC2626">🔴 2순위</td>
-            <td style="font-weight:700;color:#DC2626">SPC<br><span style="font-size:9px;font-weight:400">(통계적 공정관리)</span></td>
-            <td>8.3.3.1<br><span style="font-size:9px">특수특성 공정관리</span></td>
+            <td style="font-weight:700;color:#DC2626">SPC<br><span style="font-size:10px;font-weight:400">(통계적 공정관리)</span></td>
+            <td>8.3.3.1<br><span style="font-size:10px">특수특성 공정관리</span></td>
             <td>
               SP-14(시험실관리), COP-04(검사업무) 어디에도 SPC 탭 미확인.<br>
               관리도 양식·데이터 기록 없음.
@@ -1509,8 +1509,8 @@ document.addEventListener('DOMContentLoaded',renderFCTable);
           </tr>
           <tr style="background:#EFF6FF">
             <td style="text-align:center;font-weight:700;color:#B45309">🟠 3순위</td>
-            <td style="font-weight:700;color:#B45309">PPAP<br><span style="font-size:9px;font-weight:400">(양산부품 승인)</span></td>
-            <td>8.6.6<br><span style="font-size:9px">양산부품 승인</span></td>
+            <td style="font-weight:700;color:#B45309">PPAP<br><span style="font-size:10px;font-weight:400">(양산부품 승인)</span></td>
+            <td>8.6.6<br><span style="font-size:10px">양산부품 승인</span></td>
             <td>
               COP-02(개발업무) 내 PFMEA·관리계획서 탭은 존재하나,<br>
               PPAP 전용 서류 패키지(Level 3) 탭 없음.
