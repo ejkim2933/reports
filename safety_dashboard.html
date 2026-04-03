@@ -664,7 +664,7 @@ table tr:hover td{background:#f8fafc;}
       <div class="stat-card green"><div class="label">보유</div><div class="value" id="dm-owned">0</div><div class="sub">건</div></div>
       <div class="stat-card red"><div class="label">미보유</div><div class="value" id="dm-missing">0</div><div class="sub">건 확보 필요</div></div>
       <div class="stat-card orange"><div class="label">WWS 이행률</div><div class="value" id="dm-rate">0%</div><div class="sub">WWS 항목 기준</div></div>
-      <div class="stat-card" style="border-left:4px solid #8b5cf6;"><div class="label">파일 보유</div><div class="value" style="color:#8b5cf6;" id="dm-files">0</div><div class="sub">건 (로컬파일 매칭)</div></div>
+      <div class="stat-card" style="border-left:4px solid #8b5cf6;"><div class="label">파일 업로드</div><div class="value" style="color:#8b5cf6;" id="dm-files">0</div><div class="sub">건 (드라이브/로컬)</div></div>
     </div>
 
     <!-- 카테고리별 진행률 바 -->
@@ -681,8 +681,6 @@ table tr:hover td{background:#f8fafc;}
         <button class="tab" onclick="dmFilter('owned',this)">✅ 보유만</button>
         <button class="tab" onclick="dmFilter('wws',this)">🏢 WWS 이행항목</button>
         <button class="tab" onclick="dmFilter('legal',this)">⚖️ 법정 필수</button>
-        <button class="tab" onclick="dmFilter('hasfile',this)">📎 파일보유</button>
-        <button class="tab" onclick="dmFilter('nofile',this)">📭 파일없음</button>
       </div>
       <div style="display:flex;gap:6px;">
         <button class="btn btn-primary btn-sm" onclick="dmAddDoc()">+ 서류 추가</button>
@@ -703,7 +701,7 @@ table tr:hover td{background:#f8fafc;}
             <th style="width:90px;">보유 상태</th>
             <th style="width:100px;">최종 업데이트</th>
             <th style="width:100px;">만료/갱신일</th>
-            <th style="width:140px;">로컬 파일</th>
+            <th style="width:120px;">파일</th>
             <th style="width:130px;">비고</th>
             <th style="width:110px;">관리</th>
           </tr></thead>
@@ -712,32 +710,9 @@ table tr:hover td{background:#f8fafc;}
       </div>
     </div>
 
-    <!-- 하단: 미보유 항목 안내 + 파일 업로드 -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+    <!-- 하단: 미보유 항목 안내 -->
+    <div style="margin-top:16px;">
       <div id="dm-alert"></div>
-      <div class="card">
-        <div class="card-title">📤 파일 업로드 (로컬 연결)</div>
-        <div class="alert info" style="margin-bottom:12px;">파일을 선택하면 해당 서류 항목에 파일명이 연결됩니다.<br>실제 파일은 이 폴더에 함께 보관하세요.</div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>연결할 서류 항목</label>
-            <select id="dm-upload-target" style="width:100%;padding:8px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:13px;">
-              <option value="">-- 서류 선택 --</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>파일 선택</label>
-            <input type="file" id="dm-file-input" style="width:100%;padding:6px;border:1px solid #d1d5db;border-radius:8px;font-size:12px;" onchange="dmLinkFile()">
-          </div>
-        </div>
-        <div class="form-group">
-          <label>또는 파일명 직접 입력</label>
-          <div style="display:flex;gap:6px;">
-            <input type="text" id="dm-manual-filename" placeholder="예) 안전보건교육일지_202604.docx" style="flex:1;padding:8px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:13px;">
-            <button class="btn btn-primary btn-sm" onclick="dmLinkManual()">연결</button>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -2183,7 +2158,7 @@ function renderDocMgr(){
   const total = docs.length;
   const owned = docs.filter(d=>d.status==='보유').length;
   const missing = docs.filter(d=>d.status==='미보유').length;
-  const filesLinked = docs.filter(d=>d.localFile).length;
+  const filesLinked = docs.filter(d=>d.driveUrl||d.localFile).length;
   const wwsTotal = docs.filter(d=>d.wwsCode).length;
   const wwsOwned = docs.filter(d=>d.wwsCode && d.status==='보유').length;
   const rate = wwsTotal>0 ? Math.round(wwsOwned/wwsTotal*100) : 0;
@@ -2229,8 +2204,6 @@ function renderDocMgr(){
   else if(dmCurrentFilter==='owned') filtered = docs.filter(d=>d.status==='보유');
   else if(dmCurrentFilter==='wws') filtered = docs.filter(d=>d.wwsCode);
   else if(dmCurrentFilter==='legal') filtered = docs.filter(d=>d.category==='legal'||d.category==='wws');
-  else if(dmCurrentFilter==='hasfile') filtered = docs.filter(d=>d.localFile);
-  else if(dmCurrentFilter==='nofile') filtered = docs.filter(d=>!d.localFile);
 
   // 테이블 렌더링
   const tbody = document.getElementById('dm-table-body');
@@ -2241,10 +2214,15 @@ function renderDocMgr(){
       const sc = d.status==='보유'?'green':d.status==='갱신필요'?'yellow':'red';
       const wwsBadge = d.wwsCode ? `<span class="badge blue" style="font-size:10px;">${d.wwsCode}</span>` : '<span style="font-size:10px;color:#9ca3af;">—</span>';
       const templateBtn = d.hasTemplate ? `<button class="btn btn-primary btn-sm" onclick="openTemplate('${d.id}')" style="font-size:10px;" title="웹 양식 열기">📝</button>` : '';
-      const fileDisplay = d.localFile
-        ? `<span style="font-size:10px;color:#16a34a;cursor:pointer;" title="${d.localFile}" onclick="alert('📎 파일: ${d.localFile.replace(/'/g,"\\'")}')">📎 ${d.localFile.length>18?d.localFile.substring(0,18)+'…':d.localFile}</span>
-           <button style="background:none;border:none;cursor:pointer;font-size:10px;color:#dc2626;" onclick="dmUnlinkFile('${d.id}')" title="파일 연결 해제">✕</button>`
-        : `<span style="font-size:10px;color:#d1d5db;">파일 없음</span>`;
+      const fileDisplay = d.driveUrl
+        ? `<a href="${d.driveUrl}" target="_blank" style="font-size:11px;color:#1e5096;text-decoration:none;" title="클릭하여 드라이브에서 보기">📄 ${(d.localFile||d.name).length>15?(d.localFile||d.name).substring(0,15)+'…':(d.localFile||d.name)}</a>
+           <a href="${d.driveUrl}" target="_blank" style="font-size:10px;margin-left:4px;" title="드라이브 열기">⬇</a>
+           <button style="background:none;border:none;cursor:pointer;font-size:10px;color:#dc2626;margin-left:2px;" onclick="dmUnlinkFile('${d.id}')" title="파일 연결 해제">✕</button>`
+        : d.localFile
+          ? `<span style="font-size:10px;color:#6b7280;" title="${d.localFile}">📎 ${d.localFile.length>15?d.localFile.substring(0,15)+'…':d.localFile}</span>
+             <button style="background:none;border:none;cursor:pointer;font-size:10px;color:#dc2626;margin-left:2px;" onclick="dmUnlinkFile('${d.id}')" title="파일 연결 해제">✕</button>`
+          : `<span style="font-size:10px;color:#d1d5db;">파일 없음</span>`;
+      const uploadId = 'dm-upload-'+d.id;
       // 만료 경고
       let expiresWarn = '';
       if(d.expires){
@@ -2268,20 +2246,14 @@ function renderDocMgr(){
         <td><input type="date" value="${d.expires||''}" style="border:1px solid #e8edf3;border-radius:6px;padding:3px 6px;font-size:11px;width:100%;" onchange="updateDMStatus('${d.id}','expires',this.value)"></td>
         <td>${fileDisplay}</td>
         <td style="font-size:10px;color:#6b7280;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${(d.note||'').replace(/"/g,'&quot;')}">${d.note||''}</td>
-        <td style="display:flex;gap:3px;flex-wrap:wrap;">
+        <td style="display:flex;gap:3px;flex-wrap:wrap;align-items:center;">
           ${templateBtn}
           <button class="btn btn-outline btn-sm" onclick="dmNote('${d.id}')" style="font-size:10px;" title="메모 편집">✏️</button>
-          <button class="btn btn-outline btn-sm" onclick="dmLinkFileFor('${d.id}')" style="font-size:10px;" title="파일 연결">📎</button>
+          <label class="btn btn-primary btn-sm" style="font-size:10px;cursor:pointer;margin:0;" title="파일 업로드 (드라이브)">📁<input type="file" style="display:none;" onchange="dmUploadToDrive('${d.id}',this)"></label>
+          <span id="dm-upload-status-${d.id}" style="font-size:9px;color:#6b7280;"></span>
         </td>
       </tr>`;
     }).join('');
-
-  // 파일 업로드 대상 셀렉트 업데이트
-  const uploadSelect = document.getElementById('dm-upload-target');
-  if(uploadSelect){
-    uploadSelect.innerHTML = '<option value="">-- 서류 선택 --</option>' +
-      docs.map(d=>`<option value="${d.id}">${d.wwsCode?'['+d.wwsCode+'] ':''}${d.name}</option>`).join('');
-  }
 
   // 하단 미보유 알림
   const alertEl = document.getElementById('dm-alert');
@@ -2331,51 +2303,61 @@ function dmNote(id){
   if(note!==null){ saveDMItem(id,'note',note); renderDocMgr(); }
 }
 
-// 파일 연결 기능
-function dmLinkFile(){
-  const target = document.getElementById('dm-upload-target').value;
-  const fileInput = document.getElementById('dm-file-input');
-  if(!target){ alert('연결할 서류 항목을 먼저 선택하세요.'); return; }
-  if(!fileInput.files.length){ return; }
-  const fileName = fileInput.files[0].name;
-  saveDMItem(target, 'localFile', fileName);
-  // 파일이 있으면 자동으로 보유 상태로 변경
-  saveDMItem(target, 'status', '보유');
-  saveDMItem(target, 'updated', new Date().toISOString().split('T')[0]);
-  fileInput.value = '';
-  document.getElementById('dm-upload-target').value = '';
-  renderDocMgr();
-  alert('✅ 파일이 연결되었습니다: ' + fileName);
-}
-function dmLinkManual(){
-  const target = document.getElementById('dm-upload-target').value;
-  const fileName = document.getElementById('dm-manual-filename').value.trim();
-  if(!target){ alert('연결할 서류 항목을 먼저 선택하세요.'); return; }
-  if(!fileName){ alert('파일명을 입력하세요.'); return; }
-  saveDMItem(target, 'localFile', fileName);
-  saveDMItem(target, 'status', '보유');
-  saveDMItem(target, 'updated', new Date().toISOString().split('T')[0]);
-  document.getElementById('dm-manual-filename').value = '';
-  document.getElementById('dm-upload-target').value = '';
-  renderDocMgr();
-  alert('✅ 파일이 연결되었습니다: ' + fileName);
-}
-function dmLinkFileFor(id){
+// 드라이브 업로드 기능
+function dmUploadToDrive(docId, input) {
+  if(!input.files || !input.files[0]) return;
+  const file = input.files[0];
   const docs = getDMList();
-  const doc = docs.find(d=>d.id===id);
-  const fileName = prompt(`[${doc?.name}] 연결할 파일명 입력:`, doc?.localFile||'');
-  if(fileName!==null){
-    saveDMItem(id, 'localFile', fileName);
-    if(fileName){
-      saveDMItem(id, 'status', '보유');
-      saveDMItem(id, 'updated', new Date().toISOString().split('T')[0]);
-    }
+  const doc = docs.find(d=>d.id===docId);
+
+  if(!DRIVE_UPLOAD_URL) {
+    // Fallback: just save filename
+    saveDMItem(docId, 'localFile', file.name);
+    saveDMItem(docId, 'status', '보유');
+    saveDMItem(docId, 'updated', new Date().toISOString().split('T')[0]);
     renderDocMgr();
+    alert('✅ 파일이 연결되었습니다: ' + file.name);
+    return;
   }
+
+  // Show uploading status
+  const statusEl = document.getElementById('dm-upload-status-' + docId);
+  if(statusEl) statusEl.textContent = '업로드 중...';
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const base64 = e.target.result.split(',')[1];
+    fetch(DRIVE_UPLOAD_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        fileName: file.name,
+        fileData: base64,
+        mimeType: file.type,
+        subfolder: '서류관리'
+      })
+    }).then(() => {
+      // Save drive folder URL (since no-cors can't read response)
+      const driveUrl = 'https://drive.google.com/drive/folders/10a7V0ao6Qf-_9XeiK4Bd2NRmfAX7rgB5';
+      saveDMItem(docId, 'driveUrl', driveUrl);
+      saveDMItem(docId, 'localFile', file.name);
+      saveDMItem(docId, 'status', '보유');
+      saveDMItem(docId, 'updated', new Date().toISOString().split('T')[0]);
+      if(statusEl) statusEl.textContent = '✅ 완료';
+      setTimeout(() => { if(statusEl) statusEl.textContent = ''; }, 2000);
+      renderDocMgr();
+    }).catch(err => {
+      if(statusEl) statusEl.textContent = '❌ 실패';
+      console.error('Drive upload error:', err);
+    });
+  };
+  reader.readAsDataURL(file);
 }
 function dmUnlinkFile(id){
   if(confirm('이 서류의 파일 연결을 해제하시겠습니까?')){
     saveDMItem(id, 'localFile', '');
+    saveDMItem(id, 'driveUrl', '');
     renderDocMgr();
   }
 }
@@ -2398,8 +2380,8 @@ function dmAddDoc(){
 function dmExportCSV(){
   const docs = getDMList();
   const BOM = '\uFEFF';
-  const header = 'WWS코드,서류명,법적근거,주기,보유상태,최종업데이트,만료갱신일,로컬파일,비고\n';
-  const rows = docs.map(d=>`"${d.wwsCode||''}","${d.name}","${d.basis}","${d.period}","${d.status}","${d.updated||''}","${d.expires||''}","${d.localFile||''}","${(d.note||'').replace(/"/g,'""')}"`).join('\n');
+  const header = 'WWS코드,서류명,법적근거,주기,보유상태,최종업데이트,만료갱신일,파일명,드라이브URL,비고\n';
+  const rows = docs.map(d=>`"${d.wwsCode||''}","${d.name}","${d.basis}","${d.period}","${d.status}","${d.updated||''}","${d.expires||''}","${d.localFile||''}","${d.driveUrl||''}","${(d.note||'').replace(/"/g,'""')}"`).join('\n');
   const blob = new Blob([BOM+header+rows], {type:'text/csv;charset=utf-8'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
