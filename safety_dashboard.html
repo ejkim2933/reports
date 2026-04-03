@@ -2832,9 +2832,15 @@ function renderSigns(){
   if(!tbody)return;
   tbody.innerHTML=signs.map(s=>{
     const sc=s.status==='설치완료'?'green':s.status==='설치필요'?'red':'yellow';
+    const memo = s.memo || '';
+    const signImg = s.imageData || '';
     return `<tr>
       <td style="font-weight:600;">${s.location}</td>
-      <td style="font-size:12px;">${s.content}</td>
+      <td style="font-size:12px;">
+        ${s.content}
+        ${memo?`<div style="font-size:11px;color:#6b7280;margin-top:4px;padding:4px 8px;background:#f8fafc;border-radius:4px;">📝 ${memo}</div>`:''}
+        ${signImg?`<div style="margin-top:4px;"><img src="${signImg}" style="max-width:120px;max-height:80px;border-radius:6px;border:1px solid #e8edf3;cursor:pointer;" onclick="window.open('${signImg}','_blank')" title="클릭해서 크게 보기"></div>`:''}
+      </td>
       <td style="font-size:12px;">${s.color}</td>
       <td><input type="date" value="${s.installed||''}" style="border:1px solid #e8edf3;border-radius:6px;padding:3px 6px;font-size:12px;" onchange="saveSignItem('${s.id}','installed',this.value)"></td>
       <td><input type="date" value="${s.checked||''}" style="border:1px solid #e8edf3;border-radius:6px;padding:3px 6px;font-size:12px;" onchange="saveSignItem('${s.id}','checked',this.value)"></td>
@@ -2845,7 +2851,10 @@ function renderSigns(){
           <option value="교체필요" ${s.status==='교체필요'?'selected':''}>⚠️ 교체필요</option>
         </select>
       </td>
-      <td><button class="btn btn-outline btn-sm" onclick="editSign('${s.id}')">편집</button></td>
+      <td style="display:flex;flex-direction:column;gap:4px;">
+        <button class="btn btn-outline btn-sm" onclick="editSignMemo('${s.id}')" style="font-size:10px;">📝 메모</button>
+        <label class="btn btn-outline btn-sm" style="font-size:10px;cursor:pointer;margin:0;">📷 사진<input type="file" accept="image/*" style="display:none;" onchange="uploadSignImage('${s.id}',this)"></label>
+      </td>
     </tr>`;
   }).join('');
 }
@@ -2862,12 +2871,25 @@ function addSign(){
   defaultSigns.push({id,location,content,color:'🔵 파랑 (지시)',installed:'',checked:'',status:'설치필요'});
   renderSigns();
 }
-function editSign(id){
+function editSignMemo(id){
   const signs=getSignList();
   const sign=signs.find(s=>s.id===id);
   if(!sign)return;
-  const content=prompt('비표 내용 수정:', sign.content);
-  if(content!==null){saveSignItem(id,'content',content);renderSigns();}
+  const memo=prompt('메모 입력 (설치 상태, 특이사항 등):', sign.memo||'');
+  if(memo!==null){saveSignItem(id,'memo',memo);renderSigns();}
+}
+function uploadSignImage(id, input){
+  if(!input.files||!input.files[0])return;
+  const file=input.files[0];
+  if(file.size>5*1024*1024){alert('5MB 이하 이미지만 업로드 가능합니다.');return;}
+  const reader=new FileReader();
+  reader.onload=function(e){
+    saveSignItem(id,'imageData',e.target.result);
+    saveSignItem(id,'checked',new Date().toISOString().split('T')[0]);
+    input.value='';
+    renderSigns();
+  };
+  reader.readAsDataURL(file);
 }
 
 // ============================================================
