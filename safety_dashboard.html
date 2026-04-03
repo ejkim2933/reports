@@ -185,6 +185,21 @@ table tr:hover td{background:#f8fafc;}
 @media(max-width:1200px){.dash-hero-stats{grid-template-columns:repeat(2,1fr);}}
 /* RESPONSIVE */
 @media(max-width:768px){#sidebar{transform:translateX(-100%);}#main{margin-left:0;}}
+.hamburger{display:none;background:none;border:none;font-size:22px;cursor:pointer;padding:4px 8px;color:#0d1f3c;}
+@media(max-width:768px){
+  .hamburger{display:block;}
+  #sidebar{transition:transform 0.3s ease;position:fixed;z-index:200;}
+  #sidebar.open{transform:translateX(0)!important;}
+  .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:150;}
+  .sidebar-overlay.show{display:block;}
+  .topbar{padding:0 12px;}
+  .content{padding:12px;}
+  .tabs{flex-wrap:wrap;}
+  .tab{padding:8px 12px;font-size:12px;}
+  .esg-filter-btn{padding:6px 10px;}
+  .esg-month-cell.esg-clickable{min-width:36px;min-height:36px;font-size:16px;}
+  .esg-file-popup{width:220px;left:auto;right:-40px;}
+}
 /* NOTICE */
 .notice-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;}
 .notice-dot.red{background:#ef4444;}
@@ -236,6 +251,55 @@ table tr:hover td{background:#f8fafc;}
 .wws-filter-tab{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid #e8edf3;background:#fff;color:#374151;transition:all 0.2s;}
 .wws-filter-tab.active{background:#1e5096;color:#fff;border-color:#1e5096;}
 .wws-filter-tab:hover{border-color:#1e5096;}
+/* ESG ANNUAL PLAN TABLE */
+.esg-container{overflow:visible;}
+.esg-filter-bar{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px;}
+.esg-filter-btn{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid #e8edf3;background:#fff;color:#374151;transition:all 0.2s;}
+.esg-filter-btn.active{color:#fff;border-color:transparent;}
+.esg-table-wrap{overflow-x:auto;border:1px solid #e8edf3;border-radius:8px;max-height:80vh;}
+.esg-table{width:100%;border-collapse:collapse;font-size:11px;min-width:1400px;}
+.esg-table thead{position:sticky;top:0;z-index:5;}
+.esg-table th{background:#0d1f3c;color:#fff;padding:7px 6px;text-align:center;font-size:10px;font-weight:600;white-space:nowrap;border:1px solid #1a3a6e;}
+.esg-table th.col-month{width:32px;min-width:32px;}
+.esg-table td{padding:5px 6px;border:1px solid #e8edf3;vertical-align:middle;font-size:11px;}
+.esg-table tr:hover td{background:#f0f4ff;}
+.esg-cat-row td{font-weight:800;font-size:12px;color:#fff;padding:6px 10px;border:none;}
+.esg-cat-안전{background:#1e5096;}
+.esg-cat-소방{background:#dc2626;}
+.esg-cat-보건{background:#16a34a;}
+.esg-cat-환경{background:#059669;}
+.esg-cat-전기{background:#eab308;color:#1a1a1a !important;}
+.esg-cat-윤리인권{background:#8b5cf6;}
+.esg-cat-자격관리{background:#f97316;}
+.esg-cat-정보보안{background:#6366f1;}
+.esg-cat-기타{background:#6b7280;}
+.esg-month-cell{text-align:center;width:32px;min-width:32px;font-size:13px;font-weight:700;transition:all 0.15s;}
+.esg-month-cell.esg-clickable{cursor:pointer;user-select:none;}
+.esg-month-cell.esg-clickable:hover{background:#dbeafe;transform:scale(1.15);}
+.esg-month-cell.esg-done.esg-clickable:hover{background:#dcfce7;}
+.esg-memo-area{margin-top:8px;padding-top:8px;border-top:1px solid #e8edf3;}
+.esg-memo-area textarea{width:100%;padding:5px 8px;border:1px solid #d1d5db;border-radius:4px;font-size:11px;font-family:inherit;resize:vertical;min-height:40px;}
+.esg-memo-item{font-size:11px;color:#374151;padding:3px 0;border-bottom:1px solid #f1f5f9;display:flex;justify-content:space-between;align-items:center;}
+.esg-memo-item .memo-date{font-size:9px;color:#9ca3af;margin-right:6px;white-space:nowrap;}
+.esg-done{color:#16a34a;}
+.esg-plan{color:#3b82f6;}
+.esg-empty{color:#d1d5db;}
+.esg-total-row td{background:#f8fafc;font-weight:700;font-size:12px;border-top:2px solid #0d1f3c;}
+.esg-file-btn{padding:2px 6px;border-radius:4px;font-size:10px;cursor:pointer;border:1px solid #d1d5db;background:#fff;color:#374151;white-space:nowrap;}
+.esg-file-btn:hover{background:#eef4ff;border-color:#1e5096;}
+.esg-file-popup{position:absolute;right:0;top:100%;background:#fff;border:1px solid #e8edf3;border-radius:8px;padding:12px;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:100;width:260px;display:none;}
+.esg-file-popup.show{display:block;}
+.esg-file-popup input[type=text]{width:100%;padding:5px 8px;border:1px solid #d1d5db;border-radius:4px;font-size:11px;margin-bottom:6px;}
+.esg-file-popup .esg-file-list{max-height:100px;overflow-y:auto;margin-bottom:6px;}
+.esg-file-popup .esg-file-item{display:flex;justify-content:space-between;align-items:center;padding:3px 0;font-size:11px;border-bottom:1px solid #f1f5f9;}
+.esg-file-popup .esg-file-item a{color:#1e5096;text-decoration:none;}
+.esg-file-popup .esg-file-item a:hover{text-decoration:underline;}
+.esg-file-popup .esg-file-rm{color:#dc2626;cursor:pointer;border:none;background:none;font-size:12px;}
+.esg-summary{margin-top:12px;padding:12px 16px;background:#f0f4ff;border-radius:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.esg-summary .esg-budget{font-size:16px;font-weight:800;color:#1e5096;}
+.esg-summary .esg-note{font-size:11px;color:#6b7280;}
+.esg-scroll-hint{display:none;text-align:center;font-size:11px;color:#6b7280;padding:6px;background:#f8fafc;border-radius:6px;margin-bottom:8px;}
+@media(max-width:768px){.esg-scroll-hint{display:block;}}
 </style>
 </head>
 <body>
@@ -274,9 +338,12 @@ table tr:hover td{background:#f8fafc;}
   </div>
 </div>
 
+<div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
 <!-- MAIN -->
 <div id="main">
   <div class="topbar" id="topbar-print-hide">
+    <button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
     <h2 id="page-title">📊 대시보드</h2>
     <div class="actions">
       <span id="clock" style="font-size:13px;color:#6b7280;"></span>
@@ -522,65 +589,14 @@ table tr:hover td{background:#f8fafc;}
   <!-- ===== 교육 관리 ===== -->
   <div id="section-education" class="section">
     <div class="tabs">
-      <button class="tab active" onclick="switchTab('edu','write')">✏️ 교육 기록</button>
-      <button class="tab" onclick="switchTab('edu','plan')">📅 연간 계획</button>
+      <button class="tab active" onclick="switchTab('edu','plan')">📅 연간 계획</button>
       <button class="tab" onclick="switchTab('edu','history')">📜 교육 이력</button>
     </div>
-    <div id="edu-tab-write">
+    <div id="edu-tab-plan">
       <div class="card">
-        <div class="card-title">📚 안전보건교육 실시 기록</div>
-        <div class="form-row">
-          <div class="form-group"><label>교육일자</label><input type="date" id="edu-date"></div>
-          <div class="form-group"><label>교육 종류</label>
-            <select id="edu-type">
-              <option>정기교육 (근로자)</option>
-              <option>신규채용자 교육</option>
-              <option>작업변경 특별교육</option>
-              <option>관리감독자 교육</option>
-              <option>특별 안전보건교육</option>
-              <option>기타</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>교육 시간</label><input type="number" id="edu-hours" placeholder="시간" step="0.5" min="0.5"></div>
-          <div class="form-group"><label>교육 방법</label>
-            <select id="edu-method">
-              <option>집합교육</option>
-              <option>온라인교육</option>
-              <option>영상교육</option>
-              <option>OJT (현장교육)</option>
-              <option>외부교육기관</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group"><label>교육 내용</label><textarea id="edu-content" placeholder="교육 주요 내용을 기재"></textarea></div>
-        <div class="form-row">
-          <div class="form-group"><label>강사명</label><input type="text" id="edu-trainer" placeholder="이름 또는 기관명"></div>
-          <div class="form-group"><label>교육 장소</label><input type="text" id="edu-place" placeholder="회의실, 현장, 온라인 등"></div>
-        </div>
-        <div class="form-group"><label>참석자 명단</label><input type="text" id="edu-attendees" placeholder="홍길동, 김철수, ... (또는 '전 직원')"></div>
-        <div class="form-group"><label>참석 인원 수</label><input type="number" id="edu-count" placeholder="명" min="1"></div>
-        <div class="form-group"><label>특이사항</label><textarea id="edu-notes" placeholder="질문, 건의사항, 교육 효과 등"></textarea></div>
-        <div style="display:flex;gap:8px;justify-content:flex-end;">
-          <button class="btn btn-success" onclick="saveEducation()">💾 교육 기록 저장</button>
-        </div>
-      </div>
-    </div>
-    <div id="edu-tab-plan" style="display:none;">
-      <div class="card">
-        <div class="card-title">📅 법적 교육 의무 현황 (2026년)</div>
-        <div class="alert warning">법적 교육 미이수 시 과태료 부과 대상입니다.</div>
-        <div class="table-wrap"><table>
-          <thead><tr><th>교육종류</th><th>대상</th><th>법정시간</th><th>주기</th><th>이수현황</th><th>비고</th></tr></thead>
-          <tbody>
-            <tr><td>정기교육</td><td>전 근로자</td><td>월 2시간 이상</td><td>매월</td><td id="edu-plan-regular"><span class="badge gray">확인중</span></td><td>연 24시간</td></tr>
-            <tr><td>신규채용자 교육</td><td>신규입사자</td><td>8시간</td><td>입사시</td><td><span class="badge blue">해당시 실시</span></td><td>채용 전 또는 당일</td></tr>
-            <tr><td>관리감독자 교육</td><td>관리감독자</td><td>연 16시간</td><td>연1회</td><td id="edu-plan-super"><span class="badge gray">확인중</span></td><td>반기 8시간씩 권장</td></tr>
-            <tr><td>특별교육</td><td>유해위험작업 근로자</td><td>16시간</td><td>작업 전</td><td><span class="badge blue">해당시 실시</span></td><td>금형,프레스 등</td></tr>
-            <tr><td>작업변경 교육</td><td>작업변경 근로자</td><td>2시간</td><td>변경시</td><td><span class="badge blue">해당시 실시</span></td><td>공정 변경 포함</td></tr>
-          </tbody>
-        </table></div>
+        <div class="card-title">📅 ESG 연간 계획 및 준수 평가 (2026년)</div>
+        <div class="alert info">전사 안전·보건·환경·윤리 관련 법적 의무 및 자율 관리 항목을 통합 관리합니다. ● 시행완료 / ○ 계획</div>
+        <div id="esg-plan-edu"></div>
       </div>
     </div>
     <div id="edu-tab-history" style="display:none;">
@@ -756,8 +772,9 @@ table tr:hover td{background:#f8fafc;}
   <!-- ===== 연간 일정 ===== -->
   <div id="section-schedule" class="section">
     <div class="card">
-      <div class="card-title">📅 2026년 연간 안전보건 관리 일정</div>
-      <div id="annual-schedule"></div>
+      <div class="card-title">📅 2026년 ESG 연간 계획 및 준수 평가</div>
+      <div class="alert info">전사 ESG 연간 계획 통합 일정입니다. 상세 관리는 [교육 관리 > 연간 계획] 탭에서도 확인 가능합니다.</div>
+      <div id="esg-plan-schedule"></div>
     </div>
   </div>
 
@@ -972,7 +989,12 @@ const pageTitles = {
   accident:'🚨 아차사고 (카톡방)', schedule:'📅 연간 일정',
   signs:'🪧 안전 비표 관리', cardnews:'📢 카드뉴스 시리즈', posters:'🖼️ 게시판 포스터', settings:'⚙️ 설정'
 };
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('show');
+}
 function showSection(id){
+  if(window.innerWidth<=768){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebar-overlay').classList.remove('show');}
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.getElementById('section-'+id).classList.add('active');
   document.querySelectorAll('#sidebar nav a').forEach(a=>a.classList.remove('active'));
@@ -981,6 +1003,7 @@ function showSection(id){
   if(id==='dashboard') renderDashboard();
   if(id==='docmgr') renderDocMgr();
   if(id==='schedule') renderSchedule();
+  if(id==='education') renderESGPlan('esg-plan-edu');
   if(id==='patrol') { showPatrolView('home'); }
   if(id==='signs') renderSigns();
   if(id==='risk') renderRiskStatus();
@@ -996,6 +1019,7 @@ function switchTab(section, tab){
   allTabs.forEach(t=>t.classList.remove('active'));
   if(event && event.currentTarget) event.currentTarget.classList.add('active');
   if(tab==='history'||tab==='list') renderHistories(section);
+  if(section==='edu' && tab==='plan') renderESGPlan('esg-plan-edu');
 }
 
 // ============================================================
@@ -2400,38 +2424,317 @@ function openTemplate(docId){
 }
 
 // ============================================================
-// ANNUAL SCHEDULE
+// ESG ANNUAL PLAN DATA & RENDERING
 // ============================================================
-const scheduleData = [
-  {month:1,items:['안전보건 경영방침 선언 및 게시','연간 안전보건 계획 수립','전년도 성과 분석','위험성평가 실시 계획']},
-  {month:2,items:['신규 위험성평가 실시','안전보건관리규정 검토·개정','법정 의무교육 계획 수립','설비 연간 자체검사 계획']},
-  {month:3,items:['1/4분기 안전보건 목표 점검','안전보건 담당자 교육 (외부)','협력업체 안전수준 평가']},
-  {month:4,items:['🔥 산업안전보건 강조기간 (4월)','안전의 달 행사 실시','체험 안전교육 실시','화재 대피 훈련']},
-  {month:5,items:['근로자 일반건강검진 실시','상반기 작업환경측정 실시','여름철 폭염 특별대책 수립']},
-  {month:6,items:['2/4분기 안전보건 점검','상반기 성과 평가','여름철 특별안전점검 실시','폭염 예방교육']},
-  {month:7,items:['하반기 안전보건 계획 점검','장마·폭염 현장관리','수급인 안전보건 수준 평가']},
-  {month:8,items:['폭염 특별관리 (열사병 예방)','여름철 안전보건 캠페인','설비 반기 자체검사 실시']},
-  {month:9,items:['3/4분기 안전보건 목표 점검','연간 위험성평가 검토','가을 안전캠페인']},
-  {month:10,items:['🔥 산업안전보건의 날 (10월 28일)','연간 안전보건 성과 점검','소방훈련 실시','겨울철 특별안전대책 수립']},
-  {month:11,items:['겨울철 특별안전점검','하반기 작업환경측정 실시','연간 교육 이수 현황 점검','동절기 안전교육']},
-  {month:12,items:['하반기 건강검진 실시','연간 안전보건 성과 평가','내년도 안전보건 계획 수립','안전보건 우수자 표창']},
+const esgCatColors = {'안전':'#1e5096','소방':'#dc2626','보건':'#16a34a','환경':'#059669','전기':'#eab308','윤리인권':'#8b5cf6','자격관리':'#f97316','정보보안':'#6366f1','기타':'#6b7280'};
+const esgData = [
+  {cat:'안전',name:'관리감독자교육',target:'조립/사출/도장 담당자',eval:'16시간 교육이수',basis:'교육이수증',cycle:'년1회',manager:'',agency:'대한산업안전협회',plan:[0,0,1,0,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'390,000원'},
+  {cat:'안전',name:'위험성평가담당자교육',target:'위험성평가 담당자',eval:'16시간 교육이수',basis:'교육이수증',cycle:'년1회',manager:'',agency:'대한산업안전협회',plan:[0,0,1,0,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'216,000원'},
+  {cat:'안전',name:'안전보건관리책임자교육',target:'안전보건관리책임자',eval:'6시간 보수교육(집체)',basis:'교육이수증',cycle:'2년1회',manager:'대표이사',agency:'이전이행(2025.12)',plan:[0,0,0,0,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'안전',name:'특별안전교육',target:'크레인/화학물질/압력용기/유해화학물질',eval:'16시간 교육이수',basis:'교육이수증',cycle:'-',manager:'각 취급자',agency:'대한산업안전협회',plan:[0,0,0,1,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'안전',name:'안전보건교육(정기)',target:'정기교육',eval:'매 반기 12시간 안전교육',basis:'교육이수증',cycle:'반기 12시간',manager:'전체',agency:'',plan:[0,1,0,0,0,1,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'안전',name:'안전보건교육(채용시)',target:'채용시',eval:'채용시 8시간 안전교육',basis:'교육일지',cycle:'8시간',manager:'김민수 외',agency:'.',plan:[1,0,0,0,0,0,0,0,0,0,0,0],done:[1,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'안전',name:'안전검사(위험기계)',target:'사출기/크레인/리프트/압력용기/컨베이어/로봇',eval:'안전검사',basis:'안전검사결과통지서',cycle:'해당시',manager:'임정인',agency:'한국안전기술협회',plan:[0,1,0,0,0,0,1,0,0,1,1,0],done:[0,1,0,0,0,0,0,0,0,0,0,0],cost:'2,368,000원'},
+  {cat:'안전',name:'안전관리(사업장)',target:'전공정',eval:'정기안전점검',basis:'정기안전점검보고서',cycle:'월2회',manager:'박동수(외부)',agency:'대한산업안전협회',plan:[1,1,1,1,1,1,1,1,1,1,1,1],done:[1,1,1,0,0,0,0,0,0,0,0,0],cost:'6,000,000원'},
+  {cat:'안전',name:'위험성평가(정기)',target:'사업장내 위험성평가',eval:'위험성평가 및 조치',basis:'위험성평가서',cycle:'년1회',manager:'임정인',agency:'',plan:[0,0,1,0,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'안전',name:'산업안전보건위원회',target:'산업안전보건회의/전부서',eval:'회의록',basis:'회의록',cycle:'년4회',manager:'각 담당자',agency:'',plan:[0,0,1,0,0,1,0,1,1,0,0,0],done:[0,0,1,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'안전',name:'EHS점검',target:'전부서 SHEE',eval:'작업장 점검 SHEET',basis:'작업장 점검 SHEET',cycle:'월1회',manager:'각 담당자',agency:'',plan:[1,1,1,1,1,1,1,1,1,1,1,1],done:[1,1,1,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'소방',name:'소방계획서',target:'소방관리자',eval:'소방계획서 작성',basis:'소방계획서',cycle:'년1회',manager:'박제성/임문호',agency:'',plan:[1,0,0,0,0,0,0,0,0,0,0,0],done:[1,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'소방',name:'훈련교육(본사)',target:'소화기/소화전',eval:'화재/지진/태풍 대피훈련',basis:'훈련보고서',cycle:'년1회',manager:'박제성',agency:'',plan:[0,0,1,0,0,1,0,0,0,1,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'소방',name:'훈련교육(화성공장)',target:'소화기/소화전',eval:'화재/지진/태풍 대피훈련',basis:'훈련보고서',cycle:'년1회',manager:'임문호',agency:'',plan:[0,0,1,0,0,0,0,1,1,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'소방',name:'소방안전관리자교육',target:'소방안전관리자',eval:'소방안전교육(온라인2H/현장4H)',basis:'교육이수증',cycle:'2년1회',manager:'박제성/임문호',agency:'박제성(2024.04.11)/임문호(2025.10.01)',plan:[0,0,1,0,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'96,000원'},
+  {cat:'소방',name:'소방시설점검',target:'소화기/소화전/소방펌프/수신기',eval:'작동여부 점검',basis:'소방점검표',cycle:'월1회',manager:'박제성/임문호',agency:'한국소방산업',plan:[1,1,1,1,1,1,1,1,1,1,1,1],done:[1,1,1,0,0,0,0,0,0,0,0,0],cost:'3,360,000원'},
+  {cat:'소방',name:'작동기능점검',target:'10월 점검 후 소방서 송부',eval:'작동여부 점검',basis:'작동기능점검표',cycle:'년1회',manager:'박제성/임문호',agency:'한국소방산업',plan:[0,0,0,0,0,0,0,0,1,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'보건',name:'건강검진(일반)',target:'전체 직원',eval:'일반 건강검진',basis:'건강검진결과표',cycle:'년1회',manager:'임정인',agency:'수원중앙병원',plan:[0,0,0,0,0,1,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'보건',name:'특수건강검진',target:'도장/인쇄/금형/야간근로',eval:'특수건강검진',basis:'특수건강검진결과표',cycle:'년1회',manager:'임정인',agency:'수원중앙병원',plan:[0,0,0,0,0,1,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'1,100,000원'},
+  {cat:'보건',name:'보건관리(건강위생)',target:'전체직원(검진유소견자 필수)',eval:'건강위생 전문관리',basis:'보건관리상태보고서(간호)',cycle:'월1회',manager:'박은하(외부)',agency:'한성산업의학연구소',plan:[1,1,1,1,1,1,1,1,1,1,1,1],done:[1,1,1,0,0,0,0,0,0,0,0,0],cost:'3,840,000원'},
+  {cat:'보건',name:'보건관리(작업환경)',target:'전공정',eval:'작업환경 전문관리',basis:'보건관리상태보고서(위생)',cycle:'년4회',manager:'이상철(외부)',agency:'한성산업의학연구소',plan:[1,0,0,1,0,0,1,0,0,1,0,0],done:[1,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'보건',name:'작업환경측정',target:'도장/인쇄라인',eval:'화학물질 작업라인 측정',basis:'작업환경측정결과표',cycle:'년1회',manager:'임정인',agency:'한성산업의학연구소',plan:[0,0,0,0,0,0,0,0,0,1,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'2,100,000원'},
+  {cat:'보건',name:'근골격계질환',target:'전체 직원',eval:'근골격계 질환조사',basis:'근골격계질환조사표',cycle:'3년1회',manager:'임정인',agency:'이전수행(2023년)',plan:[0,0,0,1,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'환경',name:'대기오염관리(자가측정/보고-상)',target:'시설별 먼지/THC 측정',eval:'반기별 자가측정 결과보고',basis:'반기별자가측정결과보고서',cycle:'년2회(1월/7월)',manager:'임정인',agency:'청담환경기술',plan:[1,0,0,0,0,0,1,0,0,0,0,0],done:[1,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'환경',name:'대기오염관리(자가측정-하)',target:'시설별 먼지/THC 측정',eval:'반기별 자가측정',basis:'반기별자가측정결과보고서',cycle:'년2회(4월/10월)',manager:'임문호',agency:'청담환경기술',plan:[0,0,1,0,0,0,0,1,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'1,100,000원'},
+  {cat:'환경',name:'대기오염관리(비산배출점검)',target:'비산배출시설 연간점검',eval:'비산배출시설 점검보고',basis:'비산배출시설점검보고서',cycle:'년1회(4월)',manager:'임정인',agency:'청담환경기술',plan:[0,0,1,0,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'환경',name:'대기오염관리(배출원조사)',target:'4종5종 사업장 배출원',eval:'배출원 조사표 작성',basis:'4종5종사업장대기배출원조사표',cycle:'년1회(7월15일)',manager:'임정인',agency:'청담환경기술',plan:[0,0,0,0,0,0,1,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'환경',name:'대기오염관리(비산정기점검)',target:'비산배출시설 정기점검',eval:'저감을 위한 시설관리기준',basis:'비산배출저감시설관리기준정기점검결과서',cycle:'3년1회',manager:'임정인',agency:'이전수행(2024년/환경공단)',plan:[0,0,0,0,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'환경',name:'폐기물관리(배출실적)',target:'폐기물 배출실적(전년도)',eval:'배출실적 신고',basis:'폐기물배출및처리실적보고서(온라인)',cycle:'년1회(2월)',manager:'임정인',agency:'유니환경',plan:[0,1,0,0,0,0,0,0,0,0,0,0],done:[1,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'환경',name:'폐기물관리(부담금)',target:'폐기물 처분부담금(전년도)',eval:'부담금 신고',basis:'폐기물처분부담금신고(온라인)',cycle:'년1회(3월)',manager:'임정인',agency:'',plan:[0,0,1,0,0,0,0,0,0,0,0,0],done:[0,0,1,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'환경',name:'폐수관리(배출신고)',target:'폐수배출업소 조사표(전년도)',eval:'조사표 제출',basis:'폐수배출업소조사표',cycle:'년1회(3월14일)',manager:'임정인',agency:'청담환경기술',plan:[0,0,1,0,0,0,0,0,0,0,0,0],done:[0,0,1,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'환경',name:'화학물질관리(MSDS)',target:'추가/갱신 MSDS',eval:'MSDS 확인 및 기록교육',basis:'MSDS관리대장/교육일지',cycle:'년1회',manager:'임정인',agency:'',plan:[0,0,0,1,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'환경',name:'화학물질관리(통계조사)',target:'화학물질 통계조사서(전년도)',eval:'통계조사서 제출',basis:'화학물질통계조사서(온라인)',cycle:'2년1회',manager:'임정인',agency:'이전수행(2025년)',plan:[0,0,0,0,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'환경',name:'소음관리(측정)',target:'사업장 전체 측정(본사2회/화성2회)',eval:'소음측정',basis:'소음측정보고서',cycle:'년2회',manager:'임정인',agency:'한성산업의학연구소',plan:[1,0,0,1,0,0,1,0,0,1,0,0],done:[1,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'환경',name:'환경기술인교육',target:'환경기술인교육',eval:'비산배출/소음진동폐수 보수',basis:'교육이수증',cycle:'3년1회',manager:'임문호',agency:'이전수행(2024년)',plan:[0,0,0,0,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'전기',name:'전기점검',target:'전기판넬 및 전기시설',eval:'접지/차단기 점검',basis:'점검일지',cycle:'월4회',manager:'김병묵(외부)',agency:'한국전기엔지니어링',plan:[1,1,1,1,1,1,1,1,1,1,1,1],done:[1,1,1,0,0,0,0,0,0,0,0,0],cost:'8,880,000원'},
+  {cat:'전기',name:'안전검사(변전기)',target:'변전기',eval:'변전기 정기검사',basis:'정기검사확인증',cycle:'3년1회',manager:'김병묵(외부)',agency:'본사(750kw,2023.05.18)/화성(600kw,2025.10.12)',plan:[0,0,1,0,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'1,100,000원'},
+  {cat:'전기',name:'안전검사(태양광)',target:'태양광시설',eval:'태양광 정기검사',basis:'정기검사확인증',cycle:'4년1회',manager:'김병묵(외부)',agency:'3kw(2025.01.15)/115kw(2024.11.15)',plan:[0,0,0,0,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'윤리인권',name:'윤리방침교육',target:'전체 직원',eval:'윤리방침교육',basis:'교육일지',cycle:'년1회',manager:'박제성',agency:'',plan:[0,0,1,0,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'윤리인권',name:'법정교육',target:'전체 직원(1시간 이상)',eval:'성희롱/장애인/괴롭힘/개인정보/퇴직연금',basis:'교육일지',cycle:'년1회',manager:'임정인',agency:'',plan:[0,0,1,0,0,0,0,1,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'윤리인권',name:'공익신고',target:'전체 직원',eval:'공익비윤리 신고처리 및 보호운영',basis:'교육일지',cycle:'년1회',manager:'임정인',agency:'',plan:[0,0,1,0,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'윤리인권',name:'이해상충방지',target:'전체 직원',eval:'이해상충방지 교육',basis:'교육일지',cycle:'년1회',manager:'임정인',agency:'',plan:[0,0,1,0,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'윤리인권',name:'강제노동금지',target:'전체 직원',eval:'강제노동금지 교육',basis:'교육일지',cycle:'년1회',manager:'임정인',agency:'',plan:[0,0,1,0,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'윤리인권',name:'아동노동금지',target:'전체 직원',eval:'아동노동금지 교육',basis:'교육일지',cycle:'년1회',manager:'임정인',agency:'',plan:[0,0,1,0,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'윤리인권',name:'장애인고용',target:'장애인 고용 및 인식개선',eval:'고용계획 및 실시상황보고/교육신고',basis:'전자신고',cycle:'년1회',manager:'임정인',agency:'',plan:[1,0,0,0,0,0,0,0,0,0,0,0],done:[1,0,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'자격관리',name:'심사원교육(IATF)',target:'IATF16949',eval:'집체교육 이수',basis:'교육수료증',cycle:'2년1회',manager:'김은진/황재훈',agency:'',plan:[0,1,0,0,0,0,0,0,0,0,0,0],done:[0,1,0,0,0,0,0,0,0,0,0,0],cost:'900,000원'},
+  {cat:'자격관리',name:'심사원교육(ISO)',target:'ISO14001',eval:'집체교육 이수',basis:'교육수료증',cycle:'2년1회',manager:'김은진/박제성',agency:'',plan:[0,0,0,1,0,0,0,0,0,0,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'900,000원'},
+  {cat:'정보보안',name:'기록물관리',target:'데이터 백업관리(클라우드)',eval:'기록물 보관관리',basis:'기록관리프로세스',cycle:'월1회',manager:'각 담당자',agency:'클라우다이크',plan:[1,1,1,1,1,1,1,1,1,1,1,1],done:[1,1,1,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'정보보안',name:'PC보호',target:'윈도우 및 백신 최신 업데이트',eval:'화면보호기 작동(15분이하)',basis:'분기별 준수평가',cycle:'월1회',manager:'전체',agency:'',plan:[1,1,1,1,1,1,1,1,1,1,1,1],done:[1,1,1,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'정보보안',name:'원격접속관리',target:'시스템 원격접속시 권한관리',eval:'접속대장 작성관리',basis:'시스템접속관리대장',cycle:'월1회',manager:'전체',agency:'',plan:[1,1,1,1,1,1,1,1,1,1,1,1],done:[1,1,1,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'기타',name:'SHEE점검(LG본사)',target:'사업장 전체점검(본사2회)',eval:'LG전자 SHEE점검',basis:'SHEE평가표',cycle:'년2회',manager:'박제성',agency:'',plan:[0,0,1,0,0,0,0,1,0,0,0,0],done:[0,0,1,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'기타',name:'SHEE점검(LG화성)',target:'사업장 전체점검(화성공장2회)',eval:'LG전자 SHEE점검',basis:'SHEE평가표',cycle:'년2회',manager:'임문호',agency:'',plan:[0,1,0,0,0,0,0,0,1,0,0,0],done:[0,1,0,0,0,0,0,0,0,0,0,0],cost:'-'},
+  {cat:'기타',name:'비상사태교육',target:'전체 직원',eval:'위기대응 매뉴얼 교육',basis:'교육일지',cycle:'년2회',manager:'임정인',agency:'',plan:[0,0,1,0,0,0,0,0,0,1,0,0],done:[0,0,0,0,0,0,0,0,0,0,0,0],cost:'-'}
 ];
 
-function renderSchedule(){
-  const el = document.getElementById('annual-schedule');
-  if(!el)return;
-  el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
-    ${scheduleData.map(s=>`
-      <div style="border:1px solid #e8edf3;border-radius:8px;overflow:hidden;">
-        <div style="background:#0d1f3c;color:#fff;padding:8px 12px;font-weight:700;font-size:13px;">${s.month}월</div>
-        <div style="padding:10px 12px;">
-          ${s.items.map(item=>`<div style="font-size:12px;padding:3px 0;border-bottom:1px solid #f8fafc;display:flex;gap:6px;align-items:flex-start;">
-            <span style="color:#1e5096;flex-shrink:0;">•</span><span>${item}</span>
-          </div>`).join('')}
+function getESGFiles(){
+  try{ return JSON.parse(localStorage.getItem('safety_esg_files')||'{}'); }catch(e){ return {}; }
+}
+function setESGFiles(data){
+  localStorage.setItem('safety_esg_files', JSON.stringify(data));
+}
+function getESGDone(){
+  try{ return JSON.parse(localStorage.getItem('safety_esg_done')||'{}'); }catch(e){ return {}; }
+}
+function setESGDone(data){
+  localStorage.setItem('safety_esg_done', JSON.stringify(data));
+}
+function getESGMemos(){
+  try{ return JSON.parse(localStorage.getItem('safety_esg_memos')||'{}'); }catch(e){ return {}; }
+}
+function setESGMemos(data){
+  localStorage.setItem('safety_esg_memos', JSON.stringify(data));
+}
+function isESGDone(idx, month){
+  const saved = getESGDone();
+  if(saved[idx] && saved[idx][month]) return true;
+  return esgData[idx].done[month] === 1;
+}
+
+function renderESGPlan(containerId){
+  const el = document.getElementById(containerId);
+  if(!el) return;
+  const cats = Object.keys(esgCatColors);
+  const activeFilter = el.dataset.filter || 'all';
+  const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+  const files = getESGFiles();
+
+  let filterHtml = `<div class="esg-filter-bar">
+    <button class="esg-filter-btn ${activeFilter==='all'?'active':''}" style="${activeFilter==='all'?'background:#0d1f3c;color:#fff;':''}" onclick="filterESG('${containerId}','all')">전체</button>
+    ${cats.map(c=>`<button class="esg-filter-btn ${activeFilter===c?'active':''}" style="${activeFilter===c?'background:'+esgCatColors[c]+';color:#fff;border-color:'+esgCatColors[c]+';':''}" onclick="filterESG('${containerId}','${c}')">${c}</button>`).join('')}
+  </div>
+  <div class="esg-scroll-hint">\u2190 좌우로 스크롤하여 전체 내용을 확인하세요 \u2192</div>`;
+
+  let tableHtml = `<div class="esg-table-wrap"><table class="esg-table">
+    <thead><tr>
+      <th style="min-width:40px;">No</th>
+      <th style="min-width:60px;">영역</th>
+      <th style="min-width:130px;">세부항목</th>
+      <th style="min-width:120px;">대상</th>
+      <th style="min-width:130px;">평가내용</th>
+      <th style="min-width:120px;">준수근거</th>
+      <th style="min-width:60px;">주기</th>
+      <th style="min-width:70px;">담당자</th>
+      <th style="min-width:100px;">시행기관</th>
+      ${months.map(m=>`<th class="col-month">${m}</th>`).join('')}
+      <th style="min-width:90px;">연간비용</th>
+      <th style="min-width:70px;">관련서류</th>
+    </tr></thead><tbody>`;
+
+  let currentCat = '';
+  let num = 0;
+  let filteredData = activeFilter==='all' ? esgData : esgData.filter(d=>d.cat===activeFilter);
+
+  filteredData.forEach((item,idx)=>{
+    const globalIdx = esgData.indexOf(item);
+    if(item.cat !== currentCat){
+      currentCat = item.cat;
+      const color = esgCatColors[currentCat]||'#6b7280';
+      tableHtml += `<tr class="esg-cat-row"><td colspan="23" style="background:${color};color:${currentCat==='전기'?'#1a1a1a':'#fff'};">${currentCat}</td></tr>`;
+    }
+    num++;
+    const itemFiles = files[globalIdx] || [];
+    const fileCount = itemFiles.length;
+    tableHtml += `<tr>
+      <td style="text-align:center;">${num}</td>
+      <td><span style="display:inline-block;padding:1px 6px;border-radius:10px;font-size:10px;font-weight:600;background:${esgCatColors[item.cat]}22;color:${esgCatColors[item.cat]};">${item.cat}</span></td>
+      <td style="font-weight:600;">${item.name}</td>
+      <td>${item.target}</td>
+      <td>${item.eval}</td>
+      <td style="font-size:10px;">${item.basis}</td>
+      <td style="text-align:center;">${item.cycle}</td>
+      <td>${item.manager}</td>
+      <td style="font-size:10px;">${item.agency}</td>
+      ${item.plan.map((p,mi)=>{
+        const d = isESGDone(globalIdx, mi);
+        if(d) return `<td class="esg-month-cell esg-done esg-clickable" title="${mi+1}월 - 클릭하여 미시행으로 변경" onclick="toggleESGDone(${globalIdx},${mi},'${containerId}')">●</td>`;
+        if(p) return `<td class="esg-month-cell esg-plan esg-clickable" title="${mi+1}월 - 클릭하여 시행완료 처리" onclick="toggleESGDone(${globalIdx},${mi},'${containerId}')">○</td>`;
+        return `<td class="esg-month-cell esg-empty">-</td>`;
+      }).join('')}
+      <td style="text-align:right;font-size:11px;white-space:nowrap;">${item.cost}</td>
+      <td style="text-align:center;position:relative;">
+        <button class="esg-file-btn" onclick="toggleESGFile(event,${globalIdx},'${containerId}')">📎${fileCount>0?' '+fileCount:''}</button>
+        <div class="esg-file-popup" id="esg-fp-${containerId}-${globalIdx}">
+          <div style="font-weight:700;font-size:12px;margin-bottom:8px;">📎 ${item.name}</div>
+          <div style="font-size:11px;font-weight:600;color:#374151;margin-bottom:4px;">첨부파일 / 링크</div>
+          <div class="esg-file-list" id="esg-fl-${containerId}-${globalIdx}"></div>
+          <input type="text" id="esg-fi-${containerId}-${globalIdx}" placeholder="URL 또는 파일명 입력">
+          <div style="display:flex;gap:4px;margin-bottom:4px;">
+            <label style="font-size:10px;color:#6b7280;cursor:pointer;display:flex;align-items:center;gap:3px;">
+              <input type="file" style="display:none;" onchange="addESGFileUpload(${globalIdx},'${containerId}',this)">📁 파일선택
+            </label>
+            <button class="btn btn-primary btn-sm" style="font-size:10px;padding:3px 8px;" onclick="addESGFile(${globalIdx},'${containerId}')">링크추가</button>
+          </div>
+          <div class="esg-memo-area">
+            <div style="font-size:11px;font-weight:600;color:#374151;margin-bottom:4px;">내역 메모</div>
+            <div class="esg-memo-list" id="esg-ml-${containerId}-${globalIdx}"></div>
+            <textarea id="esg-mi-${containerId}-${globalIdx}" placeholder="시행 내역, 특이사항 등 메모"></textarea>
+            <div style="display:flex;gap:4px;justify-content:flex-end;margin-top:4px;">
+              <button class="btn btn-success btn-sm" style="font-size:10px;padding:3px 8px;" onclick="addESGMemo(${globalIdx},'${containerId}')">메모저장</button>
+              <button class="btn btn-outline btn-sm" style="font-size:10px;padding:3px 8px;" onclick="closeESGFile('${containerId}',${globalIdx})">닫기</button>
+            </div>
+          </div>
         </div>
-      </div>
-    `).join('')}
+      </td>
+    </tr>`;
+  });
+
+  tableHtml += `<tr class="esg-total-row"><td colspan="22" style="text-align:right;padding-right:12px;">연간 총 비용</td><td style="text-align:right;font-size:13px;font-weight:800;color:#1e5096;white-space:nowrap;">32,350,000원</td></tr>`;
+  tableHtml += `</tbody></table></div>`;
+
+  let summaryHtml = `<div class="esg-summary">
+    <div><span class="esg-budget">총 연간 예산: 32,350,000원</span></div>
+    <div class="esg-note">● 시행완료 &nbsp; ○ 계획 &nbsp; - 해당없음 &nbsp;|&nbsp; 총 ${esgData.length}개 항목</div>
   </div>`;
+
+  el.innerHTML = filterHtml + tableHtml + summaryHtml;
+}
+
+function filterESG(containerId, cat){
+  const el = document.getElementById(containerId);
+  if(el) el.dataset.filter = cat;
+  renderESGPlan(containerId);
+}
+
+function toggleESGFile(event, idx, containerId){
+  event.stopPropagation();
+  const popup = document.getElementById(`esg-fp-${containerId}-${idx}`);
+  const wasOpen = popup.classList.contains('show');
+  document.querySelectorAll('.esg-file-popup.show').forEach(p=>p.classList.remove('show'));
+  if(!wasOpen){
+    popup.classList.add('show');
+    renderESGFileList(idx, containerId);
+    renderESGMemoList(idx, containerId);
+  }
+}
+function closeESGFile(containerId, idx){
+  const popup = document.getElementById(`esg-fp-${containerId}-${idx}`);
+  if(popup) popup.classList.remove('show');
+}
+function renderESGFileList(idx, containerId){
+  const files = getESGFiles();
+  const list = files[idx] || [];
+  const el = document.getElementById(`esg-fl-${containerId}-${idx}`);
+  if(!el) return;
+  if(list.length===0){ el.innerHTML='<div style="font-size:11px;color:#9ca3af;padding:4px 0;">첨부 파일 없음</div>'; return; }
+  el.innerHTML = list.map((f,fi)=>{
+    const isUrl = f.startsWith('http');
+    return `<div class="esg-file-item">
+      ${isUrl?`<a href="${f}" target="_blank">${f.length>30?f.substring(0,30)+'...':f}</a>`:`<span>${f}</span>`}
+      <button class="esg-file-rm" onclick="removeESGFile(${idx},${fi},'${containerId}')">&times;</button>
+    </div>`;
+  }).join('');
+}
+function addESGFile(idx, containerId){
+  const input = document.getElementById(`esg-fi-${containerId}-${idx}`);
+  if(!input || !input.value.trim()) return;
+  const files = getESGFiles();
+  if(!files[idx]) files[idx]=[];
+  files[idx].push(input.value.trim());
+  setESGFiles(files);
+  input.value='';
+  renderESGFileList(idx, containerId);
+  renderESGPlan(containerId);
+}
+function removeESGFile(idx, fileIdx, containerId){
+  const files = getESGFiles();
+  if(files[idx]){ files[idx].splice(fileIdx,1); if(files[idx].length===0) delete files[idx]; }
+  setESGFiles(files);
+  renderESGFileList(idx, containerId);
+  renderESGPlan(containerId);
+}
+
+// === ESG Done toggle ===
+function toggleESGDone(idx, month, containerId){
+  const item = esgData[idx];
+  const currentlyDone = isESGDone(idx, month);
+  const monthName = (month+1) + '월';
+  const action = currentlyDone ? '미시행으로 되돌리' : '시행완료로 변경하';
+  if(!confirm(`[${item.name}] ${monthName}\n\n${action}시겠습니까?`)) return;
+
+  const saved = getESGDone();
+  if(!saved[idx]) saved[idx] = {};
+  if(currentlyDone){
+    saved[idx][month] = false;
+    if(esgData[idx].done[month] === 0) delete saved[idx][month];
+  } else {
+    saved[idx][month] = true;
+  }
+  if(Object.keys(saved[idx]).length === 0) delete saved[idx];
+  setESGDone(saved);
+  renderESGPlan('esg-plan-edu');
+  renderESGPlan('esg-plan-schedule');
+}
+
+// === ESG File upload via file picker ===
+function addESGFileUpload(idx, containerId, input){
+  if(!input.files || !input.files[0]) return;
+  const fileName = input.files[0].name;
+  const files = getESGFiles();
+  if(!files[idx]) files[idx]=[];
+  files[idx].push(fileName);
+  setESGFiles(files);
+  input.value='';
+  renderESGFileList(idx, containerId);
+  renderESGPlan(containerId);
+}
+
+// === ESG Memo functions ===
+function addESGMemo(idx, containerId){
+  const input = document.getElementById(`esg-mi-${containerId}-${idx}`);
+  if(!input || !input.value.trim()) return;
+  const memos = getESGMemos();
+  if(!memos[idx]) memos[idx]=[];
+  const now = new Date();
+  const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+  memos[idx].push({date: dateStr, text: input.value.trim()});
+  setESGMemos(memos);
+  input.value='';
+  renderESGMemoList(idx, containerId);
+}
+function removeESGMemo(idx, memoIdx, containerId){
+  const memos = getESGMemos();
+  if(memos[idx]){ memos[idx].splice(memoIdx,1); if(memos[idx].length===0) delete memos[idx]; }
+  setESGMemos(memos);
+  renderESGMemoList(idx, containerId);
+}
+function renderESGMemoList(idx, containerId){
+  const memos = getESGMemos();
+  const list = memos[idx] || [];
+  const el = document.getElementById(`esg-ml-${containerId}-${idx}`);
+  if(!el) return;
+  if(list.length===0){ el.innerHTML='<div style="font-size:10px;color:#9ca3af;padding:2px 0;">메모 없음</div>'; return; }
+  el.innerHTML = list.map((m,mi)=>`<div class="esg-memo-item">
+    <div><span class="memo-date">${m.date}</span>${m.text}</div>
+    <button class="esg-file-rm" onclick="removeESGMemo(${idx},${mi},'${containerId}')">&times;</button>
+  </div>`).join('');
+}
+
+// Close file popups when clicking outside
+document.addEventListener('click', function(e){
+  if(!e.target.closest('.esg-file-popup') && !e.target.closest('.esg-file-btn')){
+    document.querySelectorAll('.esg-file-popup.show').forEach(p=>p.classList.remove('show'));
+  }
+});
+
+function renderSchedule(){
+  renderESGPlan('esg-plan-schedule');
 }
 
 // ============================================================
@@ -2901,6 +3204,13 @@ function ptPrint(id){
 window.onload = function(){
   initDates();
   loadSettings();
+  // Handle URL hash navigation
+  if(window.location.hash){
+    const section = window.location.hash.replace('#','');
+    if(pageTitles[section]){
+      showSection(section);
+    }
+  }
   renderDashboard();
   renderPatrolZones();
   renderTBMTheme();
