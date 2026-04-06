@@ -451,6 +451,44 @@ table tr:hover td{background:#f8fafc;}
 .esg-scroll-hint{display:none;text-align:center;font-size:11px;color:#6b7280;padding:6px;background:#f8fafc;border-radius:6px;margin-bottom:8px;}
 @media(max-width:768px){.esg-scroll-hint{display:block;}}
 
+/* PATROL FORM HEADER */
+.patrol-form-header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:12px;border-bottom:2px solid #0d1f3c;margin-bottom:12px;}
+.pfh-title{flex:1;min-width:0;}
+.pfh-name{font-size:18px;font-weight:900;color:#0d1f3c;line-height:1.3;}
+.pfh-date{font-size:12px;color:#6b7280;margin-top:3px;}
+.patrol-meta-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;background:#f8fafc;padding:12px;border-radius:10px;}
+.patrol-meta-cell{display:flex;flex-direction:column;gap:4px;}
+.patrol-meta-cell label{font-size:11px;font-weight:700;color:#475569;}
+.patrol-meta-cell input,.patrol-meta-cell select{padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-family:inherit;background:#fff;}
+
+/* PATROL CHECK LIST (카드형 — 모바일 친화) */
+.patrol-check-list{display:flex;flex-direction:column;gap:14px;}
+.pcl-zone{background:#fff;border:1px solid #e8edf3;border-radius:12px;overflow:hidden;}
+.pcl-zone-title{background:linear-gradient(135deg,#0d1f3c,#1e5096);color:#fff;padding:12px 16px;font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px;}
+.pcl-zone-ic{font-size:18px;}
+.pcl-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.15s;}
+.pcl-item:last-child{border-bottom:none;}
+.pcl-item:hover{background:#f8fafc;}
+.pcl-item.pcl-checked{background:#f0fdf4;}
+.pcl-item input[type=checkbox]{width:24px;height:24px;flex-shrink:0;accent-color:#16a34a;cursor:pointer;margin-top:1px;}
+.pcl-item-body{flex:1;min-width:0;}
+.pcl-item-text{font-size:14px;font-weight:600;color:#1a1a1a;line-height:1.4;margin-bottom:6px;}
+.pcl-item.pcl-checked .pcl-item-text{color:#15803d;text-decoration:line-through;text-decoration-thickness:1px;}
+.pcl-item-memo{width:100%;border:1px solid #e8edf3;background:#fff;border-radius:6px;padding:6px 10px;font-size:12px;color:#475569;font-family:inherit;}
+.pcl-item-memo:focus{outline:none;border-color:#1e5096;box-shadow:0 0 0 2px rgba(30,80,150,0.1);}
+
+/* PATROL BANNERS (모바일 컴팩트) */
+@media(max-width:768px){
+  .patrol-banners{grid-template-columns:1fr!important;gap:10px!important;margin-bottom:14px!important;}
+  .patrol-banners > div{padding:18px 16px!important;}
+  .patrol-banners > div > div:first-child{font-size:36px!important;margin-bottom:6px!important;}
+  .pcl-zone-title{padding:11px 14px;font-size:14px;}
+  .pcl-item{padding:13px 14px;gap:11px;}
+  .pcl-item input[type=checkbox]{width:26px;height:26px;}
+  .pcl-item-text{font-size:14.5px;line-height:1.45;}
+  .pcl-item-memo{font-size:13px;padding:7px 10px;}
+}
+
 /* INFO TIP GRID — 안내문 박스화 */
 .info-tip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-bottom:14px;}
 .info-tip{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#f0f7ff;border-left:3px solid #1e5096;border-radius:8px;font-size:12px;line-height:1.45;}
@@ -694,35 +732,23 @@ table tr:hover td{background:#f8fafc;}
         <div id="patrol-calendar"></div>
       </div>
 
-      <!-- 패트롤 체크리스트 표 (날짜 클릭 시 표시) -->
+      <!-- 패트롤 체크리스트 (날짜 클릭 시 표시) -->
       <div id="patrol-checklist-form" style="display:none;">
         <div class="card" style="margin-bottom:16px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:2px solid #0d1f3c;margin-bottom:12px;">
-            <div>
-              <div style="font-size:18px;font-weight:900;color:#0d1f3c;" id="patrol-form-title">현장 패트롤 점검표</div>
-              <div style="font-size:12px;color:#6b7280;margin-top:2px;" id="patrol-form-date"></div>
+          <div class="patrol-form-header">
+            <div class="pfh-title">
+              <div class="pfh-name" id="patrol-form-title">현장 패트롤 점검표</div>
+              <div class="pfh-date" id="patrol-form-date"></div>
             </div>
-            <div style="display:flex;align-items:center;gap:12px;">
-              <button class="btn btn-outline btn-sm patrol-print-btn" onclick="printPatrolChecklist()" style="white-space:nowrap;">🖨️ 이 점검표 인쇄</button>
-              <div style="text-align:right;font-size:11px;color:#6b7280;">
-                <div>점검자: <input type="text" id="p-inspector" placeholder="이름" style="border:none;border-bottom:1px solid #d1d5db;width:80px;font-size:11px;padding:2px 4px;"></div>
-                <div style="margin-top:4px;">날씨: <select id="p-weather" style="border:none;border-bottom:1px solid #d1d5db;font-size:11px;padding:2px;"><option>맑음</option><option>흐림</option><option>비</option><option>눈</option></select></div>
-              </div>
-            </div>
+            <button class="btn btn-outline btn-sm patrol-print-btn" onclick="printPatrolChecklist()" style="white-space:nowrap;">🖨️ 인쇄</button>
+          </div>
+          <div class="patrol-meta-row">
+            <div class="patrol-meta-cell"><label>점검자</label><input type="text" id="p-inspector" placeholder="이름 입력"></div>
+            <div class="patrol-meta-cell"><label>날씨</label><select id="p-weather"><option>맑음</option><option>흐림</option><option>비</option><option>눈</option></select></div>
           </div>
 
-          <!-- 체크리스트 표 -->
-          <div class="table-wrap">
-            <table id="patrol-check-table" style="font-size:13px;">
-              <thead><tr style="background:#0d1f3c;color:#fff;">
-                <th style="width:30%;padding:10px 12px;">점검사항</th>
-                <th style="width:40%;padding:10px 12px;">점검내용</th>
-                <th style="width:50px;padding:10px;text-align:center;">점검</th>
-                <th style="width:25%;padding:10px 12px;">비고</th>
-              </tr></thead>
-              <tbody id="patrol-check-tbody"></tbody>
-            </table>
-          </div>
+          <!-- 체크리스트 (카드형 — 모바일 친화) -->
+          <div id="patrol-check-list" class="patrol-check-list"></div>
 
           <!-- 조치사항 -->
           <div style="margin-top:16px;padding-top:12px;border-top:2px solid #e8edf3;">
@@ -769,22 +795,21 @@ table tr:hover td{background:#f8fafc;}
             </div>
           </div>
 
-          <div class="table-wrap">
-            <table style="font-size:13px;">
-              <thead><tr style="background:#065f46;color:#fff;">
-                <th style="width:35%;padding:10px 12px;">점검사항</th>
-                <th style="width:35%;padding:10px 12px;">내용</th>
-                <th style="width:50px;padding:10px;text-align:center;">점검</th>
-                <th style="width:25%;padding:10px 12px;">비고</th>
-              </tr></thead>
-              <tbody>
-                <tr><td style="font-weight:600;">TBM 실시</td><td>작업 전 안전회의 실시 여부</td><td style="text-align:center;"><input type="checkbox" id="tbm-day-done" style="width:20px;height:20px;accent-color:#16a34a;"></td><td></td></tr>
-                <tr><td style="font-weight:600;">건강상태 확인</td><td>음주·체온·약물 이상 없음</td><td style="text-align:center;"><input type="checkbox" id="tbm-health" style="width:20px;height:20px;accent-color:#16a34a;"></td><td></td></tr>
-                <tr><td style="font-weight:600;">보호구 착용</td><td>안전모·안전화·보안경 등</td><td style="text-align:center;"><input type="checkbox" id="tbm-ppe" style="width:20px;height:20px;accent-color:#16a34a;"></td><td></td></tr>
-                <tr><td style="font-weight:600;">위험요인 공유</td><td>금일 작업 위험요인·대책 공유</td><td style="text-align:center;"><input type="checkbox" id="tbm-risk" style="width:20px;height:20px;accent-color:#16a34a;"></td><td></td></tr>
-                <tr><td style="font-weight:600;">TBM 사진</td><td colspan="2"><input type="file" id="tbm-day-photo" accept="image/*" style="width:100%;padding:4px;border:1px solid #d1d5db;border-radius:6px;font-size:11px;" onchange="previewTbmDayPhoto(this)"></td><td id="tbm-day-photo-preview"></td></tr>
-              </tbody>
-            </table>
+          <div class="patrol-check-list" style="--zone-color:#065f46;">
+            <div class="pcl-zone">
+              <div class="pcl-zone-title" style="background:linear-gradient(135deg,#065f46,#10b981);"><span class="pcl-zone-ic">✅</span>TBM 점검 항목</div>
+              <label class="pcl-item" for="tbm-day-done"><input type="checkbox" id="tbm-day-done"><div class="pcl-item-body"><div class="pcl-item-text">TBM 실시 — 작업 전 안전회의</div></div></label>
+              <label class="pcl-item" for="tbm-health"><input type="checkbox" id="tbm-health"><div class="pcl-item-body"><div class="pcl-item-text">건강상태 확인 — 음주·체온·약물 이상 없음</div></div></label>
+              <label class="pcl-item" for="tbm-ppe"><input type="checkbox" id="tbm-ppe"><div class="pcl-item-body"><div class="pcl-item-text">보호구 착용 — 안전모·안전화·보안경 등</div></div></label>
+              <label class="pcl-item" for="tbm-risk"><input type="checkbox" id="tbm-risk"><div class="pcl-item-body"><div class="pcl-item-text">위험요인 공유 — 금일 작업 위험요인·대책 공유</div></div></label>
+            </div>
+            <div class="pcl-zone">
+              <div class="pcl-zone-title" style="background:linear-gradient(135deg,#065f46,#10b981);"><span class="pcl-zone-ic">📷</span>TBM 사진</div>
+              <div style="padding:14px 16px;">
+                <input type="file" id="tbm-day-photo" accept="image/*" capture="environment" style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:13px;background:#fff;" onchange="previewTbmDayPhoto(this)">
+                <div id="tbm-day-photo-preview" style="margin-top:8px;"></div>
+              </div>
+            </div>
           </div>
 
           <div style="margin-top:12px;">
@@ -1539,25 +1564,28 @@ function openPatrolDay(day){
   const filtered = getFilteredZones();
   const patrolData = DB.getObj('patrolCalendar');
   const saved = patrolData[key] || {};
-  const tbody = document.getElementById('patrol-check-tbody');
-  let rows = '';
+  const list = document.getElementById('patrol-check-list');
+  let html = '';
   filtered.forEach(zone=>{
     const icon = zone.name.match(/^(\S+)/)?.[1]||'';
     const label = zone.name.replace(/^(\S+)\s*/,'');
-    // 카테고리 헤더 행
-    rows += `<tr style="background:#f1f5f9;"><td colspan="4" style="padding:8px 12px;font-weight:800;font-size:13px;color:#0d1f3c;">${icon} ${label}</td></tr>`;
+    html += `<div class="pcl-zone">
+      <div class="pcl-zone-title"><span class="pcl-zone-ic">${icon}</span>${label}</div>`;
     zone.items.forEach((item,i)=>{
       const itemKey = `${zone.id}_${i}`;
-      const checked = saved[itemKey] ? 'checked' : '';
+      const isChecked = !!saved[itemKey];
       const memo = saved[`${itemKey}_memo`] || '';
-      rows += `<tr>
-        <td style="padding:6px 12px;font-size:12px;color:#374151;border-bottom:1px solid #f5f7fa;" colspan="2">${item}</td>
-        <td style="text-align:center;border-bottom:1px solid #f5f7fa;"><input type="checkbox" ${checked} data-key="${itemKey}" style="width:18px;height:18px;accent-color:#1e5096;" onchange="updatePatrolDayProgress()"></td>
-        <td style="border-bottom:1px solid #f5f7fa;"><input type="text" value="${memo}" data-memo="${itemKey}" placeholder="" style="width:100%;border:none;font-size:11px;padding:4px;color:#6b7280;"></td>
-      </tr>`;
+      html += `<label class="pcl-item ${isChecked?'pcl-checked':''}" for="pchk_${itemKey}">
+        <input type="checkbox" id="pchk_${itemKey}" ${isChecked?'checked':''} data-key="${itemKey}" onchange="updatePatrolDayProgress();this.closest('.pcl-item').classList.toggle('pcl-checked',this.checked)">
+        <div class="pcl-item-body">
+          <div class="pcl-item-text">${item}</div>
+          <input type="text" value="${memo.replace(/"/g,'&quot;')}" data-memo="${itemKey}" placeholder="비고 (선택)" class="pcl-item-memo" onclick="event.preventDefault();" onfocus="event.stopPropagation();">
+        </div>
+      </label>`;
     });
+    html += `</div>`;
   });
-  tbody.innerHTML = rows;
+  list.innerHTML = html;
 
   // 기존 저장된 특이사항 복원
   const issuesEl = document.getElementById('p-issues');
@@ -1571,7 +1599,7 @@ function openPatrolDay(day){
 }
 
 function updatePatrolDayProgress(){
-  const checks = document.querySelectorAll('#patrol-check-tbody input[type=checkbox]');
+  const checks = document.querySelectorAll('#patrol-check-list input[type=checkbox]');
   const total = checks.length;
   const checked = Array.from(checks).filter(c=>c.checked).length;
   const pct = total>0 ? Math.round(checked/total*100) : 0;
@@ -1588,12 +1616,12 @@ function savePatrolDay(){
   const dayData = {};
   // 체크 상태 수집
   let totalChecked = 0, totalItems = 0;
-  document.querySelectorAll('#patrol-check-tbody input[type=checkbox]').forEach(cb=>{
+  document.querySelectorAll('#patrol-check-list input[type=checkbox]').forEach(cb=>{
     dayData[cb.dataset.key] = cb.checked;
     totalItems++;
     if(cb.checked) totalChecked++;
   });
-  document.querySelectorAll('#patrol-check-tbody input[data-memo]').forEach(inp=>{
+  document.querySelectorAll('#patrol-check-list input[data-memo]').forEach(inp=>{
     if(inp.value) dayData[inp.dataset.memo+'_memo'] = inp.value;
   });
   dayData.done = totalChecked > 0;
