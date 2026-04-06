@@ -1901,28 +1901,47 @@ function previewTbmDayPhoto(input){
   const preview = document.getElementById('tbm-day-photo-preview');
   if(!preview || !input.files.length) return;
   const file = input.files[0];
-  // 사진을 압축해서 base64로 변환 (DB 동기화 용)
-  compressImage(file, 800, 0.7).then(dataUrl => {
+  preview.innerHTML = '<div style="font-size:11px;color:#6b7280;">압축 중...</div>';
+  // 200KB 이하로 자동 압축
+  compressImage(file).then(dataUrl => {
     _tbmPhotoDataUrl = dataUrl;
+    const sizeKB = Math.ceil((dataUrl.length * 3 / 4) / 1024);
     preview.innerHTML = `<img src="${dataUrl}" style="width:140px;height:100px;object-fit:cover;border-radius:8px;border:2px solid #e5e7eb;">
-      <div style="font-size:11px;color:#6b7280;margin-top:2px;">${file.name}</div>`;
+      <div style="font-size:11px;color:#6b7280;margin-top:2px;">${file.name} <span style="color:#16a34a;">(${sizeKB}KB)</span></div>`;
   });
 }
 
-// 이미지 압축 (긴 변 maxWidth, JPEG quality)
-function compressImage(file, maxWidth, quality){
+// 이미지 압축 — 200KB 이하 강제 (품질·해상도 자동 조정)
+const MAX_PHOTO_BYTES = 200 * 1024; // 200 KB
+function compressImage(file){
   return new Promise(resolve => {
     const reader = new FileReader();
     reader.onload = e => {
       const img = new Image();
       img.onload = () => {
-        const ratio = Math.min(1, maxWidth / Math.max(img.width, img.height));
-        const w = Math.round(img.width * ratio);
-        const h = Math.round(img.height * ratio);
-        const canvas = document.createElement('canvas');
-        canvas.width = w; canvas.height = h;
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL('image/jpeg', quality));
+        // 200KB 이하가 될 때까지 해상도/품질 단계적으로 낮춤
+        const sizes = [1280, 1024, 900, 800, 700, 600, 500];
+        const qualities = [0.75, 0.65, 0.55, 0.5, 0.45, 0.4];
+        let result = null;
+        outer: for(const maxDim of sizes){
+          for(const q of qualities){
+            const ratio = Math.min(1, maxDim / Math.max(img.width, img.height));
+            const w = Math.round(img.width * ratio);
+            const h = Math.round(img.height * ratio);
+            const canvas = document.createElement('canvas');
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            const dataUrl = canvas.toDataURL('image/jpeg', q);
+            // base64 대략 크기: (length * 3/4) 바이트
+            const approxBytes = Math.ceil((dataUrl.length - 'data:image/jpeg;base64,'.length) * 3 / 4);
+            if(approxBytes <= MAX_PHOTO_BYTES){
+              result = dataUrl;
+              break outer;
+            }
+            result = dataUrl; // 마지막 시도 결과 유지
+          }
+        }
+        resolve(result);
       };
       img.src = e.target.result;
     };
