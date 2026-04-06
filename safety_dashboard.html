@@ -1890,41 +1890,69 @@ function openTbmDay(day){
   document.getElementById('tbm-day-title').textContent = `${now.getMonth()+1}월 ${day}일 TBM 기록`;
   document.getElementById('tbm-day-done').checked = !!dayData.done;
   document.getElementById('tbm-day-agenda').value = dayData.agenda || '';
+  const previewEl = document.getElementById('tbm-day-photo-preview');
   if(dayData.photoData){
-    document.getElementById('tbm-day-photo-preview').innerHTML = `<img src="${dayData.photoData}" style="width:140px;height:100px;object-fit:cover;border-radius:8px;border:2px solid #e5e7eb;"><div style="font-size:11px;color:#6b7280;margin-top:2px;">${dayData.photoName||''}</div>`;
+    const link = dayData.photoDriveUrl ? `<a href="${dayData.photoDriveUrl}" target="_blank" style="font-size:10px;color:#1e5096;text-decoration:underline;display:block;margin-top:2px;">드라이브에서 보기 →</a>` : '';
+    previewEl.innerHTML = `<img src="${dayData.photoData}" style="width:140px;height:100px;object-fit:cover;border-radius:8px;border:2px solid #16a34a;"><div style="font-size:11px;color:#16a34a;margin-top:2px;">📎 ${dayData.photoName||''}</div>${link}`;
   } else if(dayData.photoName){
-    document.getElementById('tbm-day-photo-preview').innerHTML = `<div style="font-size:12px;color:#16a34a;">📎 ${dayData.photoName}</div>`;
+    const link = dayData.photoDriveUrl ? `<a href="${dayData.photoDriveUrl}" target="_blank" style="font-size:11px;color:#1e5096;text-decoration:underline;">드라이브에서 보기 →</a>` : '';
+    previewEl.innerHTML = `<div style="font-size:12px;color:#16a34a;">📎 ${dayData.photoName}</div>${link}`;
   } else {
-    document.getElementById('tbm-day-photo-preview').innerHTML = '';
+    previewEl.innerHTML = '';
   }
-  _tbmPhotoDataUrl = null;
   document.getElementById('tbm-day-form').dataset.key = key;
 }
 
-let _tbmPhotoDataUrl = null;
 function previewTbmDayPhoto(input){
   const preview = document.getElementById('tbm-day-photo-preview');
   if(!preview || !input.files.length) return;
   const file = input.files[0];
-  preview.innerHTML = '<div style="font-size:11px;color:#6b7280;">압축 중...</div>';
-  // 200KB 이하로 자동 압축 후 즉시 저장
+  const form = document.getElementById('tbm-day-form');
+  const key = form?.dataset.key;
+  if(!key) return;
+
+  preview.innerHTML = '<div style="font-size:11px;color:#1e5096;">압축 + 드라이브 업로드 중...</div>';
+
+  // 1) 압축 후 미리보기
   compressImage(file).then(dataUrl => {
-    _tbmPhotoDataUrl = dataUrl;
     const sizeKB = Math.ceil((dataUrl.length * 3 / 4) / 1024);
+    // 파일명: TBM_2026-04-09.jpg
+    const ext = (file.name.split('.').pop()||'jpg').toLowerCase();
+    const newFileName = `TBM_${key}.${ext}`;
+
     preview.innerHTML = `<img src="${dataUrl}" style="width:140px;height:100px;object-fit:cover;border-radius:8px;border:2px solid #e5e7eb;">
-      <div style="font-size:11px;color:#16a34a;margin-top:2px;">📎 ${file.name} (${sizeKB}KB) — 자동 저장됨</div>`;
-    // 사진만 올려도 즉시 저장 (저장 버튼 안 눌러도 동기화)
-    const form = document.getElementById('tbm-day-form');
-    const key = form?.dataset.key;
-    if(!key) return;
-    const tbmData = DB.getObj('tbmCalendar');
-    const cur = tbmData[key] || {};
-    cur.photoName = file.name;
-    cur.photoData = dataUrl;
-    cur.savedAt = new Date().toISOString();
-    tbmData[key] = cur;
-    DB.set('tbmCalendar', tbmData);
-    renderTbmCalendar();
+      <div style="font-size:11px;color:#1e5096;margin-top:2px;">📤 ${newFileName} (${sizeKB}KB) — 드라이브 업로드 중...</div>`;
+
+    // 2) 드라이브 업로드 (압축된 base64 사용)
+    const base64 = dataUrl.split(',')[1];
+    fetch(DRIVE_UPLOAD_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        fileName: newFileName,
+        fileData: base64,
+        mimeType: 'image/jpeg',
+        subfolder: 'TBM_사진'
+      })
+    }).then(()=>{
+      // 3) 메타데이터를 DB에 저장 (썸네일 + 드라이브 폴더 링크)
+      const tbmData = DB.getObj('tbmCalendar');
+      const cur = tbmData[key] || {};
+      cur.photoName = newFileName;
+      cur.photoData = dataUrl; // 200KB 이하 썸네일 (오프라인용)
+      cur.photoDriveUrl = 'https://drive.google.com/drive/folders/10a7V0ao6Qf-_9XeiK4Bd2NRmfAX7rgB5';
+      cur.uploadedAt = new Date().toISOString();
+      tbmData[key] = cur;
+      DB.set('tbmCalendar', tbmData);
+      preview.innerHTML = `<img src="${dataUrl}" style="width:140px;height:100px;object-fit:cover;border-radius:8px;border:2px solid #16a34a;">
+        <div style="font-size:11px;color:#16a34a;margin-top:2px;">✅ ${newFileName} (${sizeKB}KB) — 드라이브 저장 완료</div>
+        <a href="${cur.photoDriveUrl}" target="_blank" style="font-size:10px;color:#1e5096;text-decoration:underline;">드라이브에서 보기 →</a>`;
+      renderTbmCalendar();
+    }).catch(err=>{
+      preview.innerHTML = `<div style="font-size:12px;color:#dc2626;">❌ 드라이브 업로드 실패: ${err.message||err}</div>`;
+      console.error('Drive upload error:', err);
+    });
   });
 }
 
@@ -1971,17 +1999,12 @@ function saveTbmDay(){
   const key = form.dataset.key;
   if(!key) return;
   const tbmData = DB.getObj('tbmCalendar');
-  const photoInput = document.getElementById('tbm-day-photo');
-  const photoName = photoInput.files.length > 0 ? photoInput.files[0].name : (tbmData[key]?.photoName || '');
-  const photoData = _tbmPhotoDataUrl || tbmData[key]?.photoData || '';
-  tbmData[key] = {
-    done: document.getElementById('tbm-day-done').checked,
-    agenda: document.getElementById('tbm-day-agenda').value,
-    photoName: photoName,
-    photoData: photoData,
-    savedAt: new Date().toISOString()
-  };
-  _tbmPhotoDataUrl = null;
+  const cur = tbmData[key] || {};
+  // 사진 메타는 previewTbmDayPhoto에서 이미 자동 저장됨 — 여기선 텍스트만 갱신
+  cur.done = document.getElementById('tbm-day-done').checked;
+  cur.agenda = document.getElementById('tbm-day-agenda').value;
+  cur.savedAt = new Date().toISOString();
+  tbmData[key] = cur;
   DB.set('tbmCalendar', tbmData);
   // tbm 이력에도 기록 (대시보드 호환)
   if(tbmData[key].done){
