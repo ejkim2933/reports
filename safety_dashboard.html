@@ -739,42 +739,10 @@ table tr:hover td{background:#f8fafc;}
     <!-- 상단 알림 배너 -->
     <div id="meetcal-alerts" style="margin-bottom:16px;"></div>
 
-    <!-- 상단: 주간/월간/분기 완료 현황 -->
-    <div class="grid-3" style="margin-bottom:16px;">
-      <div class="stat-card blue"><div class="label">이번 주</div><div class="value" id="mc-week-pending">-</div><div class="sub">완료 / 전체</div></div>
-      <div class="stat-card orange"><div class="label">이번 달</div><div class="value" id="mc-month-pending">-</div><div class="sub">완료 / 전체</div></div>
-      <div class="stat-card green"><div class="label">이번 분기</div><div class="value" id="mc-quarter-pending">-</div><div class="sub">완료 / 전체</div></div>
-    </div>
-
-    <div class="card" style="margin-bottom:16px;">
+    <div class="card">
       <div class="card-title">📅 ESG 연간 교육 계획 (2026년)</div>
-      <div class="alert info">전사 안전·보건·환경 관련 법적 의무 교육 항목을 통합 관리합니다.</div>
+      <div class="alert info">전사 안전·보건·환경 관련 법적 의무 교육 항목을 통합 관리합니다. 월별 칸의 ●(시행완료) / ○(미시행) 으로 진행 현황을 확인하고, 일간 TBM·순회점검은 [패트롤+TBM] 메뉴에서 관리합니다.</div>
       <div id="esg-plan-meetcal"></div>
-    </div>
-
-    <!-- 분기별 표 -->
-    <div class="card" style="margin-bottom:16px;">
-      <div class="card-title">📋 주기별 미팅·교육 관리 현황</div>
-      <div class="alert info" style="margin-bottom:12px;">일간 TBM·순회점검은 [패트롤+TBM] 메뉴에서 일지로 관리합니다. <span style="color:#16a34a;font-weight:700;">●</span> 시행완료 &nbsp; <span style="color:#dc2626;font-weight:700;">○</span> 미시행</div>
-      <div id="mc-quarter-table"></div>
-    </div>
-
-    <!-- 연간 캘린더 -->
-    <div class="card" style="margin-bottom:16px;">
-      <div class="card-title">📅 연간 시행 캘린더</div>
-      <div id="meetcal-year-grid"></div>
-    </div>
-
-    <!-- 다가오는 일정 / 최근 기록 -->
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-title">🔔 다가오는 일정 (사전 알림)</div>
-        <div id="mc-upcoming"></div>
-      </div>
-      <div class="card">
-        <div class="card-title">📜 최근 미팅·교육 기록</div>
-        <div id="mc-recent-logs"></div>
-      </div>
     </div>
   </div>
 
@@ -3811,12 +3779,7 @@ function getMcAlerts(){
 // --- 메인 렌더 ---
 function renderMeetCal(){
   renderMcAlerts();
-  renderMcOverview();
   renderESGPlan('esg-plan-meetcal');
-  renderMcQuarterTable();
-  renderMcYearCalendar();
-  renderMcUpcoming();
-  renderMcRecentLogs();
 }
 
 function renderMcAlerts(){
