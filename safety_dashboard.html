@@ -129,6 +129,20 @@ table tr:hover td{background:#f8fafc;}
 .mc-upcoming-dday.overdue{background:#fef2f2;color:#dc2626;}
 .mc-upcoming-dday.soon{background:#fffbeb;color:#ea580c;}
 .mc-upcoming-dday.ok{background:#f0fdf4;color:#16a34a;}
+/* MC MASTER CARDS */
+.mc-group{margin-bottom:14px;}
+.mc-group-header{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:8px;margin-bottom:6px;font-size:13px;font-weight:800;}
+.mc-item-card{display:grid;grid-template-columns:70px 1fr auto;gap:0;background:#fff;border:1px solid #e8edf3;border-radius:10px;margin-bottom:6px;overflow:hidden;transition:box-shadow 0.15s;}
+.mc-item-card:hover{box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+.mc-item-left{padding:12px 10px;display:flex;align-items:center;justify-content:center;border-right:1px solid #f1f5f9;}
+.mc-item-body{padding:10px 14px;display:flex;flex-direction:column;justify-content:center;gap:2px;}
+.mc-item-body .mc-name{font-size:13.5px;font-weight:700;color:#1a1a1a;}
+.mc-item-body .mc-evidence{font-size:11.5px;color:#6b7280;margin-top:1px;}
+.mc-item-body .mc-note{font-size:11px;color:#9ca3af;margin-top:1px;}
+.mc-item-right{padding:10px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:100px;border-left:1px solid #f1f5f9;}
+.mc-item-right .mc-status{font-size:12px;font-weight:700;}
+.mc-item-right .mc-last{font-size:10px;color:#9ca3af;}
+.mc-done-bar{height:3px;border-radius:2px;margin-top:2px;}
 /* PATROL ZONE - CARD GRID */
 .patrol-total{background:linear-gradient(135deg, #0d1f3c 0%, #1a3a6e 60%, #1e5096 100%);border-radius:14px;padding:22px 28px;color:#fff;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:20px;}
 .patrol-total h3{font-size:16px;font-weight:800;}
@@ -755,24 +769,12 @@ table tr:hover td{background:#f8fafc;}
       </div>
 
       <!-- 법정 의무 미팅·교육 전체 목록 -->
-      <div class="card" style="margin-bottom:16px;">
-        <div class="card-title">📋 주기별 미팅·교육 관리 현황</div>
-        <div class="alert info" style="margin-bottom:12px;">일간 TBM·순회점검은 [패트롤+TBM] 메뉴에서 일지로 관리합니다. 아래는 주간~연간 반복 항목입니다.</div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr style="background:#0d1f3c;color:#fff;">
-                <th style="width:80px;">주기</th>
-                <th>활동 내용</th>
-                <th>증빙 서류</th>
-                <th style="width:160px;">비고</th>
-                <th style="width:100px;text-align:center;">이번 주기 현황</th>
-                <th style="width:80px;text-align:center;">최근 시행</th>
-              </tr>
-            </thead>
-            <tbody id="mc-master-table"></tbody>
-          </table>
+      <div style="margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div style="font-size:15px;font-weight:800;color:#0d1f3c;">📋 주기별 미팅·교육 관리 현황</div>
+          <div style="font-size:11px;color:#9ca3af;">일간 TBM·순회점검은 [패트롤+TBM] 메뉴에서 일지로 관리</div>
         </div>
+        <div id="mc-master-cards"></div>
       </div>
 
       <!-- 하단 2컬럼: 다가오는 일정 / 최근 기록 -->
@@ -1924,7 +1926,7 @@ function printPatrolChecklist(){
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Noto Sans KR','Malgun Gothic',sans-serif;}
 @page{size:A4 portrait;margin:0;}
-.page{width:210mm;height:297mm;padding:7mm 7mm;display:flex;flex-direction:column;box-sizing:border-box;}
+.page{width:210mm;height:297mm;padding:5mm;display:flex;flex-direction:column;box-sizing:border-box;}
 
 /* 헤더 */
 .hdr{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid #0d1f3c;padding-bottom:6px;margin-bottom:5px;}
@@ -1972,7 +1974,7 @@ body{font-family:'Noto Sans KR','Malgun Gothic',sans-serif;}
 
 @media print{
   html,body{width:210mm;height:297mm;margin:0;padding:0;}
-  .page{width:210mm;height:297mm;padding:7mm 7mm;}
+  .page{width:210mm;height:297mm;padding:5mm;}
   .hdr,.zh td,.col th,.sign,.act{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}
 }
 </style></head><body>
@@ -3932,11 +3934,15 @@ function renderMcOverview(){
   if(mEl) mEl.textContent = monthPending+'건';
   if(qEl) qEl.textContent = quarterPending+'건';
 
-  // 마스터 테이블
-  const tbody = document.getElementById('mc-master-table');
-  if(tbody){
+  // 마스터 카드
+  const cardsEl = document.getElementById('mc-master-cards');
+  if(cardsEl){
     let html = '';
     let lastCycle = '';
+    const groupColors = {weekly:'#1e5096', monthly:'#a16207', quarterly:'#166534', yearly:'#be185d', prod:'#475569'};
+    const groupBgs = {weekly:'#eef4ff', monthly:'#fffbeb', quarterly:'#f0fdf4', yearly:'#fdf2f8', prod:'#f8fafc'};
+    const groupLabels = {weekly:'📅 매주 (Weekly)', monthly:'📋 매월 (Monthly)', quarterly:'📊 매분기 (Quarterly)', yearly:'📆 매년 (Yearly)', prod:'🏭 생산실 미팅'};
+
     mcMasterItems.forEach(item=>{
       let range;
       if(item.id==='prod-monthly') range = getMcCurrentMonthRange();
@@ -3947,26 +3953,40 @@ function renderMcOverview(){
       const cycleLabel = item.id==='prod-monthly' ? '매월' : mcCycleLabels[item.cycle];
       const cycleCss = item.id==='prod-monthly' ? 'mc-cycle-monthly' : mcCycleCss[item.cycle];
 
-      // 주기 구분 헤더
       const groupKey = item.id==='prod-monthly' ? 'prod' : item.cycle;
       if(groupKey !== lastCycle){
+        if(lastCycle) html += '</div>'; // close prev group
         lastCycle = groupKey;
-        const groupLabels = {weekly:'📅 매주 (Weekly)', monthly:'📋 매월 (Monthly)', quarterly:'📊 매분기 (Quarterly)', yearly:'📆 매년 (Yearly)', prod:'🏭 생산실 미팅'};
-        html += `<tr><td colspan="6" style="background:${item.color}11;font-weight:800;font-size:12px;color:${item.color};padding:8px 12px;border-left:3px solid ${item.color};">${groupLabels[groupKey]||groupKey}</td></tr>`;
+        const gc = groupColors[groupKey]||'#6b7280';
+        const gb = groupBgs[groupKey]||'#f8fafc';
+        html += `<div class="mc-group">
+          <div class="mc-group-header" style="background:${gb};color:${gc};border-left:4px solid ${gc};">${groupLabels[groupKey]||groupKey}</div>`;
       }
 
-      html += `<tr>
-        <td><span class="mc-cycle-badge ${cycleCss}">${cycleLabel}</span></td>
-        <td style="font-weight:600;">${item.name}</td>
-        <td style="font-size:12px;color:#6b7280;">${item.evidence}</td>
-        <td style="font-size:12px;color:#6b7280;">${item.note}</td>
-        <td style="text-align:center;">${done
-          ? '<span class="mc-status-done">● 완료</span>'
-          : '<span class="mc-status-pending">○ 미시행</span>'}</td>
-        <td style="text-align:center;font-size:12px;color:#6b7280;">${lastLog ? lastLog.date : '-'}</td>
-      </tr>`;
+      const statusHtml = done
+        ? `<div class="mc-status" style="color:#16a34a;">● 완료</div>`
+        : `<div class="mc-status" style="color:#dc2626;">○ 미시행</div>`;
+      const borderColor = done ? '#dcfce7' : '#fee2e2';
+      const leftBg = done ? '#f0fdf4' : '#fef2f2';
+
+      html += `<div class="mc-item-card" style="border-color:${borderColor};">
+        <div class="mc-item-left" style="background:${leftBg};">
+          <span class="mc-cycle-badge ${cycleCss}">${cycleLabel}</span>
+        </div>
+        <div class="mc-item-body">
+          <div class="mc-name">${item.name}</div>
+          <div class="mc-evidence">📄 ${item.evidence}</div>
+          ${item.note ? `<div class="mc-note">💡 ${item.note}</div>` : ''}
+        </div>
+        <div class="mc-item-right" style="background:${done?'#f0fdf4':'#fef2f2'};">
+          ${statusHtml}
+          <div class="mc-last">${lastLog ? lastLog.date : '기록 없음'}</div>
+          ${!done ? `<button class="btn btn-sm btn-primary" onclick="mcQuickLog('${item.id}')" style="font-size:10px;padding:3px 8px;margin-top:2px;">기록</button>` : ''}
+        </div>
+      </div>`;
     });
-    tbody.innerHTML = html;
+    if(lastCycle) html += '</div>'; // close last group
+    cardsEl.innerHTML = html;
   }
 
   // 다가오는 일정
