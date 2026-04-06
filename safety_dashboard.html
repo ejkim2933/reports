@@ -236,38 +236,41 @@ table tr:hover td{background:#f8fafc;}
     box-shadow:none!important;border:none!important;padding:0!important;margin:0!important;
   }
 
-  /* 헤더 압축 */
-  #patrol-form-title{font-size:13px!important;}
-  #patrol-form-date{font-size:8px!important;}
+  /* 헤더 */
+  #patrol-form-title{font-size:15px!important;}
+  #patrol-form-date{font-size:10px!important;}
   #patrol-checklist-form .card>div:first-child{
-    padding-bottom:3px!important;margin-bottom:3px!important;border-bottom:2px solid #000!important;
+    padding-bottom:6px!important;margin-bottom:4px!important;border-bottom:2px solid #000!important;
   }
-  #p-inspector{font-size:9px!important;width:60px!important;}
-  #p-weather{font-size:9px!important;}
+  #p-inspector{font-size:10px!important;width:70px!important;}
+  #p-weather{font-size:10px!important;}
 
-  /* 체크리스트 테이블: 극도로 압축 */
+  /* 체크리스트 테이블 */
   #patrol-checklist-form .table-wrap{overflow:visible!important;border:none!important;}
-  #patrol-check-table{font-size:7.5px!important;line-height:1.2!important;width:100%!important;border-collapse:collapse!important;}
-  #patrol-check-table thead{display:none!important;}
-  #patrol-check-table td{
-    padding:1.5px 3px!important;border:none!important;border-bottom:0.5px solid #ddd!important;
-  }
-  #patrol-check-table td:nth-child(3){width:20px!important;text-align:center!important;}
-  #patrol-check-table td:last-child{width:15%!important;font-size:7px!important;}
-  #patrol-check-table input[type="checkbox"]{
-    width:10px!important;height:10px!important;margin:0!important;
+  #patrol-check-table{font-size:9px!important;line-height:1.3!important;width:100%!important;border-collapse:collapse!important;}
+  #patrol-check-table thead tr{
+    background:#0d1f3c!important;color:#fff!important;
     -webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;
   }
-  #patrol-check-table input[type="text"]{font-size:7px!important;padding:1px 2px!important;}
+  #patrol-check-table th{padding:3px 5px!important;font-size:8px!important;}
+  #patrol-check-table td{
+    padding:2.5px 5px!important;border-bottom:0.5px solid #ddd!important;
+  }
+  #patrol-check-table td:nth-child(3){width:24px!important;text-align:center!important;}
+  #patrol-check-table td:last-child{width:18%!important;font-size:8px!important;}
+  #patrol-check-table input[type="checkbox"]{
+    width:12px!important;height:12px!important;margin:0!important;
+    -webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;
+  }
+  #patrol-check-table input[type="text"]{font-size:8px!important;padding:1px 3px!important;}
   /* 존 헤더 */
-  #patrol-check-table tr[style*="background:#f1f5f9"] td,
   #patrol-check-table tr[style*="f1f5f9"] td{
-    background:#e8edf3!important;font-weight:800!important;font-size:8px!important;
-    padding:2px 3px!important;
+    background:#e8edf3!important;font-weight:800!important;font-size:9.5px!important;
+    padding:3px 5px!important;
     -webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;
   }
 
-  @page{size:A4 portrait;margin:5mm 7mm;}
+  @page{size:A4 portrait;margin:0;}
 }
 @media(max-width:1200px){.dash-hero-stats{grid-template-columns:repeat(2,1fr);}}
 /* RESPONSIVE */
