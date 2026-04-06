@@ -745,53 +745,26 @@ table tr:hover td{background:#f8fafc;}
     </div>
   </div>
 
-  <!-- ===== 교육·미팅 캘린더 ===== -->
+  <!-- ===== 교육 & 운영 관리 ===== -->
   <div id="section-meetcal" class="section">
 
-    <!-- 상단 알림 배너: 이번 주/이번 달 해야 할 것 -->
+    <!-- 상단 알림 배너 -->
     <div id="meetcal-alerts" style="margin-bottom:16px;"></div>
 
     <div class="tabs">
-      <button class="tab active" onclick="switchMeetCalTab('overview')">📋 현황판</button>
-      <button class="tab" onclick="switchMeetCalTab('calendar')">📅 연간 캘린더</button>
-      <button class="tab" onclick="switchMeetCalTab('eduplan')">📚 교육 계획·이력</button>
-      <button class="tab" onclick="switchMeetCalTab('log')">📝 기록 입력</button>
-      <button class="tab" onclick="switchMeetCalTab('history')">📜 이력 조회</button>
+      <button class="tab active" onclick="switchMeetCalTab('eduplan')">📚 교육 계획·이력</button>
+      <button class="tab" onclick="switchMeetCalTab('status')">📋 운영 현황·캘린더</button>
     </div>
 
-    <!-- 현황판 탭 -->
-    <div id="meetcal-tab-overview">
-      <!-- 주간/월간/분기 진행률 카드 -->
+    <!-- 탭1: 교육 계획·이력 -->
+    <div id="meetcal-tab-eduplan">
+      <!-- 상단: 주간/월간/분기 완료 현황 -->
       <div class="grid-3" style="margin-bottom:16px;">
-        <div class="stat-card blue"><div class="label">이번 주 미완료</div><div class="value" id="mc-week-pending">-</div><div class="sub">주간 항목</div></div>
-        <div class="stat-card orange"><div class="label">이번 달 미완료</div><div class="value" id="mc-month-pending">-</div><div class="sub">월간 항목</div></div>
-        <div class="stat-card green"><div class="label">이번 분기 미완료</div><div class="value" id="mc-quarter-pending">-</div><div class="sub">분기 항목</div></div>
+        <div class="stat-card blue"><div class="label">이번 주</div><div class="value" id="mc-week-pending">-</div><div class="sub">완료 / 전체</div></div>
+        <div class="stat-card orange"><div class="label">이번 달</div><div class="value" id="mc-month-pending">-</div><div class="sub">완료 / 전체</div></div>
+        <div class="stat-card green"><div class="label">이번 분기</div><div class="value" id="mc-quarter-pending">-</div><div class="sub">완료 / 전체</div></div>
       </div>
 
-      <!-- 법정 의무 미팅·교육 전체 목록 -->
-      <div style="margin-bottom:16px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-          <div style="font-size:15px;font-weight:800;color:#0d1f3c;">📋 주기별 미팅·교육 관리 현황</div>
-          <div style="font-size:11px;color:#9ca3af;">일간 TBM·순회점검은 [패트롤+TBM] 메뉴에서 일지로 관리</div>
-        </div>
-        <div id="mc-master-cards"></div>
-      </div>
-
-      <!-- 하단 2컬럼: 다가오는 일정 / 최근 기록 -->
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title">🔔 다가오는 일정 (사전 알림)</div>
-          <div id="mc-upcoming"></div>
-        </div>
-        <div class="card">
-          <div class="card-title">📜 최근 미팅·교육 기록</div>
-          <div id="mc-recent-logs"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 교육 계획·이력 탭 (기존 교육 관리 통합) -->
-    <div id="meetcal-tab-eduplan" style="display:none;">
       <div class="grid-2" style="gap:16px;margin-bottom:16px;">
         <div class="card">
           <div class="card-title">📅 ESG 연간 교육 계획 (2026년)</div>
@@ -808,85 +781,73 @@ table tr:hover td{background:#f8fafc;}
       </div>
     </div>
 
-    <!-- 연간 캘린더 탭 -->
-    <div id="meetcal-tab-calendar" style="display:none;">
-      <div class="alert info" style="margin-bottom:16px;">
-        월별 교육·미팅 일정과 시행 현황을 한눈에 확인합니다. <span style="color:#16a34a;font-weight:700;">●</span> 시행완료 &nbsp; <span style="color:#dc2626;font-weight:700;">○</span> 미시행
-      </div>
-      <div id="meetcal-year-grid"></div>
-    </div>
+    <!-- 탭2: 운영 현황·캘린더 (현황판 + 연간 캘린더 합침) -->
+    <div id="meetcal-tab-status" style="display:none;">
 
-    <!-- 기록 입력 탭 -->
-    <div id="meetcal-tab-log" style="display:none;">
+      <!-- 분기별 표 -->
       <div class="card" style="margin-bottom:16px;">
-        <div class="card-title">📝 미팅·교육 시행 기록</div>
-        <div class="form-row-3">
-          <div class="form-group"><label>시행 일자</label><input type="date" id="ml-date"></div>
-          <div class="form-group"><label>활동 구분</label>
-            <select id="ml-type">
-              <option value="">-- 선택 --</option>
-              <optgroup label="── 매주 (Weekly) ──">
-                <option value="weekly-env">환경운영점검표 (ISO14001)</option>
-              </optgroup>
-              <optgroup label="── 매월 (Monthly) ──">
-                <option value="monthly-committee">산업안전보건위원회</option>
-                <option value="monthly-contractor">도급인·수급인 협의체</option>
-              </optgroup>
-              <optgroup label="── 매분기 (Quarterly) ──">
-                <option value="quarterly-edu">정기 안전보건교육</option>
-                <option value="quarterly-joint">합동 안전점검</option>
-              </optgroup>
-              <optgroup label="── 매년 (Yearly) ──">
-                <option value="yearly-risk">위험성평가 (수시/정기)</option>
-                <option value="yearly-manager-edu">관리감독자 교육</option>
-              </optgroup>
-              <optgroup label="── 생산실 미팅 ──">
-                <option value="prod-weekly">생산실 주간 미팅</option>
-                <option value="prod-monthly">생산실 월간 미팅</option>
-              </optgroup>
-              <optgroup label="── 기타 ──">
-                <option value="other">기타</option>
-              </optgroup>
-            </select>
-          </div>
-          <div class="form-group"><label>참석 인원</label><input type="number" id="ml-count" placeholder="명"></div>
+        <div class="card-title">📋 주기별 미팅·교육 관리 현황</div>
+        <div class="alert info" style="margin-bottom:12px;">일간 TBM·순회점검은 [패트롤+TBM] 메뉴에서 일지로 관리합니다. <span style="color:#16a34a;font-weight:700;">●</span> 시행완료 &nbsp; <span style="color:#dc2626;font-weight:700;">○</span> 미시행</div>
+        <div id="mc-quarter-table"></div>
+      </div>
+
+      <!-- 연간 캘린더 -->
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">📅 연간 시행 캘린더</div>
+        <div id="meetcal-year-grid"></div>
+      </div>
+
+      <!-- 다가오는 일정 / 최근 기록 -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">🔔 다가오는 일정 (사전 알림)</div>
+          <div id="mc-upcoming"></div>
         </div>
-        <div class="form-row">
-          <div class="form-group"><label>진행자 / 강사</label><input type="text" id="ml-leader" placeholder="진행자명"></div>
-          <div class="form-group"><label>장소</label><input type="text" id="ml-place" placeholder="예: 생산실, 회의실, 외부교육"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>교육/미팅 시간</label><input type="text" id="ml-hours" placeholder="예: 2시간, 30분"></div>
-          <div class="form-group"><label>증빙 서류</label><input type="text" id="ml-evidence" placeholder="예: 회의록, 출석부, 사진 등"></div>
-        </div>
-        <div class="form-group"><label>주요 내용 / 결정사항</label><textarea id="ml-memo" placeholder="회의 내용, 결정사항, 조치사항 등을 기록합니다."></textarea></div>
-        <div style="display:flex;gap:8px;">
-          <button class="btn btn-primary" onclick="saveMeetingLog()">💾 기록 저장</button>
-          <button class="btn btn-outline" onclick="clearMeetingForm()">🔄 초기화</button>
+        <div class="card">
+          <div class="card-title">📜 최근 미팅·교육 기록</div>
+          <div id="mc-recent-logs"></div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- 이력 조회 탭 -->
-    <div id="meetcal-tab-history" style="display:none;">
-      <div class="card">
-        <div class="card-title">📜 미팅·교육 전체 이력</div>
-        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
-          <select id="ml-filter-type" onchange="renderMeetingHistory()" style="padding:6px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:12px;">
-            <option value="all">전체 구분</option>
-            <option value="weekly-env">환경운영점검표</option>
-            <option value="monthly-committee">산업안전보건위원회</option>
-            <option value="monthly-contractor">도급인·수급인 협의체</option>
-            <option value="quarterly-edu">정기 안전보건교육</option>
-            <option value="quarterly-joint">합동 안전점검</option>
-            <option value="yearly-risk">위험성평가</option>
-            <option value="yearly-manager-edu">관리감독자 교육</option>
-            <option value="prod-weekly">생산실 주간 미팅</option>
-            <option value="prod-monthly">생산실 월간 미팅</option>
+  <!-- 기록 입력용 숨겨진 폼 (퀵 기록 시 모달처럼 사용) -->
+  <div id="mc-log-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)this.style.display='none'">
+    <div style="background:#fff;border-radius:16px;width:100%;max-width:560px;padding:24px;max-height:90vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div style="font-size:16px;font-weight:800;color:#0d1f3c;">📝 시행 기록</div>
+        <button onclick="document.getElementById('mc-log-modal').style.display='none'" style="background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280;">✕</button>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>시행 일자</label><input type="date" id="ml-date"></div>
+        <div class="form-group"><label>활동 구분</label>
+          <select id="ml-type">
+            <option value="">-- 선택 --</option>
+            <optgroup label="── 매주 ──"><option value="weekly-env">환경운영점검표</option></optgroup>
+            <optgroup label="── 매월 ──"><option value="monthly-committee">산업안전보건위원회</option><option value="monthly-contractor">도급인·수급인 협의체</option></optgroup>
+            <optgroup label="── 매분기 ──"><option value="quarterly-edu">정기 안전보건교육</option><option value="quarterly-joint">합동 안전점검</option></optgroup>
+            <optgroup label="── 매년 ──"><option value="yearly-risk">위험성평가</option><option value="yearly-manager-edu">관리감독자 교육</option></optgroup>
+            <optgroup label="── 생산실 ──"><option value="prod-weekly">생산실 주간 미팅</option><option value="prod-monthly">생산실 월간 미팅</option></optgroup>
+            <optgroup label="── 기타 ──"><option value="other">기타</option></optgroup>
           </select>
-          <select id="ml-filter-month" onchange="renderMeetingHistory()" style="padding:6px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:12px;">
-            <option value="all">전체 월</option>
-            <option value="01">1월</option><option value="02">2월</option><option value="03">3월</option>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>참석 인원</label><input type="number" id="ml-count" placeholder="명"></div>
+        <div class="form-group"><label>진행자</label><input type="text" id="ml-leader" placeholder="진행자명"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>장소</label><input type="text" id="ml-place" placeholder="회의실, 생산실 등"></div>
+        <div class="form-group"><label>시간</label><input type="text" id="ml-hours" placeholder="2시간"></div>
+      </div>
+      <div class="form-group"><label>증빙</label><input type="text" id="ml-evidence" placeholder="회의록, 출석부, 사진 등"></div>
+      <div class="form-group"><label>내용 / 메모</label><textarea id="ml-memo" placeholder="주요 내용, 결정사항" style="min-height:60px;"></textarea></div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-primary" onclick="saveMeetingLog()" style="flex:1;">💾 저장</button>
+        <button class="btn btn-outline" onclick="document.getElementById('mc-log-modal').style.display='none'">취소</button>
+      </div>
+    </div>
+  </div>
             <option value="04">4월</option><option value="05">5월</option><option value="06">6월</option>
             <option value="07">7월</option><option value="08">8월</option><option value="09">9월</option>
             <option value="10">10월</option><option value="11">11월</option><option value="12">12월</option>
@@ -3794,18 +3755,22 @@ const mcTypeLabels = {};
 mcMasterItems.forEach(m => mcTypeLabels[m.id] = m.name);
 
 function switchMeetCalTab(tab){
-  ['overview','calendar','eduplan','log','history'].forEach(t=>{
+  ['eduplan','status'].forEach(t=>{
     const el = document.getElementById('meetcal-tab-'+t);
     if(el) el.style.display = t===tab ? 'block' : 'none';
   });
   document.querySelectorAll('#section-meetcal .tab').forEach(b=>b.classList.remove('active'));
   if(event && event.currentTarget) event.currentTarget.classList.add('active');
-  if(tab==='calendar') renderMcYearCalendar();
   if(tab==='eduplan'){
     renderESGPlan('esg-plan-meetcal');
     renderEduHistoryMC();
   }
-  if(tab==='history') renderMeetingHistory();
+  if(tab==='status'){
+    renderMcQuarterTable();
+    renderMcYearCalendar();
+    renderMcUpcoming();
+    renderMcRecentLogs();
+  }
 }
 
 // --- 현재 주기 범위 계산 ---
@@ -3891,6 +3856,8 @@ function getMcAlerts(){
 function renderMeetCal(){
   renderMcAlerts();
   renderMcOverview();
+  renderESGPlan('esg-plan-meetcal');
+  renderEduHistoryMC();
 }
 
 function renderMcAlerts(){
@@ -3908,91 +3875,133 @@ function renderMcAlerts(){
 }
 
 function mcQuickLog(typeId){
-  switchMeetCalTab('log');
+  clearMeetingForm();
   document.getElementById('ml-date').value = new Date().toISOString().split('T')[0];
   document.getElementById('ml-type').value = typeId;
+  const modal = document.getElementById('mc-log-modal');
+  if(modal) modal.style.display = 'flex';
 }
 
 function renderMcOverview(){
-  // 통계 카드
-  let weekPending=0, monthPending=0, quarterPending=0;
+  // 통계 카드: 완료/전체
+  let weekDone=0, weekTotal=0, monthDone=0, monthTotal=0, quarterDone=0, quarterTotal=0;
   mcMasterItems.forEach(item=>{
     let range;
     if(item.id==='prod-monthly') range = getMcCurrentMonthRange();
     else range = getMcRangeForCycle(item.cycle);
     const done = getMcLogsInRange(item.id, range).length > 0;
-    if(!done){
-      if(item.cycle==='weekly' || (item.cycle==='prod' && item.id!=='prod-monthly')) weekPending++;
-      if(item.cycle==='monthly' || item.id==='prod-monthly') monthPending++;
-      if(item.cycle==='quarterly') quarterPending++;
-    }
+    if(item.cycle==='weekly' || (item.cycle==='prod' && item.id!=='prod-monthly')){ weekTotal++; if(done) weekDone++; }
+    if(item.cycle==='monthly' || item.id==='prod-monthly'){ monthTotal++; if(done) monthDone++; }
+    if(item.cycle==='quarterly'){ quarterTotal++; if(done) quarterDone++; }
   });
   const wEl = document.getElementById('mc-week-pending');
   const mEl = document.getElementById('mc-month-pending');
   const qEl = document.getElementById('mc-quarter-pending');
-  if(wEl) wEl.textContent = weekPending+'건';
-  if(mEl) mEl.textContent = monthPending+'건';
-  if(qEl) qEl.textContent = quarterPending+'건';
+  if(wEl) wEl.textContent = `${weekDone}/${weekTotal}`;
+  if(mEl) mEl.textContent = `${monthDone}/${monthTotal}`;
+  if(qEl) qEl.textContent = `${quarterDone}/${quarterTotal}`;
+}
 
-  // 마스터 카드
-  const cardsEl = document.getElementById('mc-master-cards');
-  if(cardsEl){
-    let html = '';
-    let lastCycle = '';
-    const groupColors = {weekly:'#1e5096', monthly:'#a16207', quarterly:'#166534', yearly:'#be185d', prod:'#475569'};
-    const groupBgs = {weekly:'#eef4ff', monthly:'#fffbeb', quarterly:'#f0fdf4', yearly:'#fdf2f8', prod:'#f8fafc'};
-    const groupLabels = {weekly:'📅 매주 (Weekly)', monthly:'📋 매월 (Monthly)', quarterly:'📊 매분기 (Quarterly)', yearly:'📆 매년 (Yearly)', prod:'🏭 생산실 미팅'};
+// 분기별 표 렌더
+function renderMcQuarterTable(){
+  const el = document.getElementById('mc-quarter-table');
+  if(!el) return;
 
-    mcMasterItems.forEach(item=>{
-      let range;
-      if(item.id==='prod-monthly') range = getMcCurrentMonthRange();
-      else range = getMcRangeForCycle(item.cycle);
-      const logs = getMcLogsInRange(item.id, range);
-      const done = logs.length > 0;
-      const lastLog = getMcLastLog(item.id);
-      const cycleLabel = item.id==='prod-monthly' ? '매월' : mcCycleLabels[item.cycle];
-      const cycleCss = item.id==='prod-monthly' ? 'mc-cycle-monthly' : mcCycleCss[item.cycle];
+  const year = new Date().getFullYear();
+  const currentMonth = new Date().getMonth();
+  const quarters = [
+    {label:'1분기 (1~3월)', months:[0,1,2]},
+    {label:'2분기 (4~6월)', months:[3,4,5]},
+    {label:'3분기 (7~9월)', months:[6,7,8]},
+    {label:'4분기 (10~12월)', months:[9,10,11]}
+  ];
+  const currentQ = Math.floor(currentMonth/3);
+  const monthNames = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
 
-      const groupKey = item.id==='prod-monthly' ? 'prod' : item.cycle;
-      if(groupKey !== lastCycle){
-        if(lastCycle) html += '</div>'; // close prev group
-        lastCycle = groupKey;
-        const gc = groupColors[groupKey]||'#6b7280';
-        const gb = groupBgs[groupKey]||'#f8fafc';
-        html += `<div class="mc-group">
-          <div class="mc-group-header" style="background:${gb};color:${gc};border-left:4px solid ${gc};">${groupLabels[groupKey]||groupKey}</div>`;
+  let html = '<div class="table-wrap"><table style="font-size:12px;">';
+  html += `<thead><tr style="background:#0d1f3c;color:#fff;">
+    <th style="padding:8px 10px;width:70px;">주기</th>
+    <th style="padding:8px 10px;">활동 내용</th>
+    <th style="padding:8px 10px;width:140px;">증빙 서류</th>`;
+  quarters.forEach((q,qi) => {
+    const isCurrent = qi===currentQ;
+    html += `<th style="padding:8px 6px;text-align:center;width:80px;${isCurrent?'background:#1e5096;':''}">${q.label.split(' ')[0]}</th>`;
+  });
+  html += `<th style="padding:8px 6px;text-align:center;width:70px;">최근</th></tr></thead><tbody>`;
+
+  const groupColors = {weekly:'#1e5096', monthly:'#a16207', quarterly:'#166534', yearly:'#be185d', prod:'#475569'};
+  const groupLabels = {weekly:'📅 매주', monthly:'📋 매월', quarterly:'📊 매분기', yearly:'📆 매년', prod:'🏭 생산실'};
+  let lastGroup = '';
+
+  mcMasterItems.forEach(item => {
+    const groupKey = item.id==='prod-monthly' ? 'prod' : item.cycle;
+    if(groupKey !== lastGroup){
+      lastGroup = groupKey;
+      const gc = groupColors[groupKey]||'#6b7280';
+      html += `<tr><td colspan="${3+quarters.length+1}" style="background:${gc}0d;font-weight:800;font-size:11px;color:${gc};padding:6px 10px;border-left:3px solid ${gc};">${groupLabels[groupKey]||groupKey}</td></tr>`;
+    }
+
+    const cycleLabel = item.id==='prod-monthly' ? '매월' : mcCycleLabels[item.cycle];
+    const cycleCss = item.id==='prod-monthly' ? 'mc-cycle-monthly' : mcCycleCss[item.cycle];
+    const lastLog = getMcLastLog(item.id);
+
+    html += `<tr>
+      <td><span class="mc-cycle-badge ${cycleCss}" style="font-size:10px;">${cycleLabel}</span></td>
+      <td style="font-weight:600;font-size:12px;">${item.name}${item.note ? `<div style="font-size:10px;color:#9ca3af;margin-top:1px;">${item.note}</div>` : ''}</td>
+      <td style="font-size:10.5px;color:#6b7280;">${item.evidence}</td>`;
+
+    quarters.forEach((q, qi) => {
+      const isCurrent = qi===currentQ;
+      let cellContent = '';
+
+      if(item.cycle==='weekly' || (item.cycle==='prod' && item.id!=='prod-monthly')){
+        // 주간: 해당 분기 내 시행 횟수
+        const qStart = `${year}-${String(q.months[0]+1).padStart(2,'0')}-01`;
+        const qEnd = new Date(year, q.months[2]+1, 0).toISOString().split('T')[0];
+        const count = DB.get('meetlog').filter(r=>r.type===item.id && r.date>=qStart && r.date<=qEnd).length;
+        cellContent = count > 0
+          ? `<span style="color:#16a34a;font-weight:700;">${count}회</span>`
+          : (qi<=currentQ ? `<span style="color:#dc2626;">-</span>` : `<span style="color:#d1d5db;">-</span>`);
+      } else if(item.cycle==='monthly' || item.id==='prod-monthly'){
+        // 월간: 3개월 각각 ●/○
+        const dots = q.months.map(m => {
+          const ms = String(m+1).padStart(2,'0');
+          const mStart = `${year}-${ms}-01`;
+          const mEnd = new Date(year, m+1, 0).toISOString().split('T')[0];
+          const done = DB.get('meetlog').filter(r=>r.type===item.id && r.date>=mStart && r.date<=mEnd).length > 0;
+          if(done) return `<span style="color:#16a34a;" title="${monthNames[m]} 완료">●</span>`;
+          if(m<=currentMonth) return `<span style="color:#dc2626;" title="${monthNames[m]} 미시행">○</span>`;
+          return `<span style="color:#d1d5db;" title="${monthNames[m]}">○</span>`;
+        });
+        cellContent = dots.join(' ');
+      } else if(item.cycle==='quarterly'){
+        const qStart = `${year}-${String(q.months[0]+1).padStart(2,'0')}-01`;
+        const qEnd = new Date(year, q.months[2]+1, 0).toISOString().split('T')[0];
+        const done = DB.get('meetlog').filter(r=>r.type===item.id && r.date>=qStart && r.date<=qEnd).length > 0;
+        if(done) cellContent = `<span style="color:#16a34a;font-weight:700;">● 완료</span>`;
+        else if(qi<=currentQ) cellContent = `<span style="color:#dc2626;font-weight:600;">○ 미시행</span>`;
+        else cellContent = `<span style="color:#d1d5db;">-</span>`;
+      } else if(item.cycle==='yearly'){
+        const yLogs = DB.get('meetlog').filter(r=>r.type===item.id && r.date>=`${year}-01-01` && r.date<=`${year}-12-31`);
+        if(qi===0){
+          cellContent = yLogs.length > 0
+            ? `<span style="color:#16a34a;font-weight:700;">● ${yLogs[0].date.slice(5)}</span>`
+            : `<span style="color:#dc2626;font-weight:600;">○ 미시행</span>`;
+        } else {
+          cellContent = yLogs.length > 0 ? '' : '';
+        }
       }
 
-      const statusHtml = done
-        ? `<div class="mc-status" style="color:#16a34a;">● 완료</div>`
-        : `<div class="mc-status" style="color:#dc2626;">○ 미시행</div>`;
-      const borderColor = done ? '#dcfce7' : '#fee2e2';
-      const leftBg = done ? '#f0fdf4' : '#fef2f2';
-
-      html += `<div class="mc-item-card" style="border-color:${borderColor};">
-        <div class="mc-item-left" style="background:${leftBg};">
-          <span class="mc-cycle-badge ${cycleCss}">${cycleLabel}</span>
-        </div>
-        <div class="mc-item-body">
-          <div class="mc-name">${item.name}</div>
-          <div class="mc-evidence">📄 ${item.evidence}</div>
-          ${item.note ? `<div class="mc-note">💡 ${item.note}</div>` : ''}
-        </div>
-        <div class="mc-item-right" style="background:${done?'#f0fdf4':'#fef2f2'};">
-          ${statusHtml}
-          <div class="mc-last">${lastLog ? lastLog.date : '기록 없음'}</div>
-          ${!done ? `<button class="btn btn-sm btn-primary" onclick="mcQuickLog('${item.id}')" style="font-size:10px;padding:3px 8px;margin-top:2px;">기록</button>` : ''}
-        </div>
-      </div>`;
+      html += `<td style="text-align:center;padding:6px 4px;${isCurrent?'background:#eef4ff;':''}">${cellContent}</td>`;
     });
-    if(lastCycle) html += '</div>'; // close last group
-    cardsEl.innerHTML = html;
-  }
 
-  // 다가오는 일정
-  renderMcUpcoming();
-  // 최근 기록
-  renderMcRecentLogs();
+    html += `<td style="text-align:center;font-size:10px;color:#6b7280;">${lastLog ? lastLog.date.slice(5) : '-'}</td></tr>`;
+  });
+
+  html += '</tbody></table></div>';
+
+  // 미시행 항목에 기록 버튼
+  el.innerHTML = html;
 }
 
 function renderMcUpcoming(){
@@ -4133,6 +4142,8 @@ function saveMeetingLog(){
 
   alert('✅ 기록이 저장되었습니다! (' + (mcTypeLabels[type]||type) + ')');
   clearMeetingForm();
+  const modal = document.getElementById('mc-log-modal');
+  if(modal) modal.style.display = 'none';
   renderMeetCal();
 }
 
