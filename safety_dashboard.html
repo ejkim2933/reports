@@ -210,7 +210,65 @@ table tr:hover td{background:#f8fafc;}
 .daily5-item .d5-link{font-size:11px;color:#1e5096;cursor:pointer;text-decoration:none;font-weight:600;white-space:nowrap;padding:4px 10px;border-radius:6px;background:#eef4ff;transition:all 0.2s;}
 .daily5-item .d5-link:hover{background:#1e5096;color:#fff;}
 /* PRINT */
-@media print{#sidebar,#topbar-print-hide{display:none!important;}#main{margin-left:0!important;}}
+@media print{
+  /* 기본: 사이드바·상단바·버튼 숨김 */
+  #sidebar,#topbar-print-hide,.hamburger,.sidebar-overlay{display:none!important;}
+  #main{margin-left:0!important;}
+  body{background:#fff!important;}
+  .content{padding:0!important;}
+  .section:not(.active){display:none!important;}
+  .btn,.btn-outline,.btn-success,.btn-primary,.btn-danger,.btn-sm,.patrol-print-btn{display:none!important;}
+
+  /* 패트롤 체크리스트가 열려있을 때: 체크리스트만 출력 */
+  .patrol-banners,
+  #patrol-view>div:first-child,
+  #patrol-view>div:nth-child(2),
+  #patrol-calendar,
+  #patrol-view>.card:last-child,
+  #tbm-view,
+  #p-issues,
+  #patrol-checklist-form div[style*="border-top"],
+  #patrol-checklist-form div[style*="justify-content"]{display:none!important;}
+
+  /* 체크리스트 카드 */
+  #patrol-checklist-form{display:block!important;}
+  #patrol-checklist-form>.card{
+    box-shadow:none!important;border:none!important;padding:0!important;margin:0!important;
+  }
+
+  /* 헤더 압축 */
+  #patrol-form-title{font-size:13px!important;}
+  #patrol-form-date{font-size:8px!important;}
+  #patrol-checklist-form .card>div:first-child{
+    padding-bottom:3px!important;margin-bottom:3px!important;border-bottom:2px solid #000!important;
+  }
+  #p-inspector{font-size:9px!important;width:60px!important;}
+  #p-weather{font-size:9px!important;}
+
+  /* 체크리스트 테이블: 극도로 압축 */
+  #patrol-checklist-form .table-wrap{overflow:visible!important;border:none!important;}
+  #patrol-check-table{font-size:7.5px!important;line-height:1.2!important;width:100%!important;border-collapse:collapse!important;}
+  #patrol-check-table thead{display:none!important;}
+  #patrol-check-table td{
+    padding:1.5px 3px!important;border:none!important;border-bottom:0.5px solid #ddd!important;
+  }
+  #patrol-check-table td:nth-child(3){width:20px!important;text-align:center!important;}
+  #patrol-check-table td:last-child{width:15%!important;font-size:7px!important;}
+  #patrol-check-table input[type="checkbox"]{
+    width:10px!important;height:10px!important;margin:0!important;
+    -webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;
+  }
+  #patrol-check-table input[type="text"]{font-size:7px!important;padding:1px 2px!important;}
+  /* 존 헤더 */
+  #patrol-check-table tr[style*="background:#f1f5f9"] td,
+  #patrol-check-table tr[style*="f1f5f9"] td{
+    background:#e8edf3!important;font-weight:800!important;font-size:8px!important;
+    padding:2px 3px!important;
+    -webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;
+  }
+
+  @page{size:A4 portrait;margin:5mm 7mm;}
+}
 @media(max-width:1200px){.dash-hero-stats{grid-template-columns:repeat(2,1fr);}}
 /* RESPONSIVE */
 @media(max-width:768px){#sidebar{transform:translateX(-100%);}#main{margin-left:0;}}
@@ -228,6 +286,47 @@ table tr:hover td{background:#f8fafc;}
   .esg-filter-btn{padding:6px 10px;}
   .esg-month-cell.esg-clickable{min-width:36px;min-height:36px;font-size:16px;}
   .esg-file-popup{width:220px;left:auto;right:-40px;}
+  /* Grid layouts: collapse to 1 column on mobile */
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr !important;}
+  .form-row,.form-row-3{grid-template-columns:1fr !important;}
+  /* Dashboard hero stats */
+  .dash-hero-stats{grid-template-columns:1fr !important;}
+  .dash-hero{padding:18px 16px;border-radius:12px;}
+  .dash-hero h3{font-size:15px;}
+  .dash-hero-stat .dhs-val{font-size:22px;}
+  /* Dashboard middle 3-col and bottom 2-col (inline grids with helper classes) */
+  .dash-mid-grid{grid-template-columns:1fr !important;}
+  .dash-bottom-grid{grid-template-columns:1fr !important;}
+  .dash-bottom-inner{grid-template-columns:1fr !important;}
+  /* Patrol banners: stack vertically */
+  .patrol-banners{grid-template-columns:1fr !important;}
+  /* Document manager grids */
+  .dm-stat-grid{grid-template-columns:repeat(2,1fr) !important;}
+  .dm-cat-grid{grid-template-columns:1fr !important;}
+  /* Signs color reference grid */
+  .signs-color-grid{grid-template-columns:repeat(2,1fr) !important;}
+  /* Tables: horizontal scroll */
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .table-wrap table{min-width:600px;}
+  /* Meetcal alert cards */
+  .mc-alert-card{flex-direction:row;flex-wrap:wrap;padding:12px 14px;font-size:12px;}
+  /* Meetcal year calendar grid (rendered via JS as 4 cols) */
+  #meetcal-year-grid > div{grid-template-columns:repeat(2,1fr) !important;}
+  /* Meetcal upcoming D-day items */
+  .mc-upcoming-item{flex-wrap:wrap;}
+  .mc-upcoming-dday{width:40px;height:40px;font-size:9px;}
+  /* Stat card values slightly smaller */
+  .stat-card .value{font-size:24px;}
+  /* Patrol print button: ensure tap target */
+  .patrol-banners a[href*="patrol_print"]{padding:6px 12px;font-size:12px;}
+}
+@media(max-width:480px){
+  .dm-stat-grid{grid-template-columns:1fr !important;}
+  #meetcal-year-grid > div{grid-template-columns:1fr !important;}
+  .signs-color-grid{grid-template-columns:1fr !important;}
+  .dash-hero-stat .dhs-val{font-size:20px;}
+  .stat-card .value{font-size:20px;}
+  .mc-year-month{padding:10px;}
 }
 /* NOTICE */
 .notice-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;}
@@ -413,7 +512,7 @@ table tr:hover td{background:#f8fafc;}
     </div>
 
     <!-- 중간 3컬럼: 나의 현황 / WWS 이행현황 / 캘린더 -->
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;">
+    <div class="dash-mid-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;">
       <!-- 나의 현황 -->
       <div class="dash-my-card">
         <h4>📋 나의 현황</h4>
@@ -435,8 +534,8 @@ table tr:hover td{background:#f8fafc;}
     </div>
 
     <!-- 하단 2컬럼: 최근 기록 / 공지·알림 -->
-    <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div class="dash-bottom-grid" style="display:grid;grid-template-columns:2fr 1fr;gap:16px;">
+      <div class="dash-bottom-inner" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
         <div class="card">
           <div class="card-title">🌅 최근 TBM 기록</div>
           <div id="recent-tbm"></div>
@@ -459,7 +558,7 @@ table tr:hover td{background:#f8fafc;}
   <div id="section-patrol" class="section">
 
     <!-- 두 개의 큰 배너 -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+    <div class="patrol-banners" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
       <!-- 패트롤 배너 -->
       <div onclick="showPatrolView('patrol')" style="background:linear-gradient(135deg,#0d1f3c,#1e5096);border-radius:16px;padding:28px 24px;color:#fff;cursor:pointer;transition:transform 0.15s;position:relative;overflow:hidden;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform=''">
         <div style="font-size:48px;margin-bottom:8px;">🔍</div>
@@ -506,9 +605,12 @@ table tr:hover td{background:#f8fafc;}
               <div style="font-size:18px;font-weight:900;color:#0d1f3c;" id="patrol-form-title">현장 패트롤 점검표</div>
               <div style="font-size:12px;color:#6b7280;margin-top:2px;" id="patrol-form-date"></div>
             </div>
-            <div style="text-align:right;font-size:11px;color:#6b7280;">
-              <div>점검자: <input type="text" id="p-inspector" placeholder="이름" style="border:none;border-bottom:1px solid #d1d5db;width:80px;font-size:11px;padding:2px 4px;"></div>
-              <div style="margin-top:4px;">날씨: <select id="p-weather" style="border:none;border-bottom:1px solid #d1d5db;font-size:11px;padding:2px;"><option>맑음</option><option>흐림</option><option>비</option><option>눈</option></select></div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <button class="btn btn-outline btn-sm patrol-print-btn" onclick="window.print()" style="white-space:nowrap;">🖨️ 이 점검표 인쇄</button>
+              <div style="text-align:right;font-size:11px;color:#6b7280;">
+                <div>점검자: <input type="text" id="p-inspector" placeholder="이름" style="border:none;border-bottom:1px solid #d1d5db;width:80px;font-size:11px;padding:2px 4px;"></div>
+                <div style="margin-top:4px;">날씨: <select id="p-weather" style="border:none;border-bottom:1px solid #d1d5db;font-size:11px;padding:2px;"><option>맑음</option><option>흐림</option><option>비</option><option>눈</option></select></div>
+              </div>
             </div>
           </div>
 
@@ -534,7 +636,6 @@ table tr:hover td{background:#f8fafc;}
           <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
             <button class="btn btn-outline" onclick="clearPatrol()">초기화</button>
             <button class="btn btn-success" onclick="savePatrolDay()">💾 점검 저장</button>
-            <a href="patrol_print.html" target="_blank" class="btn btn-outline" style="text-decoration:none;">🖨️ 인쇄용 점검표 (A4)</a>
           </div>
         </div>
       </div>
@@ -857,7 +958,7 @@ table tr:hover td{background:#f8fafc;}
   <div id="section-docmgr" class="section">
     <p style="font-size:13px;color:#6b7280;line-height:1.6;margin:0 0 16px;padding:0 4px;">서류 보유 상태를 관리합니다. 상태를 '보유'로 변경하고 메모란에 보관 위치(출력본, 공유폴더 등)를 기재해 주세요.</p>
     <!-- 상단: 보유현황 요약 카드 -->
-    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px;">
+    <div class="dm-stat-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px;">
       <div class="stat-card blue"><div class="label">전체 서류</div><div class="value" id="dm-total">0</div><div class="sub">건</div></div>
       <div class="stat-card green"><div class="label">보유</div><div class="value" id="dm-owned">0</div><div class="sub">건</div></div>
       <div class="stat-card red"><div class="label">미보유</div><div class="value" id="dm-missing">0</div><div class="sub">건 확보 필요</div></div>
@@ -868,7 +969,7 @@ table tr:hover td{background:#f8fafc;}
     <!-- 카테고리별 진행률 바 -->
     <div class="card" style="margin-bottom:16px;">
       <div class="card-title">📊 WWS 카테고리별 증빙 현황</div>
-      <div id="dm-category-bars" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;"></div>
+      <div id="dm-category-bars" class="dm-cat-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;"></div>
     </div>
 
     <!-- 필터 탭 -->
@@ -947,7 +1048,7 @@ table tr:hover td{background:#f8fafc;}
     </div>
     <div class="card">
       <div class="card-title">📖 안전표지 색상 기준 (ISO 45001 / KS S ISO 3864-1)</div>
-      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;">
+      <div class="signs-color-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;">
         <!-- 빨강: 원형 + 대각선 (금지) -->
         <div style="text-align:center;padding:16px 12px;background:#fee2e2;border-radius:8px;">
           <div style="width:56px;height:56px;margin:0 auto;border-radius:50%;border:5px solid #dc2626;position:relative;display:flex;align-items:center;justify-content:center;">
