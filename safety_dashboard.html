@@ -741,8 +741,31 @@ table tr:hover td{background:#f8fafc;}
 
     <div class="card">
       <div class="card-title">📅 ESG 연간 교육 계획 (2026년)</div>
-      <div class="alert info">전사 안전·보건·환경 관련 법적 의무 교육 항목을 통합 관리합니다. 월별 칸의 ●(시행완료) / ○(미시행) 으로 진행 현황을 확인하고, 일간 TBM·순회점검은 [패트롤+TBM] 메뉴에서 관리합니다.</div>
+      <div class="alert info">전사 안전·보건·환경 관련 법적 의무 교육 항목을 통합 관리합니다. 월별 칸의 ●(시행완료) / ○(미시행) 으로 진행 현황을 확인하고, 일간 TBM·순회점검은 [패트롤+TBM] 메뉴에서 관리합니다.<br>＋ <strong>기타 항목 추가</strong> 버튼으로 안전보건 선포식, 임명식 등 자체 행사를 등록할 수 있습니다 (사진·메모 첨부 가능).</div>
       <div id="esg-plan-meetcal"></div>
+    </div>
+
+    <!-- 기타 항목 추가 모달 -->
+    <div id="custom-esg-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)closeCustomESGModal()">
+      <div style="background:#fff;border-radius:16px;width:100%;max-width:520px;padding:24px;max-height:90vh;overflow-y:auto;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <div style="font-size:16px;font-weight:800;color:#0d1f3c;">＋ 기타 항목 추가</div>
+          <button onclick="closeCustomESGModal()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280;">✕</button>
+        </div>
+        <div style="font-size:12px;color:#6b7280;margin-bottom:14px;">예: 안전보건 선포식, 내부 안전관리자 임명식, 사내 안전캠페인 등</div>
+        <div class="form-group"><label>활동명 *</label><input type="text" id="ce-name" placeholder="예) 안전보건 선포식"></div>
+        <div class="form-row">
+          <div class="form-group"><label>대상</label><input type="text" id="ce-target" placeholder="예) 전체 직원"></div>
+          <div class="form-group"><label>주기</label><input type="text" id="ce-cycle" placeholder="예) 년1회, 부정기"></div>
+        </div>
+        <div class="form-group"><label>내용</label><input type="text" id="ce-eval" placeholder="예) 경영진 안전 선포 + 결의문 낭독"></div>
+        <div class="form-group"><label>담당자</label><input type="text" id="ce-manager" placeholder="예) 안전보건관리책임자"></div>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button class="btn btn-primary" onclick="saveCustomESG()" style="flex:1;">💾 저장</button>
+          <button class="btn btn-outline" onclick="closeCustomESGModal()">취소</button>
+        </div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:10px;line-height:1.5;">저장 후 표에서 월별 칸을 클릭해 시행완료 처리하고, 📎 버튼으로 사진·메모·증빙파일을 등록할 수 있습니다.</div>
+      </div>
     </div>
   </div>
 
@@ -2852,10 +2875,23 @@ function getESGMemos(){
 function setESGMemos(data){
   localStorage.setItem('safety_esg_memos', JSON.stringify(data));
 }
+// === 사용자 추가 ESG 항목 (기타 영역) ===
+function getCustomESG(){
+  try{ return JSON.parse(localStorage.getItem('safety_esg_custom')||'[]'); }catch(e){ return []; }
+}
+function setCustomESG(arr){
+  localStorage.setItem('safety_esg_custom', JSON.stringify(arr));
+}
+// 빌트인 + 커스텀 합쳐서 반환 (인덱스 안정성 위해 deleted 항목도 포함)
+function getAllESG(){
+  return esgData.concat(getCustomESG());
+}
+
 function isESGDone(idx, month){
   const saved = getESGDone();
   if(saved[idx] && saved[idx][month]) return true;
-  return esgData[idx].done[month] === 1;
+  const all = getAllESG();
+  return (all[idx] && all[idx].done && all[idx].done[month] === 1);
 }
 
 function renderESGPlan(containerId){
@@ -2866,9 +2902,10 @@ function renderESGPlan(containerId){
   const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
   const files = getESGFiles();
 
-  let filterHtml = `<div class="esg-filter-bar">
+  let filterHtml = `<div class="esg-filter-bar" style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">
     <button class="esg-filter-btn ${activeFilter==='all'?'active':''}" style="${activeFilter==='all'?'background:#0d1f3c;color:#fff;':''}" onclick="filterESG('${containerId}','all')">전체</button>
     ${cats.map(c=>`<button class="esg-filter-btn ${activeFilter===c?'active':''}" style="${activeFilter===c?'background:'+esgCatColors[c]+';color:#fff;border-color:'+esgCatColors[c]+';':''}" onclick="filterESG('${containerId}','${c}')">${c}</button>`).join('')}
+    <button class="esg-filter-btn" style="margin-left:auto;background:#16a34a;color:#fff;border-color:#16a34a;font-weight:700;" onclick="openCustomESGModal('${containerId}')">＋ 기타 항목 추가</button>
   </div>
   <div class="esg-scroll-hint">\u2190 좌우로 스크롤하여 전체 내용을 확인하세요 \u2192</div>`;
 
@@ -2890,10 +2927,11 @@ function renderESGPlan(containerId){
 
   let currentCat = '';
   let num = 0;
-  let filteredData = activeFilter==='all' ? esgData : esgData.filter(d=>d.cat===activeFilter);
+  const allData = getAllESG();
+  let filteredData = (activeFilter==='all' ? allData : allData.filter(d=>d.cat===activeFilter)).filter(d => !d.deleted);
 
   filteredData.forEach((item,idx)=>{
-    const globalIdx = esgData.indexOf(item);
+    const globalIdx = allData.indexOf(item);
     if(item.cat !== currentCat){
       currentCat = item.cat;
       const color = esgCatColors[currentCat]||'#6b7280';
@@ -2902,10 +2940,12 @@ function renderESGPlan(containerId){
     num++;
     const itemFiles = files[globalIdx] || [];
     const fileCount = itemFiles.length;
+    const deleteBtn = item.custom ? `<button onclick="event.stopPropagation();deleteCustomESG(${globalIdx},'${containerId}')" title="삭제" style="background:none;border:none;color:#dc2626;cursor:pointer;font-size:11px;margin-left:4px;padding:0;">🗑️</button>` : '';
+    const customBadge = item.custom ? `<span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:700;background:#16a34a22;color:#16a34a;margin-left:4px;vertical-align:middle;">사용자추가</span>` : '';
     tableHtml += `<tr>
       <td style="text-align:center;">${num}</td>
       ${isFiltered?'':`<td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600;background:${esgCatColors[item.cat]}22;color:${esgCatColors[item.cat]};">${item.cat}</span></td>`}
-      <td style="font-weight:600;">${item.name}${item.agency?`<div style="font-size:10px;color:#6b7280;font-weight:400;margin-top:2px;">${item.agency}</div>`:''}</td>
+      <td style="font-weight:600;">${item.name}${customBadge}${deleteBtn}${item.agency?`<div style="font-size:10px;color:#6b7280;font-weight:400;margin-top:2px;">${item.agency}</div>`:''}</td>
       <td>${item.target}</td>
       <td>${item.eval}${item.basis?`<div style="font-size:10px;color:#9ca3af;margin-top:2px;">${item.basis}</div>`:''}</td>
       <td style="text-align:center;white-space:nowrap;">${item.cycle}</td>
@@ -2974,6 +3014,60 @@ function filterESG(containerId, cat){
   renderESGPlan(containerId);
 }
 
+// === 사용자 추가 ESG 항목 모달 ===
+let _customESGContainerId = '';
+function openCustomESGModal(containerId){
+  _customESGContainerId = containerId || 'esg-plan-meetcal';
+  ['ce-name','ce-target','ce-eval','ce-cycle','ce-manager'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  const m = document.getElementById('custom-esg-modal');
+  if(m) m.style.display='flex';
+}
+function closeCustomESGModal(){
+  const m = document.getElementById('custom-esg-modal');
+  if(m) m.style.display='none';
+}
+function saveCustomESG(){
+  const name = document.getElementById('ce-name').value.trim();
+  if(!name){alert('항목명을 입력해주세요.'); return;}
+  const item = {
+    cat: '기타',
+    name,
+    target: document.getElementById('ce-target').value.trim() || '-',
+    eval: document.getElementById('ce-eval').value.trim() || '-',
+    basis: '',
+    cycle: document.getElementById('ce-cycle').value.trim() || '부정기',
+    manager: document.getElementById('ce-manager').value.trim() || '-',
+    agency: '',
+    plan: [0,0,0,0,0,0,0,0,0,0,0,0],
+    done: [0,0,0,0,0,0,0,0,0,0,0,0],
+    cost: '-',
+    custom: true,
+    createdAt: new Date().toISOString()
+  };
+  const list = getCustomESG();
+  list.push(item);
+  setCustomESG(list);
+  closeCustomESGModal();
+  ['esg-plan-meetcal','esg-plan-edu','esg-plan-schedule'].forEach(cid=>{
+    if(document.getElementById(cid)) renderESGPlan(cid);
+  });
+  alert('✅ 추가되었습니다. 월별 칸을 클릭해서 시행완료 처리하고, 📎 버튼으로 사진·메모를 등록할 수 있습니다.');
+}
+function deleteCustomESG(globalIdx, containerId){
+  if(globalIdx < esgData.length){ alert('기본 항목은 삭제할 수 없습니다.'); return; }
+  if(!confirm('이 항목을 삭제하시겠습니까?\n\n첨부파일/메모/시행기록도 함께 사라집니다.')) return;
+  const list = getCustomESG();
+  const customIdx = globalIdx - esgData.length;
+  if(customIdx < 0 || customIdx >= list.length) return;
+  list[customIdx].deleted = true; // 인덱스 안정성 위해 soft delete
+  setCustomESG(list);
+  ['esg-plan-meetcal','esg-plan-edu','esg-plan-schedule'].forEach(cid=>{
+    if(document.getElementById(cid)) renderESGPlan(cid);
+  });
+}
+
 function toggleESGFile(event, idx, containerId){
   event.stopPropagation();
   const popup = document.getElementById(`esg-fp-${containerId}-${idx}`);
@@ -3035,7 +3129,9 @@ function removeESGFile(idx, fileIdx, containerId){
 
 // === ESG Done toggle ===
 function toggleESGDone(idx, month, containerId){
-  const item = esgData[idx];
+  const all = getAllESG();
+  const item = all[idx];
+  if(!item) return;
   const currentlyDone = isESGDone(idx, month);
   const monthName = (month+1) + '월';
   const action = currentlyDone ? '미시행으로 되돌리' : '시행완료로 변경하';
@@ -3045,7 +3141,7 @@ function toggleESGDone(idx, month, containerId){
   if(!saved[idx]) saved[idx] = {};
   if(currentlyDone){
     saved[idx][month] = false;
-    if(esgData[idx].done[month] === 0) delete saved[idx][month];
+    if(item.done && item.done[month] === 0) delete saved[idx][month];
   } else {
     saved[idx][month] = true;
   }
@@ -3053,6 +3149,7 @@ function toggleESGDone(idx, month, containerId){
   setESGDone(saved);
   renderESGPlan('esg-plan-edu');
   renderESGPlan('esg-plan-schedule');
+  renderESGPlan('esg-plan-meetcal');
 }
 
 // === ESG File upload via Google Drive ===
@@ -3073,7 +3170,8 @@ function addESGFileUpload(idx, containerId, input){
   }
 
   // 구글 드라이브 업로드
-  const itemName = esgData[idx] ? esgData[idx].cat + '_' + esgData[idx].name : '';
+  const _allEsg = getAllESG();
+  const itemName = _allEsg[idx] ? _allEsg[idx].cat + '_' + _allEsg[idx].name : '';
   const btn = input.closest('.esg-file-popup').querySelector('.esg-upload-status');
   if(btn) btn.innerHTML = '<span style="color:#1e5096;">업로드 중...</span>';
 
