@@ -100,6 +100,35 @@ table tr:hover td{background:#f8fafc;}
 .tabs{display:flex;gap:4px;margin-bottom:16px;background:#f1f5f9;padding:4px;border-radius:8px;}
 .tab{padding:6px 14px;border-radius:6px;font-size:13px;cursor:pointer;border:none;background:none;color:#64748b;font-weight:500;transition:all 0.2s;}
 .tab.active{background:#fff;color:#0d1f3c;font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,0.1);}
+/* MEETCAL - 교육 & 운영 관리 */
+.mc-cycle-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;letter-spacing:0.02em;}
+.mc-cycle-weekly{background:#eef4ff;color:#1e5096;}
+.mc-cycle-monthly{background:#fef9c3;color:#a16207;}
+.mc-cycle-quarterly{background:#f0fdf4;color:#166534;}
+.mc-cycle-yearly{background:#fce7f3;color:#be185d;}
+.mc-cycle-prod{background:#f1f5f9;color:#475569;}
+.mc-status-done{color:#16a34a;font-weight:700;}
+.mc-status-pending{color:#dc2626;font-weight:700;}
+.mc-status-upcoming{color:#ea580c;font-weight:600;}
+.mc-alert-card{padding:14px 18px;border-radius:10px;margin-bottom:10px;display:flex;align-items:center;gap:12px;font-size:13px;line-height:1.5;}
+.mc-alert-card.urgent{background:#fef2f2;border-left:4px solid #dc2626;color:#991b1b;}
+.mc-alert-card.warn{background:#fffbeb;border-left:4px solid #f59e0b;color:#92400e;}
+.mc-alert-card.ok{background:#f0fdf4;border-left:4px solid #22c55e;color:#166534;}
+.mc-alert-card .mc-alert-icon{font-size:20px;flex-shrink:0;}
+.mc-year-month{background:#fff;border-radius:10px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,0.08);border:1px solid #e8edf3;}
+.mc-year-month h5{font-size:13px;font-weight:800;color:#0d1f3c;margin-bottom:10px;text-align:center;}
+.mc-year-item{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #f1f5f9;font-size:11px;}
+.mc-year-item:last-child{border-bottom:none;}
+.mc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.mc-dot.done{background:#16a34a;}
+.mc-dot.pending{background:#dc2626;}
+.mc-dot.future{background:#d1d5db;}
+.mc-upcoming-item{padding:10px 0;border-bottom:1px solid #f1f5f9;display:flex;align-items:flex-start;gap:10px;}
+.mc-upcoming-item:last-child{border-bottom:none;}
+.mc-upcoming-dday{flex-shrink:0;width:48px;height:48px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:700;line-height:1.3;}
+.mc-upcoming-dday.overdue{background:#fef2f2;color:#dc2626;}
+.mc-upcoming-dday.soon{background:#fffbeb;color:#ea580c;}
+.mc-upcoming-dday.ok{background:#f0fdf4;color:#16a34a;}
 /* PATROL ZONE - CARD GRID */
 .patrol-total{background:linear-gradient(135deg, #0d1f3c 0%, #1a3a6e 60%, #1e5096 100%);border-radius:14px;padding:22px 28px;color:#fff;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:20px;}
 .patrol-total h3{font-size:16px;font-weight:800;}
@@ -319,7 +348,7 @@ table tr:hover td{background:#f8fafc;}
     <div class="section-title">일일관리</div>
     <a onclick="showSection('patrol')"><span class="icon">🔍</span> 패트롤+TBM 통합</a>
     <div class="section-title">교육·평가</div>
-    <a onclick="showSection('education')"><span class="icon">📚</span> 교육 관리</a>
+    <a onclick="showSection('meetcal')"><span class="icon">📅</span> 교육 & 운영 관리</a>
     <a onclick="showSection('risk')"><span class="icon">⚠️</span> 위험성 평가</a>
     <div class="section-title">기록·서류</div>
     <a onclick="showSection('docmgr')"><span class="icon">📋</span> 서류·이행 통합관리</a>
@@ -596,6 +625,173 @@ table tr:hover td{background:#f8fafc;}
     </div>
   </div>
 
+  <!-- ===== 교육·미팅 캘린더 ===== -->
+  <div id="section-meetcal" class="section">
+
+    <!-- 상단 알림 배너: 이번 주/이번 달 해야 할 것 -->
+    <div id="meetcal-alerts" style="margin-bottom:16px;"></div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchMeetCalTab('overview')">📋 현황판</button>
+      <button class="tab" onclick="switchMeetCalTab('calendar')">📅 연간 캘린더</button>
+      <button class="tab" onclick="switchMeetCalTab('eduplan')">📚 교육 계획·이력</button>
+      <button class="tab" onclick="switchMeetCalTab('log')">📝 기록 입력</button>
+      <button class="tab" onclick="switchMeetCalTab('history')">📜 이력 조회</button>
+    </div>
+
+    <!-- 현황판 탭 -->
+    <div id="meetcal-tab-overview">
+      <!-- 주간/월간/분기 진행률 카드 -->
+      <div class="grid-3" style="margin-bottom:16px;">
+        <div class="stat-card blue"><div class="label">이번 주 미완료</div><div class="value" id="mc-week-pending">-</div><div class="sub">주간 항목</div></div>
+        <div class="stat-card orange"><div class="label">이번 달 미완료</div><div class="value" id="mc-month-pending">-</div><div class="sub">월간 항목</div></div>
+        <div class="stat-card green"><div class="label">이번 분기 미완료</div><div class="value" id="mc-quarter-pending">-</div><div class="sub">분기 항목</div></div>
+      </div>
+
+      <!-- 법정 의무 미팅·교육 전체 목록 -->
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">📋 주기별 미팅·교육 관리 현황</div>
+        <div class="alert info" style="margin-bottom:12px;">일간 TBM·순회점검은 [패트롤+TBM] 메뉴에서 일지로 관리합니다. 아래는 주간~연간 반복 항목입니다.</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr style="background:#0d1f3c;color:#fff;">
+                <th style="width:80px;">주기</th>
+                <th>활동 내용</th>
+                <th>증빙 서류</th>
+                <th style="width:160px;">비고</th>
+                <th style="width:100px;text-align:center;">이번 주기 현황</th>
+                <th style="width:80px;text-align:center;">최근 시행</th>
+              </tr>
+            </thead>
+            <tbody id="mc-master-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 하단 2컬럼: 다가오는 일정 / 최근 기록 -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">🔔 다가오는 일정 (사전 알림)</div>
+          <div id="mc-upcoming"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">📜 최근 미팅·교육 기록</div>
+          <div id="mc-recent-logs"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 교육 계획·이력 탭 (기존 교육 관리 통합) -->
+    <div id="meetcal-tab-eduplan" style="display:none;">
+      <div class="grid-2" style="gap:16px;margin-bottom:16px;">
+        <div class="card">
+          <div class="card-title">📅 ESG 연간 교육 계획 (2026년)</div>
+          <div class="alert info">전사 안전·보건·환경 관련 법적 의무 교육 항목을 통합 관리합니다.</div>
+          <div id="esg-plan-meetcal"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">📜 교육 시행 이력</div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>교육일자</th><th>교육종류</th><th>시간</th><th>방법</th><th>강사</th><th>참석인원</th><th>작업</th></tr></thead>
+            <tbody id="edu-history-body-mc"></tbody>
+          </table></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 연간 캘린더 탭 -->
+    <div id="meetcal-tab-calendar" style="display:none;">
+      <div class="alert info" style="margin-bottom:16px;">
+        월별 교육·미팅 일정과 시행 현황을 한눈에 확인합니다. <span style="color:#16a34a;font-weight:700;">●</span> 시행완료 &nbsp; <span style="color:#dc2626;font-weight:700;">○</span> 미시행
+      </div>
+      <div id="meetcal-year-grid"></div>
+    </div>
+
+    <!-- 기록 입력 탭 -->
+    <div id="meetcal-tab-log" style="display:none;">
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">📝 미팅·교육 시행 기록</div>
+        <div class="form-row-3">
+          <div class="form-group"><label>시행 일자</label><input type="date" id="ml-date"></div>
+          <div class="form-group"><label>활동 구분</label>
+            <select id="ml-type">
+              <option value="">-- 선택 --</option>
+              <optgroup label="── 매주 (Weekly) ──">
+                <option value="weekly-env">환경운영점검표 (ISO14001)</option>
+              </optgroup>
+              <optgroup label="── 매월 (Monthly) ──">
+                <option value="monthly-committee">산업안전보건위원회</option>
+                <option value="monthly-contractor">도급인·수급인 협의체</option>
+              </optgroup>
+              <optgroup label="── 매분기 (Quarterly) ──">
+                <option value="quarterly-edu">정기 안전보건교육</option>
+                <option value="quarterly-joint">합동 안전점검</option>
+              </optgroup>
+              <optgroup label="── 매년 (Yearly) ──">
+                <option value="yearly-risk">위험성평가 (수시/정기)</option>
+                <option value="yearly-manager-edu">관리감독자 교육</option>
+              </optgroup>
+              <optgroup label="── 생산실 미팅 ──">
+                <option value="prod-weekly">생산실 주간 미팅</option>
+                <option value="prod-monthly">생산실 월간 미팅</option>
+              </optgroup>
+              <optgroup label="── 기타 ──">
+                <option value="other">기타</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="form-group"><label>참석 인원</label><input type="number" id="ml-count" placeholder="명"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>진행자 / 강사</label><input type="text" id="ml-leader" placeholder="진행자명"></div>
+          <div class="form-group"><label>장소</label><input type="text" id="ml-place" placeholder="예: 생산실, 회의실, 외부교육"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>교육/미팅 시간</label><input type="text" id="ml-hours" placeholder="예: 2시간, 30분"></div>
+          <div class="form-group"><label>증빙 서류</label><input type="text" id="ml-evidence" placeholder="예: 회의록, 출석부, 사진 등"></div>
+        </div>
+        <div class="form-group"><label>주요 내용 / 결정사항</label><textarea id="ml-memo" placeholder="회의 내용, 결정사항, 조치사항 등을 기록합니다."></textarea></div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-primary" onclick="saveMeetingLog()">💾 기록 저장</button>
+          <button class="btn btn-outline" onclick="clearMeetingForm()">🔄 초기화</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 이력 조회 탭 -->
+    <div id="meetcal-tab-history" style="display:none;">
+      <div class="card">
+        <div class="card-title">📜 미팅·교육 전체 이력</div>
+        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+          <select id="ml-filter-type" onchange="renderMeetingHistory()" style="padding:6px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:12px;">
+            <option value="all">전체 구분</option>
+            <option value="weekly-env">환경운영점검표</option>
+            <option value="monthly-committee">산업안전보건위원회</option>
+            <option value="monthly-contractor">도급인·수급인 협의체</option>
+            <option value="quarterly-edu">정기 안전보건교육</option>
+            <option value="quarterly-joint">합동 안전점검</option>
+            <option value="yearly-risk">위험성평가</option>
+            <option value="yearly-manager-edu">관리감독자 교육</option>
+            <option value="prod-weekly">생산실 주간 미팅</option>
+            <option value="prod-monthly">생산실 월간 미팅</option>
+          </select>
+          <select id="ml-filter-month" onchange="renderMeetingHistory()" style="padding:6px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:12px;">
+            <option value="all">전체 월</option>
+            <option value="01">1월</option><option value="02">2월</option><option value="03">3월</option>
+            <option value="04">4월</option><option value="05">5월</option><option value="06">6월</option>
+            <option value="07">7월</option><option value="08">8월</option><option value="09">9월</option>
+            <option value="10">10월</option><option value="11">11월</option><option value="12">12월</option>
+          </select>
+        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>일자</th><th>구분</th><th>진행자</th><th>장소</th><th>시간</th><th>참석</th><th>증빙</th><th>내용</th><th style="width:50px;">삭제</th></tr></thead>
+          <tbody id="meeting-log-body"></tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== 위험성 평가 (PDF 업로드 관리) ===== -->
   <div id="section-risk" class="section">
     <div class="card" style="margin-bottom:16px;">
@@ -681,8 +877,6 @@ table tr:hover td{background:#f8fafc;}
         <button class="tab" onclick="dmFilter('owned',this)">✅ 보유만</button>
         <button class="tab" onclick="dmFilter('wws',this)">🏢 WWS 이행항목</button>
         <button class="tab" onclick="dmFilter('legal',this)">⚖️ 법정 필수</button>
-        <button class="tab" onclick="dmFilter('mergeable',this)">🔗 통합 가능</button>
-        <button class="tab" onclick="dmFilter('has-sample',this)">📎 예시파일 보유</button>
       </div>
     </div>
 
@@ -692,22 +886,18 @@ table tr:hover td{background:#f8fafc;}
       <div class="table-wrap">
         <table>
           <thead><tr>
-            <th style="width:6%;">코드</th>
-            <th style="width:19%;">서류명</th>
-            <th style="width:14%;">법적근거 / 비고</th>
-            <th style="width:5%;">주기</th>
-            <th style="width:8%;">상태</th>
-            <th style="width:20%;">필수 기재항목 / 예시파일</th>
-            <th style="width:18%;">파일</th>
-            <th style="width:4%;"></th>
+            <th style="width:7%;">코드</th>
+            <th style="width:22%;">서류명</th>
+            <th style="width:18%;">법적근거 / 비고</th>
+            <th style="width:6%;">주기</th>
+            <th style="width:10%;">상태</th>
+            <th style="width:22%;">파일</th>
+            <th style="width:5%;"></th>
           </tr></thead>
           <tbody id="dm-table-body"></tbody>
         </table>
       </div>
     </div>
-
-    <!-- 통합 가이드 -->
-    <div id="dm-merge-info"></div>
 
     <!-- 하단: 미보유 항목 안내 -->
     <div style="margin-top:16px;">
@@ -947,7 +1137,7 @@ const DB = {
 // ============================================================
 const pageTitles = {
   dashboard:'📊 대시보드', docmgr:'📋 서류·이행 통합관리', patrol:'🔍 패트롤+TBM 통합 체크리스트',
-  education:'📚 교육 관리', risk:'⚠️ 위험성 평가',
+  education:'📚 교육 관리', meetcal:'📅 교육 & 운영 관리', risk:'⚠️ 위험성 평가',
   accident:'🚨 아차사고 (카톡방)', schedule:'📅 연간 일정',
   signs:'🪧 안전 비표 관리', cardnews:'📢 카드뉴스 시리즈', posters:'🖼️ 게시판 포스터', settings:'⚙️ 설정'
 };
@@ -965,7 +1155,8 @@ function showSection(id){
   if(id==='dashboard') renderDashboard();
   if(id==='docmgr') renderDocMgr();
   if(id==='schedule') renderSchedule();
-  if(id==='education') renderESGPlan('esg-plan-edu');
+  if(id==='education') { renderESGPlan('esg-plan-edu'); }
+  if(id==='meetcal') renderMeetCal();
   if(id==='patrol') { showPatrolView('home'); }
   if(id==='signs') renderSigns();
   if(id==='risk') renderRiskStatus();
@@ -1835,9 +2026,11 @@ function renderDashboard(){
   document.getElementById('stat-tbm').textContent = todayTBM ? '✅' : '❌';
   document.getElementById('stat-tbm-sub').textContent = todayTBM ? `${todayTBM.leader} 완료` : '미기록';
 
-  // Education
+  // Education + MeetLog
   const eduData = DB.get('education').filter(r=>r.date&&r.date.startsWith(thisMonth));
-  document.getElementById('stat-edu').textContent = eduData.length;
+  const meetLogData = DB.get('meetlog').filter(r=>r.date&&r.date.startsWith(thisMonth));
+  document.getElementById('stat-edu').textContent = eduData.length + meetLogData.length;
+  document.getElementById('stat-edu-sub').textContent = (eduData.length + meetLogData.length) > 0 ? '회 실시' : '미시행';
 
   // Patrol
   const patrolData = DB.get('patrol').filter(r=>r.date&&r.date.startsWith(thisMonth));
@@ -2031,6 +2224,10 @@ function renderDashNotices(){
   if(missingDocs>0) notices.push({icon:'📋', text:`미보유 서류 ${missingDocs}건 — 확보 필요`});
   const wwsMissing = docs.filter(d=>d.wwsCode && d.status==='미보유').length;
   if(wwsMissing>0) notices.push({icon:'🏢', text:`WWS 미이행 항목 ${wwsMissing}건`});
+  // 교육&운영 관리 알림 통합
+  const mcAlerts = getMcAlerts();
+  mcAlerts.filter(a=>a.level==='urgent').forEach(a=>notices.push({icon:'🔴', text:a.text}));
+  mcAlerts.filter(a=>a.level==='warn').slice(0,3).forEach(a=>notices.push({icon:'🟡', text:a.text}));
   if(notices.length===0) notices.push({icon:'✅', text:'현재 특별한 알림이 없습니다.'});
   el.innerHTML = notices.map(n=>`<div class="dash-notice-item"><span>${n.icon}</span><span>${n.text}</span></div>`).join('');
 }
@@ -2070,72 +2267,72 @@ function renderRecentPatrol(){
 // ============================================================
 const docMasterList = [
   // === A. 경영책임자 리더십 (중처법 제4조 제4호 등) ===
-  {id:'d01', wwsCode:'', wwsNo:'', name:'안전보건관리규정', basis:'산안법 §25', period:'상시', status:'미보유', updated:'', expires:'', note:'50인 이상 의무, 50인 미만 권고', category:'legal', hasTemplate:false, localFile:'', requiredItems:'목적, 안전보건 조직, 교육, 점검, 보호구, 사고조사 등 (산안법 시행규칙 별표2)', localSample:'산업안전보건관리규정(202301).docx', mergeGroup:''},
-  {id:'d02', wwsCode:'A-2-1', wwsNo:302, name:'안전보건관리계획서', basis:'산안법 §14', period:'연1회', status:'미보유', updated:'', expires:'', note:'WWS: 안전보건관리체계의 수립 및 운영', category:'wws', hasTemplate:false, localFile:'', requiredItems:'안전보건방침, 조직, 예산, 시설, 교육, 비상조치 계획', localSample:'04. 체계구축(안전보건관리계획(노).docx', mergeGroup:''},
-  {id:'d04', wwsCode:'A-2-4', wwsNo:305, name:'안전보건목표·경영방침', basis:'산안법 §14', period:'연1회', status:'미보유', updated:'', expires:'', note:'WWS: 기업 안전보건관리 실행 통합 확인', category:'wws', hasTemplate:false, localFile:'', requiredItems:'경영방침 선언문, 연간 목표, 세부 실행계획', localSample:'', mergeGroup:''},
-  {id:'w01', wwsCode:'A-1-1', wwsNo:301, name:'경영책임자 안전보건교육 이수증', basis:'산안법 §14', period:'연1회', status:'미보유', updated:'', expires:'', note:'경영책임자 교육 참석사진·교육서류', category:'wws', hasTemplate:false, localFile:'', requiredItems:'교육기관명, 이수일, 이수시간, 교육내용', localSample:'', mergeGroup:''},
-  {id:'w02', wwsCode:'A-3-1', wwsNo:306, name:'안전보건 담당자 배치 현황 (인사발령문)', basis:'산안법 §15', period:'상시', status:'미보유', updated:'', expires:'', note:'조직도/인사발령문', category:'wws', hasTemplate:false, localFile:'', requiredItems:'인사발령문, 직무기술서, 자격요건', localSample:'', mergeGroup:''},
-  {id:'w30', wwsCode:'A-3-1~3', wwsNo:307, name:'안전보건목표 달성 예산 편성·집행 실적', basis:'중처법 §4④', period:'연1회', status:'미보유', updated:'', expires:'', note:'예산서, 결산서, 집행 영수증 필요', category:'wws', hasTemplate:false, localFile:'', requiredItems:'예산 편성서, 집행 내역서, 영수증', localSample:'', mergeGroup:''},
+  {id:'d01', wwsCode:'', wwsNo:'', name:'안전보건관리규정', basis:'산안법 §25', period:'상시', status:'미보유', updated:'', expires:'', note:'50인 이상 의무, 50인 미만 권고', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d02', wwsCode:'A-2-1', wwsNo:302, name:'안전보건관리계획서', basis:'산안법 §14', period:'연1회', status:'미보유', updated:'', expires:'', note:'WWS: 안전보건관리체계의 수립 및 운영', category:'wws', hasTemplate:false, localFile:''},
+  {id:'d04', wwsCode:'A-2-4', wwsNo:305, name:'안전보건목표·경영방침', basis:'산안법 §14', period:'연1회', status:'미보유', updated:'', expires:'', note:'WWS: 기업 안전보건관리 실행 통합 확인', category:'wws', hasTemplate:false, localFile:''},
+  {id:'w01', wwsCode:'A-1-1', wwsNo:301, name:'경영책임자 안전보건교육 이수증', basis:'산안법 §14', period:'연1회', status:'미보유', updated:'', expires:'', note:'경영책임자 교육 참석사진·교육서류', category:'wws', hasTemplate:false, localFile:''},
+  {id:'w02', wwsCode:'A-3-1', wwsNo:306, name:'안전보건 담당자 배치 현황 (인사발령문)', basis:'산안법 §15', period:'상시', status:'미보유', updated:'', expires:'', note:'조직도/인사발령문', category:'wws', hasTemplate:false, localFile:''},
+  {id:'w30', wwsCode:'A-3-1~3', wwsNo:307, name:'안전보건목표 달성 예산 편성·집행 실적', basis:'중처법 §4④', period:'연1회', status:'미보유', updated:'', expires:'', note:'예산서, 결산서, 집행 영수증 필요', category:'wws', hasTemplate:false, localFile:''},
 
   // === B. 안전보건 교육 (중처법 제5조 제2항 등) ===
-  {id:'d10', wwsCode:'B-2-1', wwsNo:313, name:'연간 근로자 안전보건교육 계획서', basis:'산안법 §29', period:'연1회', status:'미보유', updated:'', expires:'', note:'WWS: 연간 일정표 포함', category:'wws', hasTemplate:false, localFile:'', requiredItems:'교육종류별 일정, 대상, 시간, 강사, 장소', localSample:'', mergeGroup:''},
-  {id:'d05', wwsCode:'B-2-2', wwsNo:314, name:'근로자 정기 안전보건교육 실시 증빙', basis:'산안법 §29', period:'매월', status:'미보유', updated:'', expires:'', note:'참석자 명단, 사진, 교육 자료 필요. 월 2시간 법정', category:'wws', hasTemplate:false, localFile:'', requiredItems:'교육일시, 종류, 내용, 강사, 참석자 서명, 사진', localSample:'', mergeGroup:'edu-record'},
-  {id:'w03', wwsCode:'B-2-5', wwsNo:317, name:'교육 미이수자/누락자 관리 현황 및 추가 교육 기록', basis:'산안법 §29', period:'상시', status:'미보유', updated:'', expires:'', note:'연 24시간 이상 누적 관리', category:'wws', hasTemplate:false, localFile:'', requiredItems:'미이수자 명단, 사유, 추가교육 일정', localSample:'', mergeGroup:'edu-record'},
-  {id:'d08', wwsCode:'B-3-3', wwsNo:320, name:'관리감독자 정기 안전보건교육 이수증', basis:'산안법 §29', period:'연16시간', status:'미보유', updated:'', expires:'', note:'연간 16시간 이상 이수 필요', category:'wws', hasTemplate:false, localFile:'', requiredItems:'교육기관명, 이수일, 이수시간 (연 16시간 이상)', localSample:'', mergeGroup:''},
-  {id:'w04', wwsCode:'B-3-4', wwsNo:321, name:'안전보건 업무 담당자 교육 이수 및 누락자 관리 대장', basis:'산안법 §32', period:'2년마다', status:'미보유', updated:'', expires:'', note:'신규 34시간, 보수 24시간', category:'wws', hasTemplate:false, localFile:'', requiredItems:'담당자명, 이수일, 이수시간 (신규34h/보수24h), 누락사유', localSample:'', mergeGroup:''},
-  {id:'d06', wwsCode:'', wwsNo:'', name:'신규채용자 교육 일지', basis:'산안법 §29', period:'채용시', status:'미보유', updated:'', expires:'', note:'교안 보유', category:'legal', hasTemplate:false, localFile:'', requiredItems:'교육일시, 교육내용(8시간), 강사, 참석자 서명', localSample:'신규입사자 안전보건교안.pptx', mergeGroup:''},
-  {id:'d07', wwsCode:'', wwsNo:'', name:'신규채용자 서약서', basis:'자율관리', period:'채용시', status:'미보유', updated:'', expires:'', note:'', category:'self', hasTemplate:false, localFile:'', requiredItems:'서약 내용, 서약자 서명, 날짜', localSample:'신규채용자 서약서.docx', mergeGroup:''},
-  {id:'d09', wwsCode:'', wwsNo:'', name:'특별 안전보건교육 일지', basis:'산안법 §29', period:'해당작업 전', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:'', requiredItems:'교육일시, 대상작업, 교육내용(16시간), 강사, 참석자 서명', localSample:'', mergeGroup:''},
+  {id:'d10', wwsCode:'B-2-1', wwsNo:313, name:'연간 근로자 안전보건교육 계획서', basis:'산안법 §29', period:'연1회', status:'미보유', updated:'', expires:'', note:'WWS: 연간 일정표 포함', category:'wws', hasTemplate:false, localFile:''},
+  {id:'d05', wwsCode:'B-2-2', wwsNo:314, name:'근로자 정기 안전보건교육 실시 증빙', basis:'산안법 §29', period:'매월', status:'미보유', updated:'', expires:'', note:'참석자 명단, 사진, 교육 자료 필요. 월 2시간 법정', category:'wws', hasTemplate:false, localFile:''},
+  {id:'w03', wwsCode:'B-2-5', wwsNo:317, name:'교육 미이수자/누락자 관리 현황 및 추가 교육 기록', basis:'산안법 §29', period:'상시', status:'미보유', updated:'', expires:'', note:'연 24시간 이상 누적 관리', category:'wws', hasTemplate:false, localFile:''},
+  {id:'d08', wwsCode:'B-3-3', wwsNo:320, name:'관리감독자 정기 안전보건교육 이수증', basis:'산안법 §29', period:'연16시간', status:'미보유', updated:'', expires:'', note:'연간 16시간 이상 이수 필요', category:'wws', hasTemplate:false, localFile:''},
+  {id:'w04', wwsCode:'B-3-4', wwsNo:321, name:'안전보건 업무 담당자 교육 이수 및 누락자 관리 대장', basis:'산안법 §32', period:'2년마다', status:'미보유', updated:'', expires:'', note:'신규 34시간, 보수 24시간', category:'wws', hasTemplate:false, localFile:''},
+  {id:'d06', wwsCode:'', wwsNo:'', name:'신규채용자 교육 일지', basis:'산안법 §29', period:'채용시', status:'미보유', updated:'', expires:'', note:'교안 보유', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d07', wwsCode:'', wwsNo:'', name:'신규채용자 서약서', basis:'자율관리', period:'채용시', status:'미보유', updated:'', expires:'', note:'', category:'self', hasTemplate:false, localFile:''},
+  {id:'d09', wwsCode:'', wwsNo:'', name:'특별 안전보건교육 일지', basis:'산안법 §29', period:'해당작업 전', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:''},
 
   // === C. 근로자 참여활동 (중처법 제4조 제3호, 제7호 등) ===
-  {id:'d03', wwsCode:'C-1-3', wwsNo:324, name:'위험성평가 결과 공유 및 유해·위험요인 알림 기록', basis:'산안법 §36', period:'연1회 이상', status:'미보유', updated:'', expires:'', note:'게시판 공고, 회의록 등 필요', category:'wws', hasTemplate:false, localFile:'', requiredItems:'평가결과 요약, 공유방법(게시/회의), 공유일, 확인서명', localSample:'', mergeGroup:'risk-report'},
-  {id:'w05', wwsCode:'C-2-3', wwsNo:326, name:'TBM(Tool Box Meeting) 활동 이행 일지', basis:'산안법 §36', period:'매일', status:'미보유', updated:'', expires:'', note:'TBM절차서 Rev.0 보유. 대시보드 TBM 기록 활용', category:'wws', hasTemplate:false, localFile:'', requiredItems:'일시, 장소, 리더, 참석자, 작업내용, 위험요인, 대책', localSample:'TBM.docx / TBM절차서 샘플.docx', mergeGroup:'tbm'},
+  {id:'d03', wwsCode:'C-1-3', wwsNo:324, name:'위험성평가 결과 공유 및 유해·위험요인 알림 기록', basis:'산안법 §36', period:'연1회 이상', status:'미보유', updated:'', expires:'', note:'게시판 공고, 회의록 등 필요', category:'wws', hasTemplate:false, localFile:''},
+  {id:'w05', wwsCode:'C-2-3', wwsNo:326, name:'TBM(Tool Box Meeting) 활동 이행 일지', basis:'산안법 §36', period:'매일', status:'미보유', updated:'', expires:'', note:'TBM절차서 Rev.0 보유. 대시보드 TBM 기록 활용', category:'wws', hasTemplate:false, localFile:''},
 
   // === D. 관리감독자 안전보건관리 (중처법 제4조 제5호 등) ===
-  {id:'d12', wwsCode:'D-1-2', wwsNo:332, name:'관리감독자 권한 부여 및 업무분장 문서', basis:'산안법 §16', period:'상시', status:'미보유', updated:'', expires:'', note:'조직도, 직무기술서 필요', category:'wws', hasTemplate:false, localFile:'', requiredItems:'직위, 성명, 권한범위, 업무분장 내용', localSample:'', mergeGroup:''},
-  {id:'w06', wwsCode:'D-2-3', wwsNo:336, name:'관리감독자별 TBM 교육 수행 및 점검 기록', basis:'산안법 §16', period:'매일', status:'미보유', updated:'', expires:'', note:'대시보드 TBM 기록 활용', category:'wws', hasTemplate:false, localFile:'', requiredItems:'관리감독자명, TBM 수행일, 점검 결과', localSample:'', mergeGroup:'tbm'},
+  {id:'d12', wwsCode:'D-1-2', wwsNo:332, name:'관리감독자 권한 부여 및 업무분장 문서', basis:'산안법 §16', period:'상시', status:'미보유', updated:'', expires:'', note:'조직도, 직무기술서 필요', category:'wws', hasTemplate:false, localFile:''},
+  {id:'w06', wwsCode:'D-2-3', wwsNo:336, name:'관리감독자별 TBM 교육 수행 및 점검 기록', basis:'산안법 §16', period:'매일', status:'미보유', updated:'', expires:'', note:'대시보드 TBM 기록 활용', category:'wws', hasTemplate:false, localFile:''},
 
   // === E. 고위험요인(SIF) 중심 위험성평가 (중처법 제4조 제3호, 제9호 등) ===
-  {id:'d14', wwsCode:'E-4-1', wwsNo:341, name:'구매/용역/도급 계약 시 안전보건 조건 및 내역 파악 문서', basis:'산안법 §63', period:'계약시', status:'미보유', updated:'', expires:'', note:'도급인 안전보건관리계획서 보유', category:'wws', hasTemplate:false, localFile:'', requiredItems:'안전보건 조건, 위험정보, 안전조치 사항', localSample:'0. 도급인 안전보건관리계획.docx', mergeGroup:'subcon-contract'},
-  {id:'d15', wwsCode:'E-4-2', wwsNo:342, name:'도급업무(외주)에 대한 위험성 파악 및 평가서', basis:'산안법 §64', period:'계약시', status:'미보유', updated:'', expires:'', note:'수급인 안전보건계획서 양식 보유', category:'wws', hasTemplate:false, localFile:'', requiredItems:'작업내용, 위험요인, 안전대책, 인력·장비 현황', localSample:'2. 수급인 제출 안전보건관리계획서(양식).docx', mergeGroup:''},
-  {id:'w07', wwsCode:'E-4-3~4', wwsNo:343, name:'위험성평가 결과 제공 및 수급인(협력사) 위험성평가 검토서', basis:'산안법 §36', period:'수시', status:'미보유', updated:'', expires:'', note:'위험성평가 미실시', category:'wws', hasTemplate:false, localFile:'', requiredItems:'원청 위험성평가 결과, 수급인 평가 검토 의견', localSample:'', mergeGroup:''},
-  {id:'w31', wwsCode:'E-5-3', wwsNo:344, name:'도급작업 시 주의사항 및 안전보건 정보제공 기록', basis:'산안법 §64', period:'계약시', status:'미보유', updated:'', expires:'', note:'안전보건협의체 회의록 등 필요', category:'wws', hasTemplate:false, localFile:'', requiredItems:'유해위험물질 정보, 작업 시 주의사항, 전달일·수령자 서명', localSample:'', mergeGroup:'subcon-contract'},
-  {id:'d16', wwsCode:'E-5-5', wwsNo:345, name:'도급받은 자(협력사)의 안전보건활동 점검 기록', basis:'산안법 §64', period:'연1회', status:'미보유', updated:'', expires:'', note:'수급인 안전보건수준 평가기준 양식 보유', category:'wws', hasTemplate:false, localFile:'', requiredItems:'점검일, 점검항목, 점검결과, 시정조치', localSample:'1. 수급인 안전보건관리수준 평가 기준(양식).docx', mergeGroup:''},
-  {id:'w32', wwsCode:'E-7-1', wwsNo:347, name:'위험성평가 실시 결과 및 경영책임자 보고서', basis:'산안법 §36', period:'연1회', status:'미보유', updated:'', expires:'', note:'결재 문서 필요 (경영책임자 서명)', category:'wws', hasTemplate:false, localFile:'', requiredItems:'평가일, 평가결과, 개선조치, 경영책임자 서명', localSample:'', mergeGroup:'risk-report'},
-  {id:'w08', wwsCode:'E-8-2', wwsNo:348, name:'위험성평가 결과 현장 교육 및 TBM 전파 기록', basis:'산안법 §36', period:'수시', status:'미보유', updated:'', expires:'', note:'TBM절차서 보유', category:'wws', hasTemplate:false, localFile:'', requiredItems:'전파일, TBM 주제, 위험성평가 연계 내용', localSample:'', mergeGroup:'tbm'},
+  {id:'d14', wwsCode:'E-4-1', wwsNo:341, name:'구매/용역/도급 계약 시 안전보건 조건 및 내역 파악 문서', basis:'산안법 §63', period:'계약시', status:'미보유', updated:'', expires:'', note:'도급인 안전보건관리계획서 보유', category:'wws', hasTemplate:false, localFile:''},
+  {id:'d15', wwsCode:'E-4-2', wwsNo:342, name:'도급업무(외주)에 대한 위험성 파악 및 평가서', basis:'산안법 §64', period:'계약시', status:'미보유', updated:'', expires:'', note:'수급인 안전보건계획서 양식 보유', category:'wws', hasTemplate:false, localFile:''},
+  {id:'w07', wwsCode:'E-4-3~4', wwsNo:343, name:'위험성평가 결과 제공 및 수급인(협력사) 위험성평가 검토서', basis:'산안법 §36', period:'수시', status:'미보유', updated:'', expires:'', note:'위험성평가 미실시', category:'wws', hasTemplate:false, localFile:''},
+  {id:'w31', wwsCode:'E-5-3', wwsNo:344, name:'도급작업 시 주의사항 및 안전보건 정보제공 기록', basis:'산안법 §64', period:'계약시', status:'미보유', updated:'', expires:'', note:'안전보건협의체 회의록 등 필요', category:'wws', hasTemplate:false, localFile:''},
+  {id:'d16', wwsCode:'E-5-5', wwsNo:345, name:'도급받은 자(협력사)의 안전보건활동 점검 기록', basis:'산안법 §64', period:'연1회', status:'미보유', updated:'', expires:'', note:'수급인 안전보건수준 평가기준 양식 보유', category:'wws', hasTemplate:false, localFile:''},
+  {id:'w32', wwsCode:'E-7-1', wwsNo:347, name:'위험성평가 실시 결과 및 경영책임자 보고서', basis:'산안법 §36', period:'연1회', status:'미보유', updated:'', expires:'', note:'결재 문서 필요 (경영책임자 서명)', category:'wws', hasTemplate:false, localFile:''},
+  {id:'w08', wwsCode:'E-8-2', wwsNo:348, name:'위험성평가 결과 현장 교육 및 TBM 전파 기록', basis:'산안법 §36', period:'수시', status:'미보유', updated:'', expires:'', note:'TBM절차서 보유', category:'wws', hasTemplate:false, localFile:''},
 
   // === F. 평가 및 개선 (중처법 제4조 제9호, 제5조 제1호 등) ===
-  {id:'w09', wwsCode:'F-1-1~4', wwsNo:350, name:'산업안전보건 관계법령 파악 및 준수 상태 점검 결과서', basis:'산안법', period:'주기적', status:'미보유', updated:'', expires:'', note:'법규 등록부 작성 필요', category:'wws', hasTemplate:false, localFile:'', requiredItems:'법령목록, 해당조항, 준수상태, 점검일', localSample:'', mergeGroup:'law'},
-  {id:'w33', wwsCode:'F-3-1~2', wwsNo:355, name:'적격 수급업체 선정을 위한 안전보건 수준평가 기준 및 결과', basis:'산안법 §64', period:'계약시', status:'미보유', updated:'', expires:'', note:'수급인 평가기준 양식 보유', category:'wws', hasTemplate:false, localFile:'', requiredItems:'평가항목(안전관리체계·사고이력·자격), 평가점수, 적격판정', localSample:'1. 수급인 안전보건관리수준 평가 기준(양식).docx', mergeGroup:'subcon-contract'},
-  {id:'w10', wwsCode:'F-4-1', wwsNo:358, name:'산업안전보건 관계법령 파악 대장 (최신 법규 업데이트 리스트)', basis:'산안법', period:'주기적', status:'미보유', updated:'', expires:'', note:'최신 법규 변경사항 반영 필요', category:'wws', hasTemplate:false, localFile:'', requiredItems:'법규명, 관련조항, 최신개정일, 적용사항', localSample:'', mergeGroup:'law'},
+  {id:'w09', wwsCode:'F-1-1~4', wwsNo:350, name:'산업안전보건 관계법령 파악 및 준수 상태 점검 결과서', basis:'산안법', period:'주기적', status:'미보유', updated:'', expires:'', note:'법규 등록부 작성 필요', category:'wws', hasTemplate:false, localFile:''},
+  {id:'w33', wwsCode:'F-3-1~2', wwsNo:355, name:'적격 수급업체 선정을 위한 안전보건 수준평가 기준 및 결과', basis:'산안법 §64', period:'계약시', status:'미보유', updated:'', expires:'', note:'수급인 평가기준 양식 보유', category:'wws', hasTemplate:false, localFile:''},
+  {id:'w10', wwsCode:'F-4-1', wwsNo:358, name:'산업안전보건 관계법령 파악 대장 (최신 법규 업데이트 리스트)', basis:'산안법', period:'주기적', status:'미보유', updated:'', expires:'', note:'최신 법규 변경사항 반영 필요', category:'wws', hasTemplate:false, localFile:''},
 
   // === 기타 법정 서류 (WWS 코드 없음) ===
-  {id:'d11', wwsCode:'', wwsNo:'', name:'작업장 안전보건 점검표', basis:'산안법 §15', period:'월1회', status:'미보유', updated:'', expires:'', note:'일일점검표+작업유형별+일일체크시트 보유', category:'legal', hasTemplate:false, localFile:'', requiredItems:'점검일, 점검자, 점검항목, 양호/불량, 조치사항', localSample:'1.작업장_(일일)_점검표_매일.xlsx / 2.작업장_안전점검(작업유형별)_체크리스트.xlsx', mergeGroup:''},
-  {id:'d13', wwsCode:'', wwsNo:'', name:'기계·기구 자체검사 기록', basis:'산안법 §98', period:'장비별', status:'미보유', updated:'', expires:'', note:'설비별 안전점검 체크리스트 보유', category:'legal', hasTemplate:false, localFile:'', requiredItems:'설비명, 검사일, 검사항목, 결과, 다음검사일', localSample:'3.설비별_안전점검_체크리스트.xlsx', mergeGroup:''},
-  {id:'d17', wwsCode:'', wwsNo:'', name:'중량물 운반기계 안전조치 지침서', basis:'산안법 §38', period:'상시', status:'미보유', updated:'', expires:'', note:'ISPF-EHS-G-02', category:'legal', hasTemplate:false, localFile:'', requiredItems:'적용범위, 안전수칙, 적재기준, 비상시 조치', localSample:'ISPF-EHS-G-02. 중량물 운반기계 안전조치 지침서(적재기준포함).docx', mergeGroup:''},
-  {id:'d18', wwsCode:'', wwsNo:'', name:'근로자 참여·의견청취 절차서', basis:'산안법 §24', period:'상시', status:'미보유', updated:'', expires:'', note:'ISPF-EHS-P-02', category:'legal', hasTemplate:false, localFile:'', requiredItems:'참여방법, 의견접수 경로, 처리절차, 회신기한', localSample:'ISPF-EHS-P-02. 근로자의 참여, 의견청취 절차서.docx', mergeGroup:''},
-  {id:'d19', wwsCode:'', wwsNo:'', name:'협력업체 작업허가서', basis:'산안법 §63', period:'작업시', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:'', requiredItems:'작업내용, 작업기간, 안전조치, 허가자·작업자 서명', localSample:'', mergeGroup:''},
-  {id:'d20', wwsCode:'', wwsNo:'', name:'산업재해조사지침', basis:'산안법 §57', period:'발생시', status:'미보유', updated:'', expires:'', note:'산업재해조사지침 보유', category:'legal', hasTemplate:false, localFile:'', requiredItems:'사고일시, 장소, 피해자, 사고경위, 원인분석, 재발방지 대책', localSample:'산업재해조사지침(202311).docx', mergeGroup:''},
-  {id:'d21', wwsCode:'', wwsNo:'', name:'아차사고 보고서', basis:'자율관리', period:'발생시', status:'미보유', updated:'', expires:'', note:'', category:'self', hasTemplate:false, localFile:'', requiredItems:'발생일시, 장소, 상황설명, 잠재위험, 개선제안', localSample:'', mergeGroup:''},
-  {id:'d22', wwsCode:'', wwsNo:'', name:'특수건강검진 결과 관리대장', basis:'산안법 §130', period:'연1회', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:'', requiredItems:'검진일, 대상자, 검진항목, 판정결과, 사후조치', localSample:'', mergeGroup:''},
-  {id:'d23', wwsCode:'', wwsNo:'', name:'작업환경측정 결과서', basis:'산안법 §125', period:'반기1회', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:'', requiredItems:'측정일, 측정장소, 측정항목, 측정결과, 노출기준 비교', localSample:'', mergeGroup:''},
-  {id:'d24', wwsCode:'', wwsNo:'', name:'MSDS 관리대장 (화학물질통합리스트)', basis:'산안법 §114', period:'상시', status:'미보유', updated:'', expires:'', note:'최신 MSDS 자료 업데이트 필요', category:'legal', hasTemplate:false, localFile:'', requiredItems:'MSDS 목록, 물질명, CAS번호, 비치위치, 최신갱신일', localSample:'화학물질통합리스트(250506).xlsx', mergeGroup:''},
-  {id:'d25', wwsCode:'', wwsNo:'', name:'환경운영점검표', basis:'자율관리', period:'주기적', status:'미보유', updated:'', expires:'', note:'2024년도 양식', category:'self', hasTemplate:false, localFile:'', requiredItems:'점검일, 점검항목, 결과, 시정사항', localSample:'E03-F01 환경운영점검표_r0.xls / SS-EM05-01 환경운영점검표(2024).xlsx', mergeGroup:''},
-  {id:'d26', wwsCode:'', wwsNo:'', name:'신규입사자의 주의사항', basis:'자율관리', period:'채용시', status:'미보유', updated:'', expires:'', note:'', category:'self', hasTemplate:false, localFile:'', requiredItems:'안전수칙, 비상연락처, 보호구 착용법, 대피경로', localSample:'신규입사자의 주의사항.docx', mergeGroup:''},
-  {id:'d27', wwsCode:'', wwsNo:'', name:'본사 비상대피도', basis:'소방법', period:'상시', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:'', requiredItems:'층별 평면도, 대피경로, 비상구 위치, 소화기 위치, 집결지', localSample:'본사 대피도.pptx', mergeGroup:''},
-  {id:'d28', wwsCode:'', wwsNo:'', name:'산업안전보건위원회 규정', basis:'산안법 §24', period:'상시', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:'', requiredItems:'구성(노사 동수), 심의사항, 의결방법, 회의주기', localSample:'산업안전보건위원회규정(202301).docx', mergeGroup:''},
-  {id:'d29', wwsCode:'', wwsNo:'', name:'보건관리지침', basis:'산안법 §18', period:'상시', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:'', requiredItems:'건강검진, 작업환경관리, 건강증진, 직업병 예방', localSample:'보건관리지침(20250825).docx', mergeGroup:''},
-  {id:'d30', wwsCode:'', wwsNo:'', name:'위험물질 안전관리지침', basis:'산안법 §114', period:'상시', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:'', requiredItems:'물질목록, 취급절차, 보관기준, 비상조치, MSDS 위치', localSample:'위험물질안전관리지침(20250825).docx', mergeGroup:''},
-  {id:'d31', wwsCode:'', wwsNo:'', name:'LOTO(잠금·태깅) 관련 지침', basis:'산안법 §38', period:'상시', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:'', requiredItems:'적용범위, 잠금장치 종류, 절차(차단→잠금→태그→확인→작업→해제), 권한', localSample:'LOTO 관련 지침(20250829).docx', mergeGroup:''},
-  {id:'d32', wwsCode:'', wwsNo:'', name:'위험성평가 실시규정', basis:'산안법 §36', period:'상시', status:'미보유', updated:'', expires:'', note:'신성오토텍 자체 규정', category:'legal', hasTemplate:false, localFile:'', requiredItems:'평가절차, 위험등급 기준, 빈도·강도 산정법, 개선대책 수립 기준', localSample:'위험성평가 실시규정(신성오토텍).hwp', mergeGroup:''},
-  {id:'d33', wwsCode:'', wwsNo:'', name:'유해물질 취급작업 체크리스트', basis:'산안법 §114', period:'작업시', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:'', requiredItems:'물질명, 작업내용, 보호구, 환기설비, 비상세척 위치', localSample:'유해물질취급작업체크리스트.xlsx', mergeGroup:''},
-  {id:'d34', wwsCode:'', wwsNo:'', name:'호흡보호구 밀착도(Fit Test) 자가검사 매뉴얼', basis:'산안법 §38', period:'상시', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:'', requiredItems:'검사방법, 밀착계수 기준, 검사주기, 부적합 시 조치', localSample:'호흡관련보호구밀착도(Fit Test)자가검사매뉴얼.docx', mergeGroup:''},
-  {id:'d35', wwsCode:'', wwsNo:'', name:'화재·폭발사고 예방 안전수칙', basis:'소방법', period:'상시', status:'미보유', updated:'', expires:'', note:'PDF 자료', category:'legal', hasTemplate:false, localFile:'', requiredItems:'화재유형별 대응, 소화기 사용법, 대피절차', localSample:'2. 사업장 화재_폭발사고 예방 안전수칙.pdf', mergeGroup:''},
-  {id:'d36', wwsCode:'', wwsNo:'', name:'작업자 안전보건관리 일일 체크시트', basis:'자율관리', period:'매일', status:'미보유', updated:'', expires:'', note:'LG 점검시트 양식', category:'self', hasTemplate:false, localFile:'', requiredItems:'점검일, 점검자, 안전장치·보호구·정리정돈 등 항목, 결과', localSample:'작업자 안전보건관리 일일 체크시트.xls', mergeGroup:''},
-  {id:'d37', wwsCode:'', wwsNo:'', name:'비상대피 시설 설치 운영 가이드', basis:'소방법', period:'상시', status:'미보유', updated:'', expires:'', note:'PDF 가이드', category:'legal', hasTemplate:false, localFile:'', requiredItems:'대피시설 종류, 설치기준, 관리방법, 점검주기', localSample:'3. 비상대피 시설 설치 운영 가이드.pdf', mergeGroup:''},
-  {id:'d38', wwsCode:'', wwsNo:'', name:'산업안전보건위원회 회의록', basis:'산안법 §24', period:'매월', status:'미보유', updated:'', expires:'', note:'근로자 50인 이상, 노사 위원 서명 필수', category:'legal', hasTemplate:false, localFile:'', requiredItems:'회의일시, 참석자(노사 위원), 안건, 심의결과, 전원 서명', localSample:'', mergeGroup:''},
-  {id:'d39', wwsCode:'', wwsNo:'', name:'도급인·수급인 협의체 회의록', basis:'산안법 §64', period:'매월', status:'미보유', updated:'', expires:'', note:'도급/파견 업체 포함', category:'legal', hasTemplate:false, localFile:'', requiredItems:'회의일시, 참석자(원·수급인), 협의내용, 합의사항, 서명', localSample:'', mergeGroup:''},
-  {id:'d40', wwsCode:'', wwsNo:'', name:'합동 안전점검 기록부', basis:'산안법 §64', period:'분기1회', status:'미보유', updated:'', expires:'', note:'원·하청 합동, 노·사 및 도급사 참여', category:'legal', hasTemplate:false, localFile:'', requiredItems:'점검일, 점검자(원·수급인), 점검항목, 결과, 시정조치', localSample:'', mergeGroup:''},
+  {id:'d11', wwsCode:'', wwsNo:'', name:'작업장 안전보건 점검표', basis:'산안법 §15', period:'월1회', status:'미보유', updated:'', expires:'', note:'일일점검표+작업유형별+일일체크시트 보유', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d13', wwsCode:'', wwsNo:'', name:'기계·기구 자체검사 기록', basis:'산안법 §98', period:'장비별', status:'미보유', updated:'', expires:'', note:'설비별 안전점검 체크리스트 보유', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d17', wwsCode:'', wwsNo:'', name:'중량물 운반기계 안전조치 지침서', basis:'산안법 §38', period:'상시', status:'미보유', updated:'', expires:'', note:'ISPF-EHS-G-02', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d18', wwsCode:'', wwsNo:'', name:'근로자 참여·의견청취 절차서', basis:'산안법 §24', period:'상시', status:'미보유', updated:'', expires:'', note:'ISPF-EHS-P-02', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d19', wwsCode:'', wwsNo:'', name:'협력업체 작업허가서', basis:'산안법 §63', period:'작업시', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d20', wwsCode:'', wwsNo:'', name:'산업재해조사지침', basis:'산안법 §57', period:'발생시', status:'미보유', updated:'', expires:'', note:'산업재해조사지침 보유', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d21', wwsCode:'', wwsNo:'', name:'아차사고 보고서', basis:'자율관리', period:'발생시', status:'미보유', updated:'', expires:'', note:'', category:'self', hasTemplate:false, localFile:''},
+  {id:'d22', wwsCode:'', wwsNo:'', name:'특수건강검진 결과 관리대장', basis:'산안법 §130', period:'연1회', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d23', wwsCode:'', wwsNo:'', name:'작업환경측정 결과서', basis:'산안법 §125', period:'반기1회', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d24', wwsCode:'', wwsNo:'', name:'MSDS 관리대장 (화학물질통합리스트)', basis:'산안법 §114', period:'상시', status:'미보유', updated:'', expires:'', note:'최신 MSDS 자료 업데이트 필요', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d25', wwsCode:'', wwsNo:'', name:'환경운영점검표', basis:'자율관리', period:'주기적', status:'미보유', updated:'', expires:'', note:'2024년도 양식', category:'self', hasTemplate:false, localFile:''},
+  {id:'d26', wwsCode:'', wwsNo:'', name:'신규입사자의 주의사항', basis:'자율관리', period:'채용시', status:'미보유', updated:'', expires:'', note:'', category:'self', hasTemplate:false, localFile:''},
+  {id:'d27', wwsCode:'', wwsNo:'', name:'본사 비상대피도', basis:'소방법', period:'상시', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d28', wwsCode:'', wwsNo:'', name:'산업안전보건위원회 규정', basis:'산안법 §24', period:'상시', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d29', wwsCode:'', wwsNo:'', name:'보건관리지침', basis:'산안법 §18', period:'상시', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d30', wwsCode:'', wwsNo:'', name:'위험물질 안전관리지침', basis:'산안법 §114', period:'상시', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d31', wwsCode:'', wwsNo:'', name:'LOTO(잠금·태깅) 관련 지침', basis:'산안법 §38', period:'상시', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d32', wwsCode:'', wwsNo:'', name:'위험성평가 실시규정', basis:'산안법 §36', period:'상시', status:'미보유', updated:'', expires:'', note:'신성오토텍 자체 규정', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d33', wwsCode:'', wwsNo:'', name:'유해물질 취급작업 체크리스트', basis:'산안법 §114', period:'작업시', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d34', wwsCode:'', wwsNo:'', name:'호흡보호구 밀착도(Fit Test) 자가검사 매뉴얼', basis:'산안법 §38', period:'상시', status:'미보유', updated:'', expires:'', note:'', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d35', wwsCode:'', wwsNo:'', name:'화재·폭발사고 예방 안전수칙', basis:'소방법', period:'상시', status:'미보유', updated:'', expires:'', note:'PDF 자료', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d36', wwsCode:'', wwsNo:'', name:'작업자 안전보건관리 일일 체크시트', basis:'자율관리', period:'매일', status:'미보유', updated:'', expires:'', note:'LG 점검시트 양식', category:'self', hasTemplate:false, localFile:''},
+  {id:'d37', wwsCode:'', wwsNo:'', name:'비상대피 시설 설치 운영 가이드', basis:'소방법', period:'상시', status:'미보유', updated:'', expires:'', note:'PDF 가이드', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d38', wwsCode:'', wwsNo:'', name:'산업안전보건위원회 회의록', basis:'산안법 §24', period:'매월', status:'미보유', updated:'', expires:'', note:'근로자 50인 이상, 노사 위원 서명 필수', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d39', wwsCode:'', wwsNo:'', name:'도급인·수급인 협의체 회의록', basis:'산안법 §64', period:'매월', status:'미보유', updated:'', expires:'', note:'도급/파견 업체 포함', category:'legal', hasTemplate:false, localFile:''},
+  {id:'d40', wwsCode:'', wwsNo:'', name:'합동 안전점검 기록부', basis:'산안법 §64', period:'분기1회', status:'미보유', updated:'', expires:'', note:'원·하청 합동, 노·사 및 도급사 참여', category:'legal', hasTemplate:false, localFile:''},
 ];
 
 function getDMList(){
@@ -2209,14 +2406,12 @@ function renderDocMgr(){
   else if(dmCurrentFilter==='owned') filtered = docs.filter(d=>d.status==='보유');
   else if(dmCurrentFilter==='wws') filtered = docs.filter(d=>d.wwsCode);
   else if(dmCurrentFilter==='legal') filtered = docs.filter(d=>d.category==='legal'||d.category==='wws');
-  else if(dmCurrentFilter==='mergeable') filtered = docs.filter(d=>d.mergeGroup);
-  else if(dmCurrentFilter==='has-sample') filtered = docs.filter(d=>d.localSample);
 
   // 테이블 렌더링
   const tbody = document.getElementById('dm-table-body');
   if(!tbody) return;
   tbody.innerHTML = filtered.length===0
-    ? '<tr><td colspan="8" style="text-align:center;color:#9ca3af;padding:24px;">해당 항목이 없습니다</td></tr>'
+    ? '<tr><td colspan="10" style="text-align:center;color:#9ca3af;padding:24px;">해당 항목이 없습니다</td></tr>'
     : filtered.map(d=>{
       const sc = d.status==='보유'?'green':d.status==='갱신필요'?'yellow':'red';
       const wwsBadge = d.wwsCode ? `<span class="badge blue" style="font-size:10px;">${d.wwsCode}</span>` : '<span style="font-size:10px;color:#9ca3af;">—</span>';
@@ -2249,16 +2444,9 @@ function renderDocMgr(){
       }
       const noteText = d.note ? `<div style="font-size:10px;color:#9ca3af;margin-top:2px;">${d.note}</div>` : '';
       const updatedText = d.updated ? `<span style="font-size:9px;color:#9ca3af;margin-left:6px;">${d.updated}</span>` : '';
-      // 통합 그룹 배지
-      const mergeLabels = {tbm:'TBM 통합',law:'법규 통합','risk-report':'위험성평가 통합','subcon-contract':'도급 통합','edu-record':'교육 통합'};
-      const mergeColors = {tbm:'#0891b2',law:'#8b5cf6','risk-report':'#ea580c','subcon-contract':'#16a34a','edu-record':'#2563eb'};
-      const mergeBadge = d.mergeGroup ? `<div style="margin-top:3px;"><span style="display:inline-block;padding:1px 6px;border-radius:10px;font-size:9px;font-weight:700;background:${mergeColors[d.mergeGroup]||'#6b7280'}15;color:${mergeColors[d.mergeGroup]||'#6b7280'};border:1px solid ${mergeColors[d.mergeGroup]||'#6b7280'}30;">🔗 ${mergeLabels[d.mergeGroup]||d.mergeGroup}</span></div>` : '';
-      // 필수항목 + 예시파일
-      const sampleFiles = d.localSample ? d.localSample.split(' / ') : [];
-      const sampleHtml = sampleFiles.length>0 ? `<div style="margin-top:4px;">${sampleFiles.map(f=>`<div style="display:flex;align-items:center;gap:3px;margin-top:2px;"><span style="font-size:10px;">📎</span><span style="font-size:10px;color:#1e5096;font-weight:600;">${f.length>28?f.substring(0,28)+'…':f}</span></div>`).join('')}</div>` : '<div style="font-size:10px;color:#d1d5db;margin-top:4px;">예시파일 없음</div>';
       return `<tr${expiresWarn}>
         <td style="text-align:center;">${wwsBadge}</td>
-        <td style="font-weight:600;font-size:14px;">${d.name}${mergeBadge}</td>
+        <td style="font-weight:600;font-size:14px;">${d.name}</td>
         <td style="font-size:13px;color:#6b7280;">
           <div>${d.basis}</div>
           ${noteText}
@@ -2272,36 +2460,12 @@ function renderDocMgr(){
           </select>
           ${updatedText}
         </td>
-        <td style="font-size:12px;">
-          <div style="color:#374151;line-height:1.4;">${d.requiredItems||''}</div>
-          ${sampleHtml}
-        </td>
         <td style="font-size:13px;">${fileDisplay}<span id="dm-upload-status-${d.id}" style="font-size:10px;"></span></td>
         <td style="text-align:center;">
           <button class="btn btn-outline btn-sm" onclick="dmNote('${d.id}')" style="font-size:12px;" title="메모 편집">✏️</button>
         </td>
       </tr>`;
     }).join('');
-
-  // 통합 안내 (mergeable 필터 시)
-  const mergeInfoEl = document.getElementById('dm-merge-info');
-  if(mergeInfoEl){
-    if(dmCurrentFilter==='mergeable'){
-      mergeInfoEl.innerHTML = `<div class="alert info" style="margin-bottom:16px;">
-        <div style="font-weight:700;margin-bottom:8px;">🔗 서류 통합 가이드 — 같은 색상 배지끼리 1건으로 합칠 수 있습니다</div>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;font-size:12px;">
-          <span style="padding:3px 10px;border-radius:12px;background:#0891b215;color:#0891b2;border:1px solid #0891b230;font-weight:600;">🔗 TBM 통합 (3→1건): TBM 일지에 관리감독자명 + 위험성평가 전파 포함</span>
-          <span style="padding:3px 10px;border-radius:12px;background:#8b5cf615;color:#8b5cf6;border:1px solid #8b5cf630;font-weight:600;">🔗 법규 통합 (2→1건): 법규 등록부 + 준수점검표 통합</span>
-          <span style="padding:3px 10px;border-radius:12px;background:#ea580c15;color:#ea580c;border:1px solid #ea580c30;font-weight:600;">🔗 위험성평가 통합 (2→1건): 결과서에 경영책임자 결재란 + 공유기록란</span>
-          <span style="padding:3px 10px;border-radius:12px;background:#16a34a15;color:#16a34a;border:1px solid #16a34a30;font-weight:600;">🔗 도급 통합 (3→1패키지): 도급 계약 패키지로 묶어 관리</span>
-          <span style="padding:3px 10px;border-radius:12px;background:#2563eb15;color:#2563eb;border:1px solid #2563eb30;font-weight:600;">🔗 교육 통합 (2→1건): 교육 관리대장에 미이수자 추적 포함</span>
-        </div>
-        <div style="font-size:11px;color:#64748b;margin-top:8px;">※ WWS 심사 시에는 코드별로 해당 부분을 분리 제출하면 됩니다. 실무 관리는 통합본 1건으로 운영 가능.</div>
-      </div>`;
-    } else {
-      mergeInfoEl.innerHTML = '';
-    }
-  }
 
   // 하단 미보유 알림
   const alertEl = document.getElementById('dm-alert');
@@ -3342,6 +3506,410 @@ function ptPrint(id){
     </div>
   </body></html>`);
   w.document.close(); setTimeout(()=>w.print(),500);
+}
+
+// ============================================================
+// 교육 & 운영 관리 (MeetCal)
+// ============================================================
+
+// 마스터 데이터: 주기별 필수 활동
+const mcMasterItems = [
+  {id:'weekly-env',    cycle:'weekly',    name:'환경운영점검표',            evidence:'ISO14001 요구사항 · 패트롤 사진/지적 · 수리 및 보완 작업',  note:'', color:'#1e5096'},
+  {id:'monthly-committee', cycle:'monthly', name:'산업안전보건위원회',      evidence:'회의록 (노사 위원 서명 필수)',                              note:'근로자 50인 이상 시', color:'#a16207'},
+  {id:'monthly-contractor', cycle:'monthly', name:'도급인·수급인 협의체',   evidence:'협의체 회의록',                                            note:'도급/파견 업체 포함', color:'#a16207'},
+  {id:'quarterly-edu', cycle:'quarterly', name:'정기 안전보건교육',         evidence:'교육 결과 보고서, 출석부',                                  note:'현장직 6시간/분기 이상', color:'#166534'},
+  {id:'quarterly-joint', cycle:'quarterly', name:'합동 안전점검',           evidence:'원·하청 합동 점검 기록부',                                  note:'노·사 및 도급사 참여', color:'#166534'},
+  {id:'yearly-risk',   cycle:'yearly',   name:'위험성평가 (수시/정기)',     evidence:'위험성평가 결과서',                                         note:'가장 중요한 증빙', color:'#be185d'},
+  {id:'yearly-manager-edu', cycle:'yearly', name:'관리감독자 교육',         evidence:'교육 이수증 (연간 16시간)',                                  note:'직책자 대상', color:'#be185d'},
+  {id:'prod-weekly',   cycle:'prod',     name:'생산실 주간 미팅',           evidence:'회의록',                                                   note:'생산 현황·이슈 공유', color:'#475569'},
+  {id:'prod-monthly',  cycle:'prod',     name:'생산실 월간 미팅',           evidence:'회의록',                                                   note:'월간 실적·계획 리뷰', color:'#475569'},
+];
+
+const mcCycleLabels = {weekly:'매주', monthly:'매월', quarterly:'매분기', yearly:'매년', prod:'생산실'};
+const mcCycleCss = {weekly:'mc-cycle-weekly', monthly:'mc-cycle-monthly', quarterly:'mc-cycle-quarterly', yearly:'mc-cycle-yearly', prod:'mc-cycle-prod'};
+const mcTypeLabels = {};
+mcMasterItems.forEach(m => mcTypeLabels[m.id] = m.name);
+
+function switchMeetCalTab(tab){
+  ['overview','calendar','eduplan','log','history'].forEach(t=>{
+    const el = document.getElementById('meetcal-tab-'+t);
+    if(el) el.style.display = t===tab ? 'block' : 'none';
+  });
+  document.querySelectorAll('#section-meetcal .tab').forEach(b=>b.classList.remove('active'));
+  if(event && event.currentTarget) event.currentTarget.classList.add('active');
+  if(tab==='calendar') renderMcYearCalendar();
+  if(tab==='eduplan'){
+    renderESGPlan('esg-plan-meetcal');
+    renderEduHistoryMC();
+  }
+  if(tab==='history') renderMeetingHistory();
+}
+
+// --- 현재 주기 범위 계산 ---
+function getMcCurrentWeekRange(){
+  const now = new Date();
+  const day = now.getDay(); // 0=일 ~ 6=토
+  const mon = new Date(now); mon.setDate(now.getDate() - (day===0?6:day-1));
+  const sun = new Date(mon); sun.setDate(mon.getDate()+6);
+  return {start: mon.toISOString().split('T')[0], end: sun.toISOString().split('T')[0]};
+}
+function getMcCurrentMonthRange(){
+  const now = new Date();
+  const s = new Date(now.getFullYear(), now.getMonth(), 1);
+  const e = new Date(now.getFullYear(), now.getMonth()+1, 0);
+  return {start: s.toISOString().split('T')[0], end: e.toISOString().split('T')[0]};
+}
+function getMcCurrentQuarterRange(){
+  const now = new Date();
+  const q = Math.floor(now.getMonth()/3);
+  const s = new Date(now.getFullYear(), q*3, 1);
+  const e = new Date(now.getFullYear(), q*3+3, 0);
+  return {start: s.toISOString().split('T')[0], end: e.toISOString().split('T')[0]};
+}
+function getMcCurrentYearRange(){
+  const y = new Date().getFullYear();
+  return {start: y+'-01-01', end: y+'-12-31'};
+}
+
+function getMcRangeForCycle(cycle){
+  if(cycle==='weekly' || cycle==='prod') return getMcCurrentWeekRange(); // prod-weekly uses week
+  if(cycle==='monthly') return getMcCurrentMonthRange();
+  if(cycle==='quarterly') return getMcCurrentQuarterRange();
+  if(cycle==='yearly') return getMcCurrentYearRange();
+  return getMcCurrentMonthRange();
+}
+
+function getMcLogsInRange(itemId, range){
+  return DB.get('meetlog').filter(r => r.type===itemId && r.date>=range.start && r.date<=range.end);
+}
+
+function getMcLastLog(itemId){
+  const logs = DB.get('meetlog').filter(r=>r.type===itemId).sort((a,b)=>b.date.localeCompare(a.date));
+  return logs[0] || null;
+}
+
+// --- 알림 생성 ---
+function getMcAlerts(){
+  const alerts = [];
+  const now = new Date();
+  mcMasterItems.forEach(item=>{
+    let range;
+    if(item.id==='prod-monthly'){
+      range = getMcCurrentMonthRange();
+    } else {
+      range = getMcRangeForCycle(item.cycle);
+    }
+    const logs = getMcLogsInRange(item.id, range);
+    if(logs.length > 0) return; // done
+
+    // 남은 일수 계산
+    const endDate = new Date(range.end+'T23:59:59');
+    const daysLeft = Math.ceil((endDate - now) / (1000*60*60*24));
+
+    if(daysLeft < 0){
+      alerts.push({level:'urgent', icon:'🔴', text:`[${mcCycleLabels[item.cycle]}] ${item.name} — 기한 초과! 즉시 시행 필요`, item});
+    } else if(daysLeft <= 3 && (item.cycle==='weekly'||item.cycle==='prod')){
+      alerts.push({level:'warn', icon:'🟡', text:`[${mcCycleLabels[item.cycle]}] ${item.name} — 이번 주 ${daysLeft}일 남음`, item});
+    } else if(daysLeft <= 7 && item.cycle==='monthly'){
+      alerts.push({level:'warn', icon:'🟡', text:`[${mcCycleLabels[item.cycle]}] ${item.name} — 이번 달 ${daysLeft}일 남음`, item});
+    } else if(daysLeft <= 14 && item.cycle==='quarterly'){
+      alerts.push({level:'warn', icon:'🟡', text:`[${mcCycleLabels[item.cycle]}] ${item.name} — 이번 분기 ${daysLeft}일 남음`, item});
+    } else if(item.cycle==='weekly' || item.cycle==='prod'){
+      // 주간 항목 미완료 알림 (항상)
+      if(item.id!=='prod-monthly'){
+        alerts.push({level:'warn', icon:'🔵', text:`[${mcCycleLabels[item.cycle]}] ${item.name} — 이번 주 미시행`, item});
+      }
+    }
+  });
+  return alerts;
+}
+
+// --- 메인 렌더 ---
+function renderMeetCal(){
+  renderMcAlerts();
+  renderMcOverview();
+}
+
+function renderMcAlerts(){
+  const el = document.getElementById('meetcal-alerts');
+  if(!el) return;
+  const alerts = getMcAlerts();
+  if(alerts.length===0){
+    el.innerHTML = '<div class="mc-alert-card ok"><span class="mc-alert-icon">✅</span><span>모든 주기별 활동이 정상 시행되었습니다.</span></div>';
+    return;
+  }
+  el.innerHTML = alerts.map(a=>
+    `<div class="mc-alert-card ${a.level}"><span class="mc-alert-icon">${a.icon}</span><span>${a.text}</span>
+     <button class="btn btn-sm btn-outline" style="margin-left:auto;flex-shrink:0;" onclick="mcQuickLog('${a.item.id}')">기록하기</button></div>`
+  ).join('');
+}
+
+function mcQuickLog(typeId){
+  switchMeetCalTab('log');
+  document.getElementById('ml-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('ml-type').value = typeId;
+}
+
+function renderMcOverview(){
+  // 통계 카드
+  let weekPending=0, monthPending=0, quarterPending=0;
+  mcMasterItems.forEach(item=>{
+    let range;
+    if(item.id==='prod-monthly') range = getMcCurrentMonthRange();
+    else range = getMcRangeForCycle(item.cycle);
+    const done = getMcLogsInRange(item.id, range).length > 0;
+    if(!done){
+      if(item.cycle==='weekly' || (item.cycle==='prod' && item.id!=='prod-monthly')) weekPending++;
+      if(item.cycle==='monthly' || item.id==='prod-monthly') monthPending++;
+      if(item.cycle==='quarterly') quarterPending++;
+    }
+  });
+  const wEl = document.getElementById('mc-week-pending');
+  const mEl = document.getElementById('mc-month-pending');
+  const qEl = document.getElementById('mc-quarter-pending');
+  if(wEl) wEl.textContent = weekPending+'건';
+  if(mEl) mEl.textContent = monthPending+'건';
+  if(qEl) qEl.textContent = quarterPending+'건';
+
+  // 마스터 테이블
+  const tbody = document.getElementById('mc-master-table');
+  if(tbody){
+    let html = '';
+    let lastCycle = '';
+    mcMasterItems.forEach(item=>{
+      let range;
+      if(item.id==='prod-monthly') range = getMcCurrentMonthRange();
+      else range = getMcRangeForCycle(item.cycle);
+      const logs = getMcLogsInRange(item.id, range);
+      const done = logs.length > 0;
+      const lastLog = getMcLastLog(item.id);
+      const cycleLabel = item.id==='prod-monthly' ? '매월' : mcCycleLabels[item.cycle];
+      const cycleCss = item.id==='prod-monthly' ? 'mc-cycle-monthly' : mcCycleCss[item.cycle];
+
+      // 주기 구분 헤더
+      const groupKey = item.id==='prod-monthly' ? 'prod' : item.cycle;
+      if(groupKey !== lastCycle){
+        lastCycle = groupKey;
+        const groupLabels = {weekly:'📅 매주 (Weekly)', monthly:'📋 매월 (Monthly)', quarterly:'📊 매분기 (Quarterly)', yearly:'📆 매년 (Yearly)', prod:'🏭 생산실 미팅'};
+        html += `<tr><td colspan="6" style="background:${item.color}11;font-weight:800;font-size:12px;color:${item.color};padding:8px 12px;border-left:3px solid ${item.color};">${groupLabels[groupKey]||groupKey}</td></tr>`;
+      }
+
+      html += `<tr>
+        <td><span class="mc-cycle-badge ${cycleCss}">${cycleLabel}</span></td>
+        <td style="font-weight:600;">${item.name}</td>
+        <td style="font-size:12px;color:#6b7280;">${item.evidence}</td>
+        <td style="font-size:12px;color:#6b7280;">${item.note}</td>
+        <td style="text-align:center;">${done
+          ? '<span class="mc-status-done">● 완료</span>'
+          : '<span class="mc-status-pending">○ 미시행</span>'}</td>
+        <td style="text-align:center;font-size:12px;color:#6b7280;">${lastLog ? lastLog.date : '-'}</td>
+      </tr>`;
+    });
+    tbody.innerHTML = html;
+  }
+
+  // 다가오는 일정
+  renderMcUpcoming();
+  // 최근 기록
+  renderMcRecentLogs();
+}
+
+function renderMcUpcoming(){
+  const el = document.getElementById('mc-upcoming');
+  if(!el) return;
+  const now = new Date();
+  const items = [];
+  mcMasterItems.forEach(item=>{
+    let range;
+    if(item.id==='prod-monthly') range = getMcCurrentMonthRange();
+    else range = getMcRangeForCycle(item.cycle);
+    const done = getMcLogsInRange(item.id, range).length > 0;
+    if(done) return;
+    const endDate = new Date(range.end+'T23:59:59');
+    const daysLeft = Math.ceil((endDate - now)/(1000*60*60*24));
+    items.push({...item, daysLeft, deadline: range.end});
+  });
+  items.sort((a,b)=>a.daysLeft-b.daysLeft);
+
+  if(items.length===0){
+    el.innerHTML = '<div style="padding:12px 0;color:#16a34a;font-size:13px;">✅ 현재 주기 내 모든 항목 시행 완료!</div>';
+    return;
+  }
+
+  el.innerHTML = items.slice(0,8).map(it=>{
+    const cls = it.daysLeft<0 ? 'overdue' : it.daysLeft<=3 ? 'soon' : 'ok';
+    const ddayText = it.daysLeft<0 ? `D+${Math.abs(it.daysLeft)}` : it.daysLeft===0 ? 'TODAY' : `D-${it.daysLeft}`;
+    const sublabel = it.daysLeft<0 ? '기한초과' : it.daysLeft<=3 ? '임박' : '예정';
+    return `<div class="mc-upcoming-item">
+      <div class="mc-upcoming-dday ${cls}"><span>${ddayText}</span><span style="font-size:8px;">${sublabel}</span></div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:600;">${it.name}</div>
+        <div style="font-size:11px;color:#6b7280;">마감: ${it.deadline} · ${it.evidence}</div>
+      </div>
+      <button class="btn btn-sm btn-primary" onclick="mcQuickLog('${it.id}')" style="flex-shrink:0;">기록</button>
+    </div>`;
+  }).join('');
+}
+
+function renderMcRecentLogs(){
+  const el = document.getElementById('mc-recent-logs');
+  if(!el) return;
+  const logs = DB.get('meetlog').sort((a,b)=>b.date.localeCompare(a.date)).slice(0,6);
+  if(logs.length===0){
+    el.innerHTML = '<div style="padding:12px 0;color:#9ca3af;font-size:13px;">기록 없음 — [기록 입력] 탭에서 시행 내역을 등록하세요.</div>';
+    return;
+  }
+  el.innerHTML = logs.map(r=>`<div style="padding:8px 0;border-bottom:1px solid #f1f5f9;">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-size:13px;font-weight:600;">${mcTypeLabels[r.type]||r.type}</span>
+      <span style="font-size:12px;color:#6b7280;">${r.date}</span>
+    </div>
+    <div style="font-size:12px;color:#6b7280;margin-top:2px;">${r.leader||''} · ${r.place||''} · ${r.count||0}명${r.memo ? ' · '+r.memo.substring(0,30)+(r.memo.length>30?'...':'') : ''}</div>
+  </div>`).join('');
+}
+
+// --- 연간 캘린더 렌더 ---
+function renderMcYearCalendar(){
+  const el = document.getElementById('meetcal-year-grid');
+  if(!el) return;
+  const year = new Date().getFullYear();
+  const currentMonth = new Date().getMonth();
+  let html = '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">';
+
+  for(let m=0; m<12; m++){
+    const monthStr = String(m+1).padStart(2,'0');
+    const rangeStart = `${year}-${monthStr}-01`;
+    const rangeEnd = new Date(year, m+1, 0).toISOString().split('T')[0];
+    const isPast = m < currentMonth;
+    const isCurrent = m === currentMonth;
+
+    html += `<div class="mc-year-month" style="${isCurrent?'border:2px solid #1e5096;':''}">`;
+    html += `<h5 style="${isCurrent?'color:#1e5096;':''}">${m+1}월${isCurrent?' (이번 달)':''}</h5>`;
+
+    // 월간 항목
+    const monthlyItems = mcMasterItems.filter(it=>it.cycle==='monthly'||it.id==='prod-monthly');
+    monthlyItems.forEach(item=>{
+      const logs = DB.get('meetlog').filter(r=>r.type===item.id && r.date>=rangeStart && r.date<=rangeEnd);
+      const done = logs.length>0;
+      const dotCls = done ? 'done' : (isPast ? 'pending' : (isCurrent ? 'pending' : 'future'));
+      html += `<div class="mc-year-item"><span class="mc-dot ${dotCls}"></span><span style="flex:1;">${item.name}</span>${done?'<span style="font-size:10px;color:#16a34a;">'+logs[0].date.slice(5)+'</span>':''}</div>`;
+    });
+
+    // 분기 항목 (1,4,7,10월에 표시)
+    if(m%3===0){
+      const qStart = `${year}-${monthStr}-01`;
+      const qEnd = new Date(year, m+3, 0).toISOString().split('T')[0];
+      const qItems = mcMasterItems.filter(it=>it.cycle==='quarterly');
+      qItems.forEach(item=>{
+        const logs = DB.get('meetlog').filter(r=>r.type===item.id && r.date>=qStart && r.date<=qEnd);
+        const done = logs.length>0;
+        const qPast = (m+2) < currentMonth;
+        const dotCls = done ? 'done' : (qPast ? 'pending' : 'future');
+        html += `<div class="mc-year-item"><span class="mc-dot ${dotCls}"></span><span style="flex:1;color:#166534;">[분기] ${item.name}</span>${done?'<span style="font-size:10px;color:#16a34a;">'+logs[0].date.slice(5)+'</span>':''}</div>`;
+      });
+    }
+
+    // 연간 항목 (1월에만 표시)
+    if(m===0){
+      const yItems = mcMasterItems.filter(it=>it.cycle==='yearly');
+      yItems.forEach(item=>{
+        const logs = DB.get('meetlog').filter(r=>r.type===item.id && r.date>=rangeStart && r.date<=`${year}-12-31`);
+        const done = logs.length>0;
+        const dotCls = done ? 'done' : 'future';
+        html += `<div class="mc-year-item"><span class="mc-dot ${dotCls}"></span><span style="flex:1;color:#be185d;">[연간] ${item.name}</span>${done?'<span style="font-size:10px;color:#16a34a;">'+logs[0].date.slice(5)+'</span>':''}</div>`;
+      });
+    }
+
+    html += '</div>';
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+// --- 기록 저장/삭제 ---
+function saveMeetingLog(){
+  const date = document.getElementById('ml-date').value;
+  const type = document.getElementById('ml-type').value;
+  if(!date){alert('시행 일자를 입력해주세요.'); return;}
+  if(!type){alert('활동 구분을 선택해주세요.'); return;}
+
+  const record = {
+    id: 'ml_'+Date.now(),
+    date,
+    type,
+    count: document.getElementById('ml-count').value||'',
+    leader: document.getElementById('ml-leader').value||'',
+    place: document.getElementById('ml-place').value||'',
+    hours: document.getElementById('ml-hours').value||'',
+    evidence: document.getElementById('ml-evidence').value||'',
+    memo: document.getElementById('ml-memo').value||'',
+    created: new Date().toISOString()
+  };
+
+  const logs = DB.get('meetlog');
+  logs.unshift(record);
+  DB.set('meetlog', logs);
+
+  alert('✅ 기록이 저장되었습니다! (' + (mcTypeLabels[type]||type) + ')');
+  clearMeetingForm();
+  renderMeetCal();
+}
+
+function clearMeetingForm(){
+  ['ml-date','ml-type','ml-count','ml-leader','ml-place','ml-hours','ml-evidence','ml-memo'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.value = '';
+  });
+}
+
+function deleteMeetingLog(id){
+  if(!confirm('이 기록을 삭제하시겠습니까?')) return;
+  const logs = DB.get('meetlog').filter(r=>r.id!==id);
+  DB.set('meetlog', logs);
+  renderMeetingHistory();
+  renderMeetCal();
+}
+
+function renderMeetingHistory(){
+  const tbody = document.getElementById('meeting-log-body');
+  if(!tbody) return;
+  let logs = DB.get('meetlog').sort((a,b)=>b.date.localeCompare(a.date));
+  const filterType = document.getElementById('ml-filter-type');
+  const filterMonth = document.getElementById('ml-filter-month');
+  if(filterType && filterType.value!=='all') logs = logs.filter(r=>r.type===filterType.value);
+  if(filterMonth && filterMonth.value!=='all') logs = logs.filter(r=>r.date&&r.date.slice(5,7)===filterMonth.value);
+
+  if(logs.length===0){
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#9ca3af;padding:20px;">기록이 없습니다.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = logs.map(r=>`<tr>
+    <td style="font-weight:600;">${r.date}</td>
+    <td><span class="mc-cycle-badge ${mcCycleCss[mcMasterItems.find(m=>m.id===r.type)?.cycle]||'mc-cycle-prod'}">${mcTypeLabels[r.type]||r.type}</span></td>
+    <td>${r.leader||'-'}</td>
+    <td>${r.place||'-'}</td>
+    <td>${r.hours||'-'}</td>
+    <td style="text-align:center;">${r.count||'-'}</td>
+    <td style="font-size:12px;">${r.evidence||'-'}</td>
+    <td style="font-size:12px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${(r.memo||'').replace(/"/g,'&quot;')}">${r.memo||'-'}</td>
+    <td><button class="btn btn-sm btn-danger" onclick="deleteMeetingLog('${r.id}')">삭제</button></td>
+  </tr>`).join('');
+}
+
+// --- 교육 이력 (meetcal 탭 내) ---
+function renderEduHistoryMC(){
+  const tbody = document.getElementById('edu-history-body-mc');
+  if(!tbody) return;
+  const data = DB.get('education').sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  if(data.length===0){
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#9ca3af;padding:16px;">교육 이력이 없습니다. [교육 관리] 메뉴에서 교육을 등록하세요.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(r=>`<tr>
+    <td>${r.date||'-'}</td><td>${r.type||'-'}</td><td>${r.hours||'-'}</td>
+    <td>${r.method||'-'}</td><td>${r.instructor||'-'}</td><td>${r.count||'-'}</td>
+    <td>-</td>
+  </tr>`).join('');
 }
 
 window.onload = function(){
