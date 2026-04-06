@@ -491,21 +491,25 @@ table tr:hover td{background:#f8fafc;}
 .pcl-zone{background:#fff;border:1px solid #e8edf3;border-radius:12px;overflow:hidden;}
 .pcl-zone-title{background:linear-gradient(135deg,#0d1f3c,#1e5096);color:#fff;padding:12px 16px;font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px;}
 .pcl-zone-ic{font-size:18px;}
-.pcl-item{display:flex;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.15s;-webkit-tap-highlight-color:transparent;}
+.pcl-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.15s;-webkit-tap-highlight-color:transparent;}
 .pcl-item:last-child{border-bottom:none;}
 .pcl-item:hover{background:#f8fafc;}
 .pcl-item:active{background:#f0f7ff;}
 .pcl-item.pcl-checked{background:#f0fdf4;}
-.pcl-item input[type=checkbox]{width:22px;height:22px;flex-shrink:0;accent-color:#16a34a;cursor:pointer;}
-.pcl-item-body{flex:1;min-width:0;display:flex;align-items:center;gap:14px;}
-.pcl-item-text{flex:1;min-width:0;font-size:14px;font-weight:600;color:#1a1a1a;line-height:1.4;word-break:keep-all;overflow-wrap:break-word;}
+.pcl-item input[type=checkbox]{width:20px;height:20px;flex-shrink:0;accent-color:#16a34a;cursor:pointer;}
+.pcl-item-body{flex:1;min-width:0;display:flex;align-items:center;gap:12px;}
+.pcl-item-text{flex:1;min-width:0;font-size:13px;font-weight:600;color:#1a1a1a;line-height:1.4;word-break:keep-all;overflow-wrap:break-word;}
 .pcl-item.pcl-checked .pcl-item-text{color:#15803d;text-decoration:line-through;text-decoration-thickness:1px;}
-.pcl-item-memo{flex-shrink:0;width:200px;border:1px solid #e8edf3;background:#fff;border-radius:6px;padding:7px 10px;font-size:12.5px;color:#475569;font-family:inherit;}
+.pcl-item-memo{flex-shrink:0;width:180px;border:1px solid #e8edf3;background:#fff;border-radius:6px;padding:6px 9px;font-size:12px;color:#475569;font-family:inherit;}
 .pcl-item-memo:focus{outline:none;border-color:#1e5096;box-shadow:0 0 0 2px rgba(30,80,150,0.1);}
+.pcl-zone-title{padding:10px 14px!important;font-size:13.5px!important;}
 @media(max-width:768px){
-  .pcl-item-body{flex-direction:column;align-items:stretch;gap:6px;}
-  .pcl-item-text{flex:none;width:100%;}
-  .pcl-item-memo{width:100%;font-size:13px;}
+  .pcl-item{padding:9px 12px;gap:10px;}
+  .pcl-item input[type=checkbox]{width:20px;height:20px;}
+  .pcl-item-body{flex-direction:column;align-items:stretch;gap:5px;}
+  .pcl-item-text{flex:none;width:100%;font-size:13px;}
+  .pcl-item-memo{width:100%;font-size:12.5px;padding:6px 9px;}
+  .pcl-zone-title{padding:9px 12px!important;font-size:13px!important;}
 }
 
 /* PATROL BANNERS + 페이지 (모바일 컴팩트) */
@@ -1881,21 +1885,49 @@ function openTbmDay(day){
   document.getElementById('tbm-day-title').textContent = `${now.getMonth()+1}월 ${day}일 TBM 기록`;
   document.getElementById('tbm-day-done').checked = !!dayData.done;
   document.getElementById('tbm-day-agenda').value = dayData.agenda || '';
-  document.getElementById('tbm-day-photo-preview').innerHTML = dayData.photoName
-    ? `<div style="font-size:12px;color:#16a34a;">📎 ${dayData.photoName}</div>` : '';
+  if(dayData.photoData){
+    document.getElementById('tbm-day-photo-preview').innerHTML = `<img src="${dayData.photoData}" style="width:140px;height:100px;object-fit:cover;border-radius:8px;border:2px solid #e5e7eb;"><div style="font-size:11px;color:#6b7280;margin-top:2px;">${dayData.photoName||''}</div>`;
+  } else if(dayData.photoName){
+    document.getElementById('tbm-day-photo-preview').innerHTML = `<div style="font-size:12px;color:#16a34a;">📎 ${dayData.photoName}</div>`;
+  } else {
+    document.getElementById('tbm-day-photo-preview').innerHTML = '';
+  }
+  _tbmPhotoDataUrl = null;
   document.getElementById('tbm-day-form').dataset.key = key;
 }
 
+let _tbmPhotoDataUrl = null;
 function previewTbmDayPhoto(input){
   const preview = document.getElementById('tbm-day-photo-preview');
   if(!preview || !input.files.length) return;
   const file = input.files[0];
-  const reader = new FileReader();
-  reader.onload = function(e){
-    preview.innerHTML = `<img src="${e.target.result}" style="width:140px;height:100px;object-fit:cover;border-radius:8px;border:2px solid #e5e7eb;">
+  // 사진을 압축해서 base64로 변환 (DB 동기화 용)
+  compressImage(file, 800, 0.7).then(dataUrl => {
+    _tbmPhotoDataUrl = dataUrl;
+    preview.innerHTML = `<img src="${dataUrl}" style="width:140px;height:100px;object-fit:cover;border-radius:8px;border:2px solid #e5e7eb;">
       <div style="font-size:11px;color:#6b7280;margin-top:2px;">${file.name}</div>`;
-  };
-  reader.readAsDataURL(file);
+  });
+}
+
+// 이미지 압축 (긴 변 maxWidth, JPEG quality)
+function compressImage(file, maxWidth, quality){
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const ratio = Math.min(1, maxWidth / Math.max(img.width, img.height));
+        const w = Math.round(img.width * ratio);
+        const h = Math.round(img.height * ratio);
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 function saveTbmDay(){
@@ -1905,12 +1937,15 @@ function saveTbmDay(){
   const tbmData = DB.getObj('tbmCalendar');
   const photoInput = document.getElementById('tbm-day-photo');
   const photoName = photoInput.files.length > 0 ? photoInput.files[0].name : (tbmData[key]?.photoName || '');
+  const photoData = _tbmPhotoDataUrl || tbmData[key]?.photoData || '';
   tbmData[key] = {
     done: document.getElementById('tbm-day-done').checked,
     agenda: document.getElementById('tbm-day-agenda').value,
     photoName: photoName,
+    photoData: photoData,
     savedAt: new Date().toISOString()
   };
+  _tbmPhotoDataUrl = null;
   DB.set('tbmCalendar', tbmData);
   // tbm 이력에도 기록 (대시보드 호환)
   if(tbmData[key].done){
@@ -3059,18 +3094,21 @@ function getESGFiles(){
 }
 function setESGFiles(data){
   localStorage.setItem('safety_esg_files', JSON.stringify(data));
+  if(typeof supaSync==='function') supaSync('esg_files');
 }
 function getESGDone(){
   try{ return JSON.parse(localStorage.getItem('safety_esg_done')||'{}'); }catch(e){ return {}; }
 }
 function setESGDone(data){
   localStorage.setItem('safety_esg_done', JSON.stringify(data));
+  if(typeof supaSync==='function') supaSync('esg_done');
 }
 function getESGMemos(){
   try{ return JSON.parse(localStorage.getItem('safety_esg_memos')||'{}'); }catch(e){ return {}; }
 }
 function setESGMemos(data){
   localStorage.setItem('safety_esg_memos', JSON.stringify(data));
+  if(typeof supaSync==='function') supaSync('esg_memos');
 }
 // === 사용자 추가 ESG 항목 (기타 영역) ===
 function getCustomESG(){
@@ -3078,6 +3116,7 @@ function getCustomESG(){
 }
 function setCustomESG(arr){
   localStorage.setItem('safety_esg_custom', JSON.stringify(arr));
+  if(typeof supaSync==='function') supaSync('esg_custom');
 }
 // 빌트인 + 커스텀 합쳐서 반환 (인덱스 안정성 위해 deleted 항목도 포함)
 function getAllESG(){
