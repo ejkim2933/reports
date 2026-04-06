@@ -463,10 +463,10 @@ table tr:hover td{background:#f8fafc;}
 .patrol-meta-cell input,.patrol-meta-cell select{padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-family:inherit;background:#fff;}
 
 /* PATROL SITE FILTER */
-.patrol-site-filter{display:flex;align-items:center;gap:12px;margin-bottom:12px;background:#f8fafc;padding:12px 14px;border-radius:10px;flex-wrap:wrap;}
+.patrol-site-filter{display:flex;align-items:center;gap:10px;margin-bottom:12px;background:#f8fafc;padding:10px 12px;border-radius:10px;width:100%;max-width:100%;box-sizing:border-box;overflow:hidden;}
 .psf-label{font-size:13px;font-weight:700;color:#0d1f3c;flex-shrink:0;}
-.psf-btns{display:flex;gap:8px;flex:1;min-width:0;}
-.psf-btns .btn{flex:1;font-size:13px;padding:9px 12px;white-space:nowrap;}
+.psf-btns{display:flex;gap:6px;flex:1;min-width:0;}
+.psf-btns .btn{flex:1 1 0;min-width:0;font-size:12px;padding:8px 8px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;}
 
 /* PATROL CHECK LIST (카드형 — 모바일 친화) */
 .patrol-check-list{display:flex;flex-direction:column;gap:14px;}
@@ -486,12 +486,20 @@ table tr:hover td{background:#f8fafc;}
 
 /* PATROL BANNERS + 페이지 (모바일 컴팩트) */
 @media(max-width:768px){
+  /* 패트롤 섹션 전체: viewport 강제 가두기 */
+  #section-patrol,#section-patrol *{max-width:100%;box-sizing:border-box;}
+  #section-patrol .table-wrap{max-width:100%;overflow-x:auto;}
   .patrol-banners{grid-template-columns:1fr!important;gap:10px!important;margin-bottom:14px!important;}
   .patrol-banners > div{padding:16px 14px!important;}
   .patrol-banners > div > div:first-child{font-size:32px!important;margin-bottom:4px!important;}
   /* 카드: 모바일 패딩 축소 + 폭 강제 */
-  #section-patrol .card{padding:10px;}
+  #section-patrol .card{padding:10px;width:100%;}
   #section-patrol .card-title{font-size:13px;}
+  /* 달력: 7칸 균등, 셀 폭 최소 */
+  #patrol-calendar,#tbm-calendar{width:100%;overflow:hidden;}
+  #patrol-calendar > div,#tbm-calendar > div{max-width:100%;}
+  #patrol-calendar > div > div,#tbm-calendar > div > div{min-width:0;font-size:11px!important;padding:4px 1px!important;}
+  #patrol-calendar > div > div > div,#tbm-calendar > div > div > div{font-size:11px!important;}
   /* 체크리스트: 모바일에서 패딩 축소 */
   .pcl-zone-title{padding:10px 12px;font-size:13.5px;}
   .pcl-item{padding:11px 12px;gap:10px;}
