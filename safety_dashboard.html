@@ -405,7 +405,7 @@ table tr:hover td{background:#f8fafc;}
 .esg-filter-bar{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px;}
 .esg-filter-btn{padding:7px 16px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid #e8edf3;background:#fff;color:#374151;transition:all 0.2s;}
 .esg-filter-btn.active{color:#fff;border-color:transparent;}
-.esg-table-wrap{overflow-x:auto;border:1px solid #e8edf3;border-radius:8px;}
+.esg-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #e8edf3;border-radius:8px;max-width:100%;width:100%;}
 .esg-table.filtered .col-cat{display:none;}
 .esg-table.filtered{min-width:1050px;}
 .esg-table{width:100%;border-collapse:collapse;font-size:13px;min-width:1150px;table-layout:auto;}
@@ -481,27 +481,27 @@ table tr:hover td{background:#f8fafc;}
 .patrol-meta-cell label{font-size:11px;font-weight:700;color:#475569;}
 .patrol-meta-cell input,.patrol-meta-cell select{padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-family:inherit;background:#fff;}
 
-/* PATROL SITE FILTER */
-.patrol-site-filter{display:flex;align-items:center;gap:10px;margin-bottom:12px;background:#f8fafc;padding:10px 12px;border-radius:10px;width:100%;max-width:100%;box-sizing:border-box;overflow:hidden;}
-.psf-label{font-size:13px;font-weight:700;color:#0d1f3c;flex-shrink:0;}
-.psf-btns{display:flex;gap:6px;flex:1;min-width:0;}
-.psf-btns .btn{flex:1 1 0;min-width:0;font-size:12px;padding:8px 8px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;}
+/* PATROL SITE TABS (TBM처럼 단순 토글) */
+.patrol-site-tabs{display:flex;gap:0;margin-bottom:12px;background:#f1f5f9;border-radius:10px;padding:4px;width:100%;box-sizing:border-box;}
+.pst-btn{flex:1;min-width:0;padding:10px 12px;border:none;background:transparent;font-size:13px;font-weight:700;color:#64748b;border-radius:7px;cursor:pointer;transition:all 0.15s;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;}
+.pst-btn.active{background:#1e5096;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.1);}
 
 /* PATROL CHECK LIST (카드형 — 모바일 친화) */
 .patrol-check-list{display:flex;flex-direction:column;gap:14px;}
 .pcl-zone{background:#fff;border:1px solid #e8edf3;border-radius:12px;overflow:hidden;}
 .pcl-zone-title{background:linear-gradient(135deg,#0d1f3c,#1e5096);color:#fff;padding:12px 16px;font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px;}
 .pcl-zone-ic{font-size:18px;}
-.pcl-item{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-bottom:1px solid #f1f5f9;transition:background 0.15s;}
+.pcl-item{display:flex;align-items:flex-start;gap:12px;padding:13px 14px;border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.15s;-webkit-tap-highlight-color:transparent;}
 .pcl-item:last-child{border-bottom:none;}
+.pcl-item:active{background:#f0f7ff;}
 .pcl-item.pcl-checked{background:#f0fdf4;}
-.pcl-row{display:flex;align-items:flex-start;gap:11px;cursor:pointer;}
 .pcl-item input[type=checkbox]{width:24px;height:24px;flex-shrink:0;accent-color:#16a34a;cursor:pointer;margin-top:1px;}
-.pcl-item-text{flex:1;min-width:0;font-size:14px;font-weight:600;color:#1a1a1a;line-height:1.4;word-break:keep-all;overflow-wrap:break-word;}
+.pcl-item-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;}
+.pcl-item-text{font-size:14px;font-weight:600;color:#1a1a1a;line-height:1.4;word-break:keep-all;overflow-wrap:break-word;}
 .pcl-item.pcl-checked .pcl-item-text{color:#15803d;text-decoration:line-through;text-decoration-thickness:1px;}
-.pcl-item-memo{width:100%;border:1px solid #e8edf3;background:#fff;border-radius:6px;padding:7px 10px;font-size:12px;color:#475569;font-family:inherit;margin-left:35px;width:calc(100% - 35px);}
+.pcl-item-memo{width:100%;border:1px solid #e8edf3;background:#fff;border-radius:6px;padding:7px 10px;font-size:12.5px;color:#475569;font-family:inherit;}
 .pcl-item-memo:focus{outline:none;border-color:#1e5096;box-shadow:0 0 0 2px rgba(30,80,150,0.1);}
-@media(max-width:768px){.pcl-item-memo{margin-left:35px;width:calc(100% - 35px);font-size:13px;}}
+@media(max-width:768px){.pcl-item-memo{font-size:13px;}}
 
 /* PATROL BANNERS + 페이지 (모바일 컴팩트) */
 @media(max-width:768px){
@@ -768,13 +768,10 @@ table tr:hover td{background:#f8fafc;}
         <button class="btn btn-outline btn-sm" onclick="showPatrolView('home')">← 돌아가기</button>
       </div>
 
-      <!-- 필터 -->
-      <div class="patrol-site-filter">
-        <div class="psf-label">🏭 사업장</div>
-        <div class="psf-btns">
-          <button class="pf-site btn btn-sm" onclick="setPatrolFilter('site','suwon',this)" style="background:#1e5096;color:#fff;">📍 수원</button>
-          <button class="pf-site btn btn-outline btn-sm" onclick="setPatrolFilter('site','hwaseong',this)">📍 화성</button>
-        </div>
+      <!-- 사업장 필터 (TBM처럼 단순 토글) -->
+      <div class="patrol-site-tabs">
+        <button class="pst-btn active" onclick="setPatrolFilter('site','suwon',this)">📍 수원</button>
+        <button class="pst-btn" onclick="setPatrolFilter('site','hwaseong',this)">📍 화성</button>
       </div>
 
       <!-- 패트롤 달력 -->
@@ -1488,10 +1485,14 @@ const patrolZones = [
 
 function setPatrolFilter(type, val, btn){
   patrolSiteFilter = val;
-  document.querySelectorAll('.pf-site').forEach(b=>{
-    b.style.background='#fff';b.style.color='#374151';b.style.border='1px solid #d1d5db';
-  });
-  if(btn){btn.style.background='#1e5096';btn.style.color='#fff';btn.style.border='1px solid #1e5096';}
+  document.querySelectorAll('.pst-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  // 현재 열린 체크리스트가 있으면 다시 렌더링
+  const form = document.getElementById('patrol-checklist-form');
+  if(form && form.style.display!=='none' && form.dataset.key){
+    const day = parseInt(form.dataset.key.split('-')[2], 10);
+    if(day) openPatrolDay(day);
+  }
 }
 
 function getFilteredZones(){
@@ -1620,13 +1621,14 @@ function openPatrolDay(day){
       const itemKey = `${zone.id}_${i}`;
       const isChecked = !!saved[itemKey];
       const memo = saved[`${itemKey}_memo`] || '';
-      html += `<div class="pcl-item ${isChecked?'pcl-checked':''}" data-itemkey="${itemKey}">
-        <div class="pcl-row" onclick="togglePatrolCheck('${itemKey}')">
-          <input type="checkbox" id="pchk_${itemKey}" ${isChecked?'checked':''} data-key="${itemKey}" onclick="event.stopPropagation();" onchange="syncPatrolCheck('${itemKey}',this.checked)">
+      const memoOpen = memo ? 'pcl-memo-open' : '';
+      html += `<label class="pcl-item ${isChecked?'pcl-checked':''} ${memoOpen}" data-itemkey="${itemKey}" for="pchk_${itemKey}">
+        <input type="checkbox" id="pchk_${itemKey}" ${isChecked?'checked':''} data-key="${itemKey}" onchange="syncPatrolCheck('${itemKey}',this.checked)">
+        <div class="pcl-item-body">
           <div class="pcl-item-text">${item}</div>
+          <input type="text" value="${memo.replace(/"/g,'&quot;')}" data-memo="${itemKey}" placeholder="비고 입력 (선택)" class="pcl-item-memo" oninput="autoSavePatrolDay()" onclick="event.preventDefault();event.stopPropagation();" onfocus="event.stopPropagation();">
         </div>
-        <input type="text" value="${memo.replace(/"/g,'&quot;')}" data-memo="${itemKey}" placeholder="비고 (선택)" class="pcl-item-memo" oninput="autoSavePatrolDay()">
-      </div>`;
+      </label>`;
     });
     html += `</div>`;
   });
