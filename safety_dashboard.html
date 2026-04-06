@@ -11,6 +11,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;}
+html,body{max-width:100vw;overflow-x:hidden;}
 body{font-family:'Noto Sans KR','Noto Sans SC','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#f0f4f9;color:#374151;display:flex;min-height:100vh;}
 /* SIDEBAR */
 #sidebar{width:220px;min-height:100vh;background:linear-gradient(180deg, #0d1f3c 0%, #1a3a6e 100%);color:#fff;position:fixed;top:0;left:0;z-index:100;display:flex;flex-direction:column;}
@@ -452,14 +453,20 @@ table tr:hover td{background:#f8fafc;}
 @media(max-width:768px){.esg-scroll-hint{display:block;}}
 
 /* PATROL FORM HEADER */
-.patrol-form-header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:12px;border-bottom:2px solid #0d1f3c;margin-bottom:12px;}
+.patrol-form-header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:12px;border-bottom:2px solid #0d1f3c;margin-bottom:12px;flex-wrap:wrap;}
 .pfh-title{flex:1;min-width:0;}
-.pfh-name{font-size:18px;font-weight:900;color:#0d1f3c;line-height:1.3;}
+.pfh-name{font-size:18px;font-weight:900;color:#0d1f3c;line-height:1.3;word-break:keep-all;}
 .pfh-date{font-size:12px;color:#6b7280;margin-top:3px;}
 .patrol-meta-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;background:#f8fafc;padding:12px;border-radius:10px;}
 .patrol-meta-cell{display:flex;flex-direction:column;gap:4px;}
 .patrol-meta-cell label{font-size:11px;font-weight:700;color:#475569;}
 .patrol-meta-cell input,.patrol-meta-cell select{padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-family:inherit;background:#fff;}
+
+/* PATROL SITE FILTER */
+.patrol-site-filter{display:flex;align-items:center;gap:12px;margin-bottom:12px;background:#f8fafc;padding:12px 14px;border-radius:10px;flex-wrap:wrap;}
+.psf-label{font-size:13px;font-weight:700;color:#0d1f3c;flex-shrink:0;}
+.psf-btns{display:flex;gap:8px;flex:1;min-width:0;}
+.psf-btns .btn{flex:1;font-size:13px;padding:9px 12px;white-space:nowrap;}
 
 /* PATROL CHECK LIST (카드형 — 모바일 친화) */
 .patrol-check-list{display:flex;flex-direction:column;gap:14px;}
@@ -472,21 +479,35 @@ table tr:hover td{background:#f8fafc;}
 .pcl-item.pcl-checked{background:#f0fdf4;}
 .pcl-item input[type=checkbox]{width:24px;height:24px;flex-shrink:0;accent-color:#16a34a;cursor:pointer;margin-top:1px;}
 .pcl-item-body{flex:1;min-width:0;}
-.pcl-item-text{font-size:14px;font-weight:600;color:#1a1a1a;line-height:1.4;margin-bottom:6px;}
+.pcl-item-text{font-size:14px;font-weight:600;color:#1a1a1a;line-height:1.4;margin-bottom:6px;word-break:keep-all;overflow-wrap:break-word;}
 .pcl-item.pcl-checked .pcl-item-text{color:#15803d;text-decoration:line-through;text-decoration-thickness:1px;}
 .pcl-item-memo{width:100%;border:1px solid #e8edf3;background:#fff;border-radius:6px;padding:6px 10px;font-size:12px;color:#475569;font-family:inherit;}
 .pcl-item-memo:focus{outline:none;border-color:#1e5096;box-shadow:0 0 0 2px rgba(30,80,150,0.1);}
 
-/* PATROL BANNERS (모바일 컴팩트) */
+/* PATROL BANNERS + 페이지 (모바일 컴팩트) */
 @media(max-width:768px){
   .patrol-banners{grid-template-columns:1fr!important;gap:10px!important;margin-bottom:14px!important;}
-  .patrol-banners > div{padding:18px 16px!important;}
-  .patrol-banners > div > div:first-child{font-size:36px!important;margin-bottom:6px!important;}
-  .pcl-zone-title{padding:11px 14px;font-size:14px;}
-  .pcl-item{padding:13px 14px;gap:11px;}
-  .pcl-item input[type=checkbox]{width:26px;height:26px;}
-  .pcl-item-text{font-size:14.5px;line-height:1.45;}
-  .pcl-item-memo{font-size:13px;padding:7px 10px;}
+  .patrol-banners > div{padding:16px 14px!important;}
+  .patrol-banners > div > div:first-child{font-size:32px!important;margin-bottom:4px!important;}
+  /* 카드: 모바일 패딩 축소 + 폭 강제 */
+  #section-patrol .card{padding:10px;}
+  #section-patrol .card-title{font-size:13px;}
+  /* 체크리스트: 모바일에서 패딩 축소 */
+  .pcl-zone-title{padding:10px 12px;font-size:13.5px;}
+  .pcl-item{padding:11px 12px;gap:10px;}
+  .pcl-item input[type=checkbox]{width:24px;height:24px;}
+  .pcl-item-text{font-size:13.5px;line-height:1.4;margin-bottom:5px;}
+  .pcl-item-memo{font-size:12.5px;padding:6px 9px;}
+  /* 사이트 필터: 한 줄로 압축 */
+  .patrol-site-filter{padding:10px 12px;gap:8px;}
+  .psf-btns .btn{font-size:12px;padding:8px 10px;}
+  /* 패트롤 폼 헤더 */
+  .patrol-form-header{padding-bottom:10px;margin-bottom:10px;}
+  .pfh-name{font-size:15px;}
+  .patrol-meta-row{padding:10px;gap:8px;margin-bottom:12px;}
+  .patrol-meta-cell input,.patrol-meta-cell select{font-size:14px;padding:9px 10px;}
+  /* 달력: 셀 폭 균등, 한 칸씩 작게 */
+  #patrol-calendar > div:nth-child(2),#tbm-calendar > div:nth-child(2){gap:2px!important;font-size:11px!important;}
 }
 
 /* INFO TIP GRID — 안내문 박스화 */
@@ -721,10 +742,12 @@ table tr:hover td{background:#f8fafc;}
       </div>
 
       <!-- 필터 -->
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;background:#f8fafc;padding:12px 16px;border-radius:10px;">
-        <span style="font-size:13px;font-weight:700;color:#0d1f3c;">🏭 사업장 선택:</span>
-        <button class="pf-site btn btn-sm" onclick="setPatrolFilter('site','suwon',this)" style="background:#1e5096;color:#fff;font-size:12px;padding:8px 20px;">📍 수원 (사출·조립)</button>
-        <button class="pf-site btn btn-outline btn-sm" onclick="setPatrolFilter('site','hwaseong',this)" style="font-size:12px;padding:8px 20px;">📍 화성 (도색·화학)</button>
+      <div class="patrol-site-filter">
+        <div class="psf-label">🏭 사업장</div>
+        <div class="psf-btns">
+          <button class="pf-site btn btn-sm" onclick="setPatrolFilter('site','suwon',this)" style="background:#1e5096;color:#fff;">📍 수원</button>
+          <button class="pf-site btn btn-outline btn-sm" onclick="setPatrolFilter('site','hwaseong',this)">📍 화성</button>
+        </div>
       </div>
 
       <!-- 패트롤 달력 -->
