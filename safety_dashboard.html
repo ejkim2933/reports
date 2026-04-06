@@ -450,6 +450,83 @@ table tr:hover td{background:#f8fafc;}
 .esg-summary .esg-note{font-size:11px;color:#6b7280;}
 .esg-scroll-hint{display:none;text-align:center;font-size:11px;color:#6b7280;padding:6px;background:#f8fafc;border-radius:6px;margin-bottom:8px;}
 @media(max-width:768px){.esg-scroll-hint{display:block;}}
+
+/* INFO TIP GRID — 안내문 박스화 */
+.info-tip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-bottom:14px;}
+.info-tip{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#f0f7ff;border-left:3px solid #1e5096;border-radius:8px;font-size:12px;line-height:1.45;}
+.info-tip .tip-ic{font-size:16px;flex-shrink:0;color:#1e5096;font-weight:800;line-height:1;margin-top:1px;}
+.info-tip strong{color:#0d1f3c;font-size:12.5px;display:block;margin-bottom:2px;}
+.info-tip span{color:#475569;font-size:11.5px;}
+
+/* ============================================================
+   모바일 우선 (≤768px) — 전체 페이지 친화적
+   ============================================================ */
+@media(max-width:768px){
+  /* 사이드바: 햄버거 메뉴 토글 방식 */
+  #sidebar{transform:translateX(-100%);transition:transform 0.25s;width:240px;}
+  #sidebar.open{transform:translateX(0);box-shadow:4px 0 20px rgba(0,0,0,0.3);}
+  #sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99;}
+  #sidebar-overlay.show{display:block;}
+  #main{margin-left:0;}
+  .topbar{padding:0 12px;height:52px;}
+  .topbar h2{font-size:15px;}
+  .topbar .actions{gap:4px;}
+  .topbar .btn{padding:6px 10px;font-size:11px;}
+  .content{padding:12px;}
+
+  /* 카드 / 그리드 */
+  .card{padding:14px;border-radius:10px;}
+  .card-title{font-size:13px;}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr!important;gap:10px;}
+  .form-row,.form-row-3{grid-template-columns:1fr!important;}
+
+  /* 통계 카드 */
+  .stat-card{padding:14px;}
+  .stat-card .value{font-size:22px;}
+  .stat-card .label{font-size:11px;}
+
+  /* 버튼 */
+  .btn{padding:8px 12px;font-size:12px;}
+  .btn-sm{padding:5px 9px;font-size:11px;}
+
+  /* 폼 */
+  .form-group input,.form-group select,.form-group textarea{font-size:14px;padding:10px 12px;}
+  .form-group label{font-size:12px;}
+
+  /* 테이블 */
+  table{font-size:11.5px;}
+  table th,table td{padding:6px 6px;}
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+
+  /* 탭 */
+  .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;}
+  .tab{padding:7px 12px;font-size:12px;white-space:nowrap;flex-shrink:0;}
+
+  /* INFO TIP — 모바일에서는 한 줄씩 */
+  .info-tip-grid{grid-template-columns:1fr;gap:6px;}
+  .info-tip{padding:9px 11px;font-size:11.5px;}
+
+  /* ESG 표 — 모바일에서 가로 스크롤 + 터치 친화 */
+  .esg-table{font-size:11px;min-width:920px;}
+  .esg-table th{padding:6px 4px;font-size:10px;}
+  .esg-table td{padding:5px 4px;font-size:10.5px;}
+  .esg-month-cell{width:32px;min-width:32px;font-size:13px;}
+  .esg-table th.col-month{width:32px;min-width:32px;}
+  .esg-filter-btn{padding:6px 12px;font-size:11px;}
+  .esg-filter-bar{gap:4px!important;}
+  .esg-file-popup{position:fixed!important;left:8px!important;right:8px!important;top:auto!important;bottom:8px!important;width:auto!important;max-height:70vh;overflow-y:auto;}
+
+  /* 모달 — 모바일에서 화면 거의 전체 */
+  .modal,.modal-content{max-width:95vw!important;max-height:90vh!important;}
+
+  /* 알림 박스 */
+  .alert{padding:10px 12px;font-size:12px;}
+
+  /* 대시보드 hero */
+  .dash-hero{padding:14px;}
+  .dash-hero-stats{grid-template-columns:repeat(2,1fr)!important;gap:10px;}
+  .dash-mid-grid,.dash-bottom-grid,.dash-bottom-inner{grid-template-columns:1fr!important;}
+}
 </style>
 </head>
 <body>
@@ -738,7 +815,12 @@ table tr:hover td{background:#f8fafc;}
 
     <div class="card">
       <div class="card-title">📅 ESG 연간 교육 계획 (2026년)</div>
-      <div class="alert info">전사 안전·보건·환경 관련 법적 의무 교육 항목을 통합 관리합니다. 월별 칸의 ●(시행완료) / ○(미시행) 으로 진행 현황을 확인하고, 일간 TBM·순회점검은 [패트롤+TBM] 메뉴에서 관리합니다.<br>＋ <strong>기타 항목 추가</strong> 버튼으로 안전보건 선포식, 임명식 등 자체 행사를 등록할 수 있습니다 (사진·메모 첨부 가능).</div>
+      <div class="info-tip-grid">
+        <div class="info-tip"><span class="tip-ic">📋</span><div><strong>통합 관리</strong><br><span>전사 안전·보건·환경 법적 의무 교육 항목</span></div></div>
+        <div class="info-tip"><span class="tip-ic">●</span><div><strong>월별 시행 체크</strong><br><span>● 시행완료 / ○ 미시행 — 칸 클릭으로 토글</span></div></div>
+        <div class="info-tip"><span class="tip-ic">📎</span><div><strong>증빙·메모</strong><br><span>각 항목 📎 버튼으로 사진·파일·메모 등록</span></div></div>
+        <div class="info-tip"><span class="tip-ic">＋</span><div><strong>기타 항목 추가</strong><br><span>안전보건 선포식, 임명식 등 자체 행사 등록</span></div></div>
+      </div>
       <div id="esg-plan-meetcal"></div>
     </div>
 
