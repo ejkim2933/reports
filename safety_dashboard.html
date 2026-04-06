@@ -482,8 +482,8 @@ table tr:hover td{background:#f8fafc;}
 .patrol-meta-cell input,.patrol-meta-cell select{padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-family:inherit;background:#fff;}
 
 /* PATROL SITE TABS (TBM처럼 단순 토글) */
-.patrol-site-tabs{display:flex;gap:0;margin-bottom:12px;background:#f1f5f9;border-radius:10px;padding:4px;width:100%;box-sizing:border-box;}
-.pst-btn{flex:1;min-width:0;padding:10px 12px;border:none;background:transparent;font-size:13px;font-weight:700;color:#64748b;border-radius:7px;cursor:pointer;transition:all 0.15s;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;}
+.patrol-site-tabs{display:flex;gap:4px;margin-bottom:12px;background:#f1f5f9;border-radius:10px;padding:4px;width:100%;max-width:100%;box-sizing:border-box;}
+.pst-btn{flex:1 1 0;width:0;min-width:0;padding:9px 6px;border:none;background:transparent;font-size:12px;font-weight:700;color:#64748b;border-radius:7px;cursor:pointer;transition:all 0.15s;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;}
 .pst-btn.active{background:#1e5096;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.1);}
 
 /* PATROL CHECK LIST (카드형 — 모바일 친화) */
@@ -514,8 +514,13 @@ table tr:hover td{background:#f8fafc;}
 
 /* PATROL BANNERS + 페이지 (모바일 컴팩트) */
 @media(max-width:768px){
-  /* 패트롤 섹션 전체: viewport 강제 가두기 */
-  #section-patrol,#section-patrol *{max-width:100%;box-sizing:border-box;}
+  /* 패트롤 섹션 전체: viewport 강제 가두기 (nuclear option) */
+  #section-patrol{overflow-x:hidden;width:100%;max-width:100vw;}
+  #section-patrol *{max-width:100%;box-sizing:border-box;}
+  #patrol-view,#tbm-view{width:100%;max-width:100%;}
+  #patrol-calendar,#tbm-calendar{width:100%;max-width:100%;overflow:hidden;}
+  .cal-grid{width:100%;max-width:100%;}
+  .cal-day{width:auto;min-width:0;}
   #section-patrol .table-wrap{max-width:100%;overflow-x:auto;}
   .patrol-banners{grid-template-columns:1fr!important;gap:10px!important;margin-bottom:14px!important;}
   .patrol-banners > div{padding:16px 14px!important;}
@@ -1902,12 +1907,24 @@ function previewTbmDayPhoto(input){
   if(!preview || !input.files.length) return;
   const file = input.files[0];
   preview.innerHTML = '<div style="font-size:11px;color:#6b7280;">압축 중...</div>';
-  // 200KB 이하로 자동 압축
+  // 200KB 이하로 자동 압축 후 즉시 저장
   compressImage(file).then(dataUrl => {
     _tbmPhotoDataUrl = dataUrl;
     const sizeKB = Math.ceil((dataUrl.length * 3 / 4) / 1024);
     preview.innerHTML = `<img src="${dataUrl}" style="width:140px;height:100px;object-fit:cover;border-radius:8px;border:2px solid #e5e7eb;">
-      <div style="font-size:11px;color:#6b7280;margin-top:2px;">${file.name} <span style="color:#16a34a;">(${sizeKB}KB)</span></div>`;
+      <div style="font-size:11px;color:#16a34a;margin-top:2px;">📎 ${file.name} (${sizeKB}KB) — 자동 저장됨</div>`;
+    // 사진만 올려도 즉시 저장 (저장 버튼 안 눌러도 동기화)
+    const form = document.getElementById('tbm-day-form');
+    const key = form?.dataset.key;
+    if(!key) return;
+    const tbmData = DB.getObj('tbmCalendar');
+    const cur = tbmData[key] || {};
+    cur.photoName = file.name;
+    cur.photoData = dataUrl;
+    cur.savedAt = new Date().toISOString();
+    tbmData[key] = cur;
+    DB.set('tbmCalendar', tbmData);
+    renderTbmCalendar();
   });
 }
 
