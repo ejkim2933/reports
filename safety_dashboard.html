@@ -609,7 +609,7 @@ table tr:hover td{background:#f8fafc;}
               <div style="font-size:12px;color:#6b7280;margin-top:2px;" id="patrol-form-date"></div>
             </div>
             <div style="display:flex;align-items:center;gap:12px;">
-              <button class="btn btn-outline btn-sm patrol-print-btn" onclick="window.print()" style="white-space:nowrap;">🖨️ 이 점검표 인쇄</button>
+              <button class="btn btn-outline btn-sm patrol-print-btn" onclick="printPatrolChecklist()" style="white-space:nowrap;">🖨️ 이 점검표 인쇄</button>
               <div style="text-align:right;font-size:11px;color:#6b7280;">
                 <div>점검자: <input type="text" id="p-inspector" placeholder="이름" style="border:none;border-bottom:1px solid #d1d5db;width:80px;font-size:11px;padding:2px 4px;"></div>
                 <div style="margin-top:4px;">날씨: <select id="p-weather" style="border:none;border-bottom:1px solid #d1d5db;font-size:11px;padding:2px;"><option>맑음</option><option>흐림</option><option>비</option><option>눈</option></select></div>
@@ -1872,6 +1872,160 @@ function savePatrol(){
   alert(`✅ 패트롤 기록 저장! (점검: ${totalChecked}/${totalItems}, 불량: ${badCount}건)`);
   clearPatrol();
 }
+function printPatrolChecklist(){
+  const dateText = document.getElementById('patrol-form-date')?.textContent || '';
+  const inspector = document.getElementById('p-inspector')?.value || '';
+  const weather = document.getElementById('p-weather')?.value || '맑음';
+  const siteName = patrolSiteFilter==='hwaseong' ? '화성공장 (도색·화학)' : '수원공장 (사출·조립)';
+
+  // 현재 체크리스트 데이터 수집
+  const zones = getFilteredZones();
+  let allItems = [];
+  zones.forEach(zone => {
+    const icon = zone.name.match(/^(\S+)/)?.[1]||'';
+    const label = zone.name.replace(/^(\S+)\s*/,'');
+    allItems.push({type:'header', text: icon+' '+label});
+    zone.items.forEach((item, i) => {
+      const key = `${zone.id}_${i}`;
+      const cb = document.querySelector(`input[data-key="${key}"]`);
+      const memo = document.querySelector(`input[data-memo="${key}"]`);
+      allItems.push({type:'item', text:item, checked: cb?.checked||false, memo: memo?.value||''});
+    });
+  });
+
+  // 2단 분할
+  const half = Math.ceil(allItems.length / 2);
+  const col1 = allItems.slice(0, half);
+  const col2 = allItems.slice(half);
+
+  function renderCol(items){
+    let html = '';
+    let num = 0;
+    items.forEach(it => {
+      if(it.type==='header'){
+        html += `<tr class="zh"><td colspan="3">${it.text}</td></tr>`;
+      } else {
+        num++;
+        html += `<tr><td class="itm">${it.text}</td><td class="chk">${it.checked?'✓':'☐'}</td><td class="nt">${it.memo}</td></tr>`;
+      }
+    });
+    return html;
+  }
+
+  // 전체 항목 수 세기
+  const totalItems = allItems.filter(i=>i.type==='item').length;
+  const checkedItems = allItems.filter(i=>i.type==='item'&&i.checked).length;
+
+  const w = window.open('','_blank','width=800,height=1000');
+  w.document.write(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8">
+<title>현장 패트롤 점검표</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans KR','Malgun Gothic',sans-serif;}
+@page{size:A4 portrait;margin:0;}
+.page{width:210mm;min-height:297mm;padding:6mm 7mm 5mm;position:relative;}
+
+/* 헤더 */
+.hdr{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid #0d1f3c;padding-bottom:5px;margin-bottom:4px;}
+.hdr h1{font-size:16px;font-weight:900;color:#0d1f3c;}
+.hdr .sub{font-size:9px;color:#666;margin-top:1px;}
+.hdr .right{text-align:right;font-size:9px;color:#333;line-height:1.6;}
+
+/* 정보란 */
+.info{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;border:1.5px solid #333;margin-bottom:4px;font-size:9.5px;}
+.info .c{padding:4px 6px;border-right:1px solid #999;display:flex;align-items:center;gap:3px;}
+.info .c:last-child{border-right:none;}
+.info .lb{font-weight:700;white-space:nowrap;}
+.info .vl{flex:1;border-bottom:1px dotted #999;min-height:14px;padding-left:3px;}
+
+/* 특이사항 */
+.spec{display:flex;gap:12px;font-size:9px;padding:2px 0 4px;align-items:center;}
+.spec .lb{font-weight:700;}
+.spec label{display:flex;align-items:center;gap:2px;}
+
+/* 2단 체크리스트 */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.col table{width:100%;border-collapse:collapse;}
+.col th{background:#0d1f3c;color:#fff;font-size:7.5px;padding:2.5px 4px;text-align:left;
+  -webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}
+.col th.chk-h{width:22px;text-align:center;}
+.col th.nt-h{width:18%;}
+.zh td{background:#e8edf3;font-weight:800;font-size:8.5px;padding:2px 4px;
+  -webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}
+.itm{font-size:8px;padding:2px 4px;border-bottom:0.5px solid #ddd;}
+.chk{width:22px;text-align:center;font-size:10px;padding:1px;border-bottom:0.5px solid #ddd;}
+.nt{width:18%;font-size:7px;padding:2px 3px;border-bottom:0.5px solid #ddd;color:#666;}
+
+/* 하단 */
+.bot{margin-top:4px;}
+.act{border:1.5px solid #333;padding:4px 6px;margin-bottom:4px;min-height:28px;}
+.act .lb{font-weight:700;font-size:9px;margin-bottom:2px;}
+.act .ln{border-bottom:1px dotted #bbb;height:13px;}
+.sign{display:grid;grid-template-columns:1fr 1fr 1fr;border:1.5px solid #333;font-size:9px;}
+.sign .s{padding:3px 6px;border-right:1px solid #999;text-align:center;}
+.sign .s:last-child{border-right:none;}
+.sign .sl{font-weight:700;margin-bottom:1px;}
+.sign .sv{border-bottom:1px solid #999;height:18px;margin-top:2px;}
+.ft{text-align:center;font-size:7.5px;color:#aaa;margin-top:3px;}
+
+@media print{
+  html,body{width:210mm;height:297mm;}
+  .page{width:210mm;min-height:297mm;}
+  .hdr,.zh td,.col th,.sign,.act{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}
+}
+</style></head><body>
+<div class="page">
+  <div class="hdr">
+    <div><h1>현장 패트롤 점검표</h1><div class="sub">산업안전보건법 §15·§16 / ${siteName}</div></div>
+    <div class="right">신성오토텍<br>${dateText}</div>
+  </div>
+
+  <div class="info">
+    <div class="c"><span class="lb">사업장</span><span class="vl">${siteName}</span></div>
+    <div class="c"><span class="lb">점검자</span><span class="vl">${inspector}</span></div>
+    <div class="c"><span class="lb">점검일</span><span class="vl">${dateText}</span></div>
+    <div class="c"><span class="lb">날씨</span><span class="vl">${weather}</span></div>
+  </div>
+
+  <div class="spec">
+    <span class="lb">특이사항:</span>
+    <label>☐ 신규 작업자</label>
+    <label>☐ 특별 작업</label>
+    <label>☐ 외부 업체</label>
+    <label>☐ 해당 없음</label>
+  </div>
+
+  <div class="cols">
+    <div class="col">
+      <table>
+        <thead><tr><th>점검내용</th><th class="chk-h">적합</th><th class="nt-h">비고</th></tr></thead>
+        <tbody>${renderCol(col1)}</tbody>
+      </table>
+    </div>
+    <div class="col">
+      <table>
+        <thead><tr><th>점검내용</th><th class="chk-h">적합</th><th class="nt-h">비고</th></tr></thead>
+        <tbody>${renderCol(col2)}</tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="bot">
+    <div class="act"><div class="lb">조치사항 / 개선 필요사항</div><div class="ln"></div><div class="ln"></div></div>
+    <div class="sign">
+      <div class="s"><div class="sl">점검자</div><div class="sv"></div></div>
+      <div class="s"><div class="sl">관리감독자</div><div class="sv"></div></div>
+      <div class="s"><div class="sl">안전보건관리담당</div><div class="sv"></div></div>
+    </div>
+  </div>
+  <div class="ft">점검 완료 후 안전보건관리 담당에게 제출 | 총 ${totalItems}개 항목 (${checkedItems}건 점검완료) | 신성오토텍</div>
+</div>
+</body></html>`);
+  w.document.close();
+  setTimeout(()=>w.print(), 400);
+}
+
 function clearPatrol(){
   getFilteredZones().forEach(zone=>{
     zone.items.forEach((_,i)=>{
