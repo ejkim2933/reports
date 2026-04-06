@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>산업안전보건 관리 시스템</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
@@ -723,25 +726,10 @@ table tr:hover td{background:#f8fafc;}
 
   <!-- ===== 교육 관리 ===== -->
   <div id="section-education" class="section">
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab('edu','plan')">📅 연간 계획</button>
-      <button class="tab" onclick="switchTab('edu','history')">📜 교육 이력</button>
-    </div>
-    <div id="edu-tab-plan">
-      <div class="card">
-        <div class="card-title">📅 ESG 연간 계획 및 준수 평가 (2026년)</div>
-        <div class="alert info">전사 안전·보건·환경·윤리 관련 법적 의무 및 자율 관리 항목을 통합 관리합니다. ● 시행완료 / ○ 계획</div>
-        <div id="esg-plan-edu"></div>
-      </div>
-    </div>
-    <div id="edu-tab-history" style="display:none;">
-      <div class="card">
-        <div class="card-title">📜 교육 이력</div>
-        <div class="table-wrap"><table>
-          <thead><tr><th>교육일자</th><th>교육종류</th><th>시간</th><th>방법</th><th>강사</th><th>참석인원</th><th>작업</th></tr></thead>
-          <tbody id="edu-history-body"></tbody>
-        </table></div>
-      </div>
+    <div class="card">
+      <div class="card-title">📅 ESG 연간 계획 및 준수 평가 (2026년)</div>
+      <div class="alert info">전사 안전·보건·환경·윤리 관련 법적 의무 및 자율 관리 항목을 통합 관리합니다. ● 시행완료 / ○ 계획</div>
+      <div id="esg-plan-edu"></div>
     </div>
   </div>
 
@@ -751,62 +739,41 @@ table tr:hover td{background:#f8fafc;}
     <!-- 상단 알림 배너 -->
     <div id="meetcal-alerts" style="margin-bottom:16px;"></div>
 
-    <div class="tabs">
-      <button class="tab active" onclick="switchMeetCalTab('eduplan')">📚 교육 계획·이력</button>
-      <button class="tab" onclick="switchMeetCalTab('status')">📋 운영 현황·캘린더</button>
+    <!-- 상단: 주간/월간/분기 완료 현황 -->
+    <div class="grid-3" style="margin-bottom:16px;">
+      <div class="stat-card blue"><div class="label">이번 주</div><div class="value" id="mc-week-pending">-</div><div class="sub">완료 / 전체</div></div>
+      <div class="stat-card orange"><div class="label">이번 달</div><div class="value" id="mc-month-pending">-</div><div class="sub">완료 / 전체</div></div>
+      <div class="stat-card green"><div class="label">이번 분기</div><div class="value" id="mc-quarter-pending">-</div><div class="sub">완료 / 전체</div></div>
     </div>
 
-    <!-- 탭1: 교육 계획·이력 -->
-    <div id="meetcal-tab-eduplan">
-      <!-- 상단: 주간/월간/분기 완료 현황 -->
-      <div class="grid-3" style="margin-bottom:16px;">
-        <div class="stat-card blue"><div class="label">이번 주</div><div class="value" id="mc-week-pending">-</div><div class="sub">완료 / 전체</div></div>
-        <div class="stat-card orange"><div class="label">이번 달</div><div class="value" id="mc-month-pending">-</div><div class="sub">완료 / 전체</div></div>
-        <div class="stat-card green"><div class="label">이번 분기</div><div class="value" id="mc-quarter-pending">-</div><div class="sub">완료 / 전체</div></div>
-      </div>
-
-      <div class="grid-2" style="gap:16px;margin-bottom:16px;">
-        <div class="card">
-          <div class="card-title">📅 ESG 연간 교육 계획 (2026년)</div>
-          <div class="alert info">전사 안전·보건·환경 관련 법적 의무 교육 항목을 통합 관리합니다.</div>
-          <div id="esg-plan-meetcal"></div>
-        </div>
-        <div class="card">
-          <div class="card-title">📜 교육 시행 이력</div>
-          <div class="table-wrap"><table>
-            <thead><tr><th>교육일자</th><th>교육종류</th><th>시간</th><th>방법</th><th>강사</th><th>참석인원</th><th>작업</th></tr></thead>
-            <tbody id="edu-history-body-mc"></tbody>
-          </table></div>
-        </div>
-      </div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title">📅 ESG 연간 교육 계획 (2026년)</div>
+      <div class="alert info">전사 안전·보건·환경 관련 법적 의무 교육 항목을 통합 관리합니다.</div>
+      <div id="esg-plan-meetcal"></div>
     </div>
 
-    <!-- 탭2: 운영 현황·캘린더 (현황판 + 연간 캘린더 합침) -->
-    <div id="meetcal-tab-status" style="display:none;">
+    <!-- 분기별 표 -->
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title">📋 주기별 미팅·교육 관리 현황</div>
+      <div class="alert info" style="margin-bottom:12px;">일간 TBM·순회점검은 [패트롤+TBM] 메뉴에서 일지로 관리합니다. <span style="color:#16a34a;font-weight:700;">●</span> 시행완료 &nbsp; <span style="color:#dc2626;font-weight:700;">○</span> 미시행</div>
+      <div id="mc-quarter-table"></div>
+    </div>
 
-      <!-- 분기별 표 -->
-      <div class="card" style="margin-bottom:16px;">
-        <div class="card-title">📋 주기별 미팅·교육 관리 현황</div>
-        <div class="alert info" style="margin-bottom:12px;">일간 TBM·순회점검은 [패트롤+TBM] 메뉴에서 일지로 관리합니다. <span style="color:#16a34a;font-weight:700;">●</span> 시행완료 &nbsp; <span style="color:#dc2626;font-weight:700;">○</span> 미시행</div>
-        <div id="mc-quarter-table"></div>
+    <!-- 연간 캘린더 -->
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title">📅 연간 시행 캘린더</div>
+      <div id="meetcal-year-grid"></div>
+    </div>
+
+    <!-- 다가오는 일정 / 최근 기록 -->
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">🔔 다가오는 일정 (사전 알림)</div>
+        <div id="mc-upcoming"></div>
       </div>
-
-      <!-- 연간 캘린더 -->
-      <div class="card" style="margin-bottom:16px;">
-        <div class="card-title">📅 연간 시행 캘린더</div>
-        <div id="meetcal-year-grid"></div>
-      </div>
-
-      <!-- 다가오는 일정 / 최근 기록 -->
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title">🔔 다가오는 일정 (사전 알림)</div>
-          <div id="mc-upcoming"></div>
-        </div>
-        <div class="card">
-          <div class="card-title">📜 최근 미팅·교육 기록</div>
-          <div id="mc-recent-logs"></div>
-        </div>
+      <div class="card">
+        <div class="card-title">📜 최근 미팅·교육 기록</div>
+        <div id="mc-recent-logs"></div>
       </div>
     </div>
   </div>
@@ -845,18 +812,6 @@ table tr:hover td{background:#f8fafc;}
       <div style="display:flex;gap:8px;">
         <button class="btn btn-primary" onclick="saveMeetingLog()" style="flex:1;">💾 저장</button>
         <button class="btn btn-outline" onclick="document.getElementById('mc-log-modal').style.display='none'">취소</button>
-      </div>
-    </div>
-  </div>
-            <option value="04">4월</option><option value="05">5월</option><option value="06">6월</option>
-            <option value="07">7월</option><option value="08">8월</option><option value="09">9월</option>
-            <option value="10">10월</option><option value="11">11월</option><option value="12">12월</option>
-          </select>
-        </div>
-        <div class="table-wrap"><table>
-          <thead><tr><th>일자</th><th>구분</th><th>진행자</th><th>장소</th><th>시간</th><th>참석</th><th>증빙</th><th>내용</th><th style="width:50px;">삭제</th></tr></thead>
-          <tbody id="meeting-log-body"></tbody>
-        </table></div>
       </div>
     </div>
   </div>
@@ -3857,7 +3812,10 @@ function renderMeetCal(){
   renderMcAlerts();
   renderMcOverview();
   renderESGPlan('esg-plan-meetcal');
-  renderEduHistoryMC();
+  renderMcQuarterTable();
+  renderMcYearCalendar();
+  renderMcUpcoming();
+  renderMcRecentLogs();
 }
 
 function renderMcAlerts(){
