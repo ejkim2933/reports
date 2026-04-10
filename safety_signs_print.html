@@ -543,7 +543,7 @@ body {
     margin: 0;
   }
 
-  /* 분전반 A4 1/4 ×4 인쇄 모드 */
+  /* 분전반 A4 1/4 ×4 인쇄 모드 — 기존 디자인 축소 */
   .quarter-print-page {
     display: grid !important;
     grid-template-columns: 1fr 1fr;
@@ -551,81 +551,75 @@ body {
     width: 210mm;
     height: 297mm;
     margin: 0;
-    padding: 2mm;
-    gap: 2mm;
+    padding: 1mm;
+    gap: 1mm;
     page-break-after: always;
     box-sizing: border-box;
   }
-  .quarter-print-page .q-card {
-    border: 1.5px solid #D32F2F;
-    border-radius: 4mm;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 4mm 5mm;
-    text-align: center;
+  .quarter-print-page .sign-page {
+    display: flex !important;
+    width: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: 1px solid #ccc;
+    page-break-after: avoid !important;
     overflow: hidden;
-    background: #fff;
   }
-  .quarter-print-page .q-card .q-badge {
-    background: #D32F2F !important;
-    color: #fff;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 10px;
-    border-radius: 20px;
-    margin-bottom: 3mm;
+  .quarter-print-page .sign-page .sign-header {
+    padding: 4mm 4mm 3mm !important;
+    border-top-width: 5mm !important;
   }
-  .quarter-print-page .q-card .q-title {
-    font-size: 22px;
-    font-weight: 900;
-    color: #B71C1C;
-    line-height: 1.3;
-    margin-bottom: 1mm;
+  .quarter-print-page .sign-page .sign-id { display: none; }
+  .quarter-print-page .sign-page .sign-title {
+    font-size: 16pt !important;
+    margin-top: 3mm !important;
   }
-  .quarter-print-page .q-card .q-title-cn {
-    font-size: 16px;
-    font-weight: 700;
-    color: #D32F2F;
-    margin-bottom: 4mm;
+  .quarter-print-page .sign-page .sign-title-cn {
+    font-size: 10pt !important;
+    margin-top: 1mm !important;
   }
-  .quarter-print-page .q-card .q-symbol {
-    width: 22mm;
-    height: 22mm;
-    border: 4px solid #D32F2F;
-    border-radius: 50%;
-    position: relative;
-    margin-bottom: 4mm;
+  .quarter-print-page .sign-page .category-badge {
+    font-size: 8pt !important;
+    padding: 1mm 3mm !important;
+    margin-bottom: 1mm !important;
   }
-  .quarter-print-page .q-card .q-symbol::after {
-    content: '';
-    position: absolute;
-    top: 20%;
-    left: -5%;
-    width: 110%;
-    height: 4px;
-    background: #D32F2F;
-    transform: rotate(-45deg);
+  .quarter-print-page .sign-page .sign-symbol {
+    width: 50px !important;
+    height: 50px !important;
+    border-width: 5px !important;
   }
-  .quarter-print-page .q-card .q-rule {
-    font-size: 20px;
-    font-weight: 900;
-    color: #1a1a1a;
-    line-height: 1.4;
-    margin-bottom: 2mm;
+  .quarter-print-page .sign-page .sign-symbol::after {
+    height: 5px !important;
   }
-  .quarter-print-page .q-card .q-rule-cn {
-    font-size: 15px;
-    font-weight: 600;
-    color: #555;
-    line-height: 1.4;
+  .quarter-print-page .sign-page .sign-body {
+    padding: 2mm 4mm 3mm !important;
   }
-  .quarter-print-page .q-card .q-footer {
-    margin-top: auto;
-    font-size: 8px;
-    color: #999;
-    padding-top: 2mm;
+  .quarter-print-page .sign-page .sign-location {
+    font-size: 8pt !important;
+    padding: 1.5mm 3mm !important;
+    margin-bottom: 2mm !important;
+  }
+  .quarter-print-page .sign-page .rule {
+    padding: 2mm 3mm !important;
+    gap: 2mm !important;
+  }
+  .quarter-print-page .sign-page .rule-icon {
+    width: 18px !important;
+    height: 18px !important;
+    font-size: 10px !important;
+  }
+  .quarter-print-page .sign-page .rule-kr {
+    font-size: 11pt !important;
+  }
+  .quarter-print-page .sign-page .rule-cn {
+    font-size: 9pt !important;
+  }
+  .quarter-print-page .sign-page .sign-footer {
+    padding: 3mm 4mm !important;
+  }
+  .quarter-print-page .sign-page .sign-footer img {
+    height: 18px !important;
   }
 }
 
@@ -1381,30 +1375,25 @@ function printSingle(id) {
 
 // ===== Print Quarter (A4 1/4 ×4) for s04 =====
 function printQuarter(id) {
-  // 기존 quarter 페이지 제거
   const old = document.getElementById('quarter-page');
   if(old) old.remove();
 
-  // 4분할 페이지 생성
+  // 기존 sign-page HTML을 그대로 복제
+  const source = document.querySelector(`.sign-page[data-id="${id}"]`);
+  if(!source) return printSingle(id);
+
   const page = document.createElement('div');
   page.id = 'quarter-page';
   page.className = 'quarter-print-page';
   for(let i=0; i<4; i++){
-    page.innerHTML += `
-      <div class="q-card">
-        <div class="q-badge">금지 禁止</div>
-        <div class="q-title">분전반 / 전기 패널함</div>
-        <div class="q-title-cn">配电箱 / 电气控制柜</div>
-        <div class="q-symbol"></div>
-        <div class="q-rule">허가자 외 접근 금지</div>
-        <div class="q-rule-cn">非授权人员严禁靠近</div>
-        <div class="q-footer">신성오토텍 안전보건관리</div>
-      </div>`;
+    const clone = source.cloneNode(true);
+    clone.style.display = 'flex';
+    clone.classList.remove('hidden-for-print');
+    page.appendChild(clone);
   }
   document.body.appendChild(page);
 
-  // 다른 표지판 숨기고 quarter만 표시
-  document.querySelectorAll('.sign-page').forEach(p => p.classList.add('hidden-for-print'));
+  document.querySelectorAll('.sign-page:not(.quarter-print-page .sign-page)').forEach(p => p.classList.add('hidden-for-print'));
   window.print();
   setTimeout(() => {
     document.querySelectorAll('.sign-page').forEach(p => p.classList.remove('hidden-for-print'));
