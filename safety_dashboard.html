@@ -802,10 +802,11 @@ table tr:hover td{background:#f8fafc;}
     <!-- 상단 알림 배너 (비활성) -->
     <!-- <div id="meetcal-alerts" style="margin-bottom:16px;"></div> -->
 
-    <!-- 상단: 월/분기/연간 ESG 교육계획 완료 현황 -->
-    <div class="grid-3" style="margin-bottom:16px;">
-      <div class="stat-card blue"><div class="label">이번 달</div><div class="value" id="mc-month-pending">-</div><div class="sub">완료 / 계획</div></div>
+    <!-- 상단: 지난분기/이번분기/이번달/연간 ESG 교육계획 완료 현황 -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;">
+      <div class="stat-card" style="border-left:4px solid #94a3b8;"><div class="label">지난 분기</div><div class="value" id="mc-prevq-pending">-</div><div class="sub">완료 / 계획</div></div>
       <div class="stat-card orange"><div class="label">이번 분기</div><div class="value" id="mc-quarter-pending">-</div><div class="sub">완료 / 계획</div></div>
+      <div class="stat-card blue"><div class="label">이번 달</div><div class="value" id="mc-month-pending">-</div><div class="sub">완료 / 계획</div></div>
       <div class="stat-card green"><div class="label">연간 누적</div><div class="value" id="mc-year-pending">-</div><div class="sub">완료 / 계획</div></div>
     </div>
 
@@ -4107,31 +4108,37 @@ function renderMcOverview(){
   const curQ = Math.floor(curMonth / 3);
   const qStart = curQ * 3;
   const qEnd = qStart + 2;
+  const prevQ = curQ > 0 ? curQ - 1 : -1;
+  const pqStart = prevQ >= 0 ? prevQ * 3 : -1;
+  const pqEnd = prevQ >= 0 ? pqStart + 2 : -1;
 
   let monthPlan=0, monthDone=0;
   let quarterPlan=0, quarterDone=0;
+  let prevqPlan=0, prevqDone=0;
   let yearPlan=0, yearDone=0;
 
   esgData.forEach((item, idx) => {
     item.plan.forEach((p, mi) => {
-      // 계획 수 집계
       if(p) {
         if(mi === curMonth) monthPlan++;
         if(mi >= qStart && mi <= qEnd) quarterPlan++;
+        if(pqStart >= 0 && mi >= pqStart && mi <= pqEnd) prevqPlan++;
         yearPlan++;
       }
-      // 시행완료 집계 (해당 달에 완료 표시된 것)
       if(isESGDone(idx, mi)) {
         if(mi === curMonth) monthDone++;
         if(mi >= qStart && mi <= qEnd) quarterDone++;
+        if(pqStart >= 0 && mi >= pqStart && mi <= pqEnd) prevqDone++;
         yearDone++;
       }
     });
   });
 
+  const pqEl = document.getElementById('mc-prevq-pending');
   const mEl = document.getElementById('mc-month-pending');
   const qEl = document.getElementById('mc-quarter-pending');
   const yEl = document.getElementById('mc-year-pending');
+  if(pqEl) pqEl.textContent = prevQ >= 0 ? `${prevqDone}/${prevqPlan}` : '-';
   if(mEl) mEl.textContent = `${monthDone}/${monthPlan}`;
   if(qEl) qEl.textContent = `${quarterDone}/${quarterPlan}`;
   if(yEl) yEl.textContent = `${yearDone}/${yearPlan}`;
