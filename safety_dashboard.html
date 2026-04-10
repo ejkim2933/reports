@@ -4032,7 +4032,7 @@ function getMcLastLog(itemId){
 function getMcAlerts(){
   const alerts = [];
   const now = new Date();
-  mcMasterItems.forEach(item=>{
+  mcMasterItems.filter(item=>item.id!=='weekly-env'&&item.id!=='prod-weekly').forEach(item=>{
     let range;
     if(item.id==='prod-monthly'){
       range = getMcCurrentMonthRange();
