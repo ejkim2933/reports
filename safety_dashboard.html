@@ -3793,11 +3793,14 @@ function cnCopy(id){
 function cnPrint(id){
   const c=cnCards.find(x=>x.id===id);
   const w=window.open('','_blank','width=800,height=1100');
-  w.document.write(`<html><head><meta charset="UTF-8"><style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+  w.document.write(`<html><head><meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
     @page{size:A4;margin:0;}
     *{margin:0;padding:0;box-sizing:border-box;}
-    html,body{width:210mm;height:297mm;font-family:'Noto Sans KR','Noto Sans SC','Malgun Gothic',sans-serif;
+    html,body{width:210mm;height:297mm;font-family:'Noto Sans KR','Noto Sans SC','Microsoft YaHei','SimHei','Malgun Gothic',sans-serif;
       -webkit-print-color-adjustment:exact !important;print-color-adjust:exact !important;color-adjust:exact !important;}
     .card{width:210mm;height:297mm;display:flex;flex-direction:column;overflow:hidden;}
     .header{padding:28px 28px 20px;background:${c.color};position:relative;display:flex;flex-direction:column;justify-content:flex-end;
@@ -3843,7 +3846,8 @@ function cnPrint(id){
       <div class="footer">${c.footer}</div>
     </div>
   </body></html>`);
-  w.document.close(); setTimeout(()=>w.print(),500);
+  w.document.close();
+  w.document.fonts.ready.then(()=>{ setTimeout(()=>w.print(),300); });
 }
 
 // ============================================================
@@ -3888,11 +3892,14 @@ function ptCopy(id){
 function ptPrint(id){
   const p=ptPosters.find(x=>x.id===id);
   const w=window.open('','_blank','width=800,height=1100');
-  w.document.write(`<html><head><meta charset="UTF-8"><style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+  w.document.write(`<html><head><meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
     @page{size:A4;margin:0;}
     *{margin:0;padding:0;box-sizing:border-box;}
-    html,body{width:210mm;height:297mm;font-family:'Noto Sans KR','Noto Sans SC','Malgun Gothic',sans-serif;
+    html,body{width:210mm;height:297mm;font-family:'Noto Sans KR','Noto Sans SC','Microsoft YaHei','SimHei','Malgun Gothic',sans-serif;
       -webkit-print-color-adjustment:exact !important;print-color-adjust:exact !important;color-adjust:exact !important;}
     .poster{width:210mm;height:297mm;display:flex;flex-direction:column;overflow:hidden;}
     .header{padding:28px 28px 22px;background:${p.color};text-align:center;position:relative;display:flex;flex-direction:column;justify-content:center;
@@ -3936,7 +3943,8 @@ function ptPrint(id){
       <div class="footer">${p.footer}</div>
     </div>
   </body></html>`);
-  w.document.close(); setTimeout(()=>w.print(),500);
+  w.document.close();
+  w.document.fonts.ready.then(()=>{ setTimeout(()=>w.print(),300); });
 }
 
 // ============================================================
