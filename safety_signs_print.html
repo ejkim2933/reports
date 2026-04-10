@@ -542,6 +542,91 @@ body {
     size: A4 portrait;
     margin: 0;
   }
+
+  /* 분전반 A4 1/4 ×4 인쇄 모드 */
+  .quarter-print-page {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: 210mm;
+    height: 297mm;
+    margin: 0;
+    padding: 2mm;
+    gap: 2mm;
+    page-break-after: always;
+    box-sizing: border-box;
+  }
+  .quarter-print-page .q-card {
+    border: 1.5px solid #D32F2F;
+    border-radius: 4mm;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4mm 5mm;
+    text-align: center;
+    overflow: hidden;
+    background: #fff;
+  }
+  .quarter-print-page .q-card .q-badge {
+    background: #D32F2F !important;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-bottom: 3mm;
+  }
+  .quarter-print-page .q-card .q-title {
+    font-size: 22px;
+    font-weight: 900;
+    color: #B71C1C;
+    line-height: 1.3;
+    margin-bottom: 1mm;
+  }
+  .quarter-print-page .q-card .q-title-cn {
+    font-size: 16px;
+    font-weight: 700;
+    color: #D32F2F;
+    margin-bottom: 4mm;
+  }
+  .quarter-print-page .q-card .q-symbol {
+    width: 22mm;
+    height: 22mm;
+    border: 4px solid #D32F2F;
+    border-radius: 50%;
+    position: relative;
+    margin-bottom: 4mm;
+  }
+  .quarter-print-page .q-card .q-symbol::after {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: -5%;
+    width: 110%;
+    height: 4px;
+    background: #D32F2F;
+    transform: rotate(-45deg);
+  }
+  .quarter-print-page .q-card .q-rule {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.5;
+    margin-bottom: 1mm;
+  }
+  .quarter-print-page .q-card .q-rule-cn {
+    font-size: 12px;
+    font-weight: 500;
+    color: #555;
+    line-height: 1.4;
+  }
+  .quarter-print-page .q-card .q-footer {
+    margin-top: auto;
+    font-size: 8px;
+    color: #999;
+    padding-top: 2mm;
+  }
 }
 
 /* ===== SCREEN: HIDE SIGN PAGES BY DEFAULT (show grid) ===== */
@@ -552,6 +637,9 @@ body {
 
   .sign-page.visible-on-screen {
     display: flex;
+  }
+  .quarter-print-page {
+    display: none;
   }
 }
 
@@ -686,13 +774,6 @@ body {
     <div class="sign-rules">
       <div class="rule">
         <span class="rule-icon">1</span>
-        <div class="rule-text">
-          <div class="rule-kr">허가자 외 접근 금지</div>
-          <div class="rule-cn">非授权人员严禁靠近</div>
-        </div>
-      </div>
-      <div class="rule">
-        <span class="rule-icon">2</span>
         <div class="rule-text">
           <div class="rule-kr">작업 전 반드시 잠금·태그(LOTO) 실시</div>
           <div class="rule-cn">作业前必须执行上锁挂牌(LOTO)</div>
@@ -979,19 +1060,12 @@ body {
       <div class="rule">
         <span class="rule-icon">1</span>
         <div class="rule-text">
-          <div class="rule-kr">래핑기 가동 중 손·신체 접근 금지</div>
-          <div class="rule-cn">运行中严禁手及身体靠近</div>
+          <div class="rule-kr">래핑기 가동 중 구역 내 접근 금지</div>
+          <div class="rule-cn">缠绕机运行中禁止进入该区域</div>
         </div>
       </div>
       <div class="rule">
         <span class="rule-icon">2</span>
-        <div class="rule-text">
-          <div class="rule-kr">보안경 및 안전장갑 반드시 착용</div>
-          <div class="rule-cn">必须佩戴护目镜和安全手套</div>
-        </div>
-      </div>
-      <div class="rule">
-        <span class="rule-icon">3</span>
         <div class="rule-text">
           <div class="rule-kr">비상정지 버튼 위치 사전 숙지</div>
           <div class="rule-cn">须熟知紧急停止按钮位置</div>
@@ -1026,15 +1100,8 @@ body {
       <div class="rule">
         <span class="rule-icon">2</span>
         <div class="rule-text">
-          <div class="rule-kr">방열장갑 및 보안경 반드시 착용</div>
-          <div class="rule-cn">必须佩戴隔热手套和护目镜</div>
-        </div>
-      </div>
-      <div class="rule">
-        <span class="rule-icon">3</span>
-        <div class="rule-text">
           <div class="rule-kr">금형 체결 상태 확인 후 작업</div>
-          <div class="rule-cn">确认模具锁紧状态</div>
+          <div class="rule-cn">确认模具锁紧状态后方可作业</div>
         </div>
       </div>
     </div>
@@ -1227,7 +1294,7 @@ const signMeta = {
   s01: { title: '크레인 작업 구역', type: 'red', label: '금지', loc: '천장주행크레인 / 크레인 작업 구역', summary: '정격하중 초과 금지, 안전모 반드시 착용' },
   s02: { title: '금형 취급 구역', type: 'blue', label: '지시', loc: '금형 보관대 / 금형 취급 구역', summary: '2인 1조 필수, 안전화·안전모 착용' },
   s03: { title: '고소작업 구역', type: 'yellow', label: '경고', loc: '고소작업 구역 / 사다리 사용 구역', summary: '안전대 착용 필수, 추락 위험' },
-  s04: { title: '분전반 / 전기 패널함', type: 'red', label: '금지', loc: '분전반 / 전기 패널함', summary: '허가자 외 접근 금지, LOTO 실시' },
+  s04: { title: '분전반 / 전기 패널함', type: 'red', label: '금지', loc: '분전반 / 전기 패널함', summary: 'LOTO 실시 (A4 1/4 ×4)' },
   s05: { title: '공장 출입구', type: 'blue', label: '지시', loc: '공장 출입구', summary: '안전모·안전화 착용 후 입장' },
   s06: { title: '지게차 이동 통로', type: 'red', label: '금지', loc: '지게차 이동 통로', summary: '보행자 출입 금지, 열쇠 분리 보관' },
   s07: { title: '화학물질 보관소', type: 'yellow', label: '경고', loc: '화학물질 보관소', summary: 'MSDS 비치, 개인보호구 착용 필수' },
@@ -1235,8 +1302,8 @@ const signMeta = {
   s09: { title: '소화기 비치 위치', type: 'red', label: '방화', loc: '소화기 비치 위치', summary: '소화기 비치 및 사용법 안내' },
   s10: { title: '휴게 공간', type: 'red', label: '금지', loc: '휴게 공간', summary: '작업복 탈의 후 휴식, 흡연 금지' },
   s11: { title: '운반대차 구역', type: 'yellow', label: '경고', loc: '운반대차 구역', summary: '적재하중 준수, 2인 이상 운반' },
-  s12: { title: '래핑기 작업 구역', type: 'red', label: '금지', loc: '래핑기 작업 구역', summary: '가동 중 접근 금지, 보안경 착용' },
-  s13: { title: '사출기 작업 구역', type: 'blue', label: '지시', loc: '사출기 작업 구역', summary: '안전문 닫힘 확인, 방열장갑 착용' },
+  s12: { title: '래핑기 작업 구역', type: 'red', label: '금지', loc: '래핑기 작업 구역', summary: '가동 중 구역 접근 금지, 비상정지 숙지' },
+  s13: { title: '사출기 작업 구역', type: 'blue', label: '지시', loc: '사출기 작업 구역', summary: '안전문 닫힘 확인, 금형 체결 확인' },
   s14: { title: '건조기 구역', type: 'yellow', label: '경고', loc: '건조기 구역', summary: '가동 중 개방 금지, 고온 주의' },
   s15: { title: '컨베이어 구역', type: 'red', label: '금지', loc: '컨베이어 구역', summary: '가동 중 접촉 금지, 끼임 위험 주의' },
   s16: { title: '리프트 구역', type: 'red', label: '금지', loc: '리프트 구역', summary: '정격하중 준수, 탑승 절대 금지' }
@@ -1254,7 +1321,8 @@ function buildGrid() {
     card.className = `grid-card type-${m.type}`;
     card.dataset.type = m.type;
     card.dataset.id = id;
-    card.onclick = () => printSingle(id);
+    const printFn = id==='s04' ? 'printQuarter' : 'printSingle';
+    card.onclick = () => window[printFn](id);
     card.innerHTML = `
       <div class="grid-card-header">
         <span class="card-id">${id.toUpperCase()}</span>
@@ -1266,7 +1334,7 @@ function buildGrid() {
         ${m.summary}
       </div>
       <div class="grid-card-footer">
-        <button class="print-one" onclick="event.stopPropagation(); printSingle('${id}')">인쇄</button>
+        <button class="print-one" onclick="event.stopPropagation(); ${printFn}('${id}')">${id==='s04'?'A4 ×4 인쇄':'인쇄'}</button>
       </div>
     `;
     grid.appendChild(card);
@@ -1308,6 +1376,39 @@ function printSingle(id) {
   // restore
   setTimeout(() => {
     document.querySelectorAll('.sign-page').forEach(p => p.classList.remove('hidden-for-print'));
+  }, 1000);
+}
+
+// ===== Print Quarter (A4 1/4 ×4) for s04 =====
+function printQuarter(id) {
+  // 기존 quarter 페이지 제거
+  const old = document.getElementById('quarter-page');
+  if(old) old.remove();
+
+  // 4분할 페이지 생성
+  const page = document.createElement('div');
+  page.id = 'quarter-page';
+  page.className = 'quarter-print-page';
+  for(let i=0; i<4; i++){
+    page.innerHTML += `
+      <div class="q-card">
+        <div class="q-badge">금지 禁止</div>
+        <div class="q-title">분전반 / 전기 패널함</div>
+        <div class="q-title-cn">配电箱 / 电气控制柜</div>
+        <div class="q-symbol"></div>
+        <div class="q-rule">작업 전 반드시<br>잠금·태그(LOTO) 실시</div>
+        <div class="q-rule-cn">作业前必须执行上锁挂牌(LOTO)</div>
+        <div class="q-footer">신성오토텍 안전보건관리</div>
+      </div>`;
+  }
+  document.body.appendChild(page);
+
+  // 다른 표지판 숨기고 quarter만 표시
+  document.querySelectorAll('.sign-page').forEach(p => p.classList.add('hidden-for-print'));
+  window.print();
+  setTimeout(() => {
+    document.querySelectorAll('.sign-page').forEach(p => p.classList.remove('hidden-for-print'));
+    page.remove();
   }, 1000);
 }
 
