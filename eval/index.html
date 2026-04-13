@@ -118,21 +118,8 @@
         💡 각 항목에 대해 자신의 달성도를 솔직하게 입력해주세요. (자기평가는 최종 점수의 40% 반영)
       </div>
 
-      <!-- 자동화 항목 선택 토글 (연봉직만 표시) -->
-      <div id="self-auto-toggle" class="hidden" style="background:#EBF8FF;border:1px solid #BEE3F8;border-radius:8px;padding:14px 16px;margin-bottom:16px;">
-        <div style="font-weight:600;color:#2B6CB0;margin-bottom:10px;">🤖 자동화·AI 혁신 항목 참여 여부 <span style="font-size:11px;font-weight:400;color:#4a5568;">(자동화·MES 활용 항목: 15점)</span></div>
-        <div style="display:flex;gap:24px;align-items:center;flex-wrap:wrap;">
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;">
-            <input type="radio" name="self-auto" value="yes" checked onchange="onAutoToggle('self')">
-            <span>✅ <strong>참여</strong> — 자동화·MES 항목 포함 (15점)</span>
-          </label>
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;">
-            <input type="radio" name="self-auto" value="no" onchange="onAutoToggle('self')">
-            <span>⏭️ <strong>미참여</strong> — 업무 KPI 3개에 각 5점 가중 (KPI 각 20점)</span>
-          </label>
-        </div>
-        <div style="font-size:11px;color:#718096;margin-top:8px;">※ 현업이 바빠 자동화 활동 참여가 어려운 경우 '미참여' 선택 → 기존 업무 KPI 배점이 상향됩니다.</div>
-      </div>
+      <!-- 보너스 항목 (연봉직만 표시) -->
+      <div id="self-bonus-section" class="hidden"></div>
 
       <table class="kpi-table" id="self-kpi-table">
         <thead>
@@ -223,21 +210,8 @@
         ⚠️ 팀장 평가 점수는 최종 점수의 60%로 반영됩니다. 객관적이고 공정하게 평가해주세요.
       </div>
 
-      <!-- 자동화 항목 선택 토글 (연봉직만 표시) -->
-      <div id="mgr-auto-toggle" class="hidden" style="background:#FFFFF0;border:1px solid #F6E05E;border-radius:8px;padding:14px 16px;margin-bottom:16px;">
-        <div style="font-weight:600;color:#744210;margin-bottom:10px;">🤖 자동화·AI 혁신 항목 참여 여부 <span style="font-size:11px;font-weight:400;color:#4a5568;">(자동화·MES 활용 항목: 15점)</span></div>
-        <div style="display:flex;gap:24px;align-items:center;flex-wrap:wrap;">
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;">
-            <input type="radio" name="mgr-auto" value="yes" checked onchange="onAutoToggle('mgr')">
-            <span>✅ <strong>참여</strong> — 자동화·MES 항목 포함 (15점)</span>
-          </label>
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;">
-            <input type="radio" name="mgr-auto" value="no" onchange="onAutoToggle('mgr')">
-            <span>⏭️ <strong>미참여</strong> — 업무 KPI 3개에 각 5점 가중 (KPI 각 20점)</span>
-          </label>
-        </div>
-        <div style="font-size:11px;color:#718096;margin-top:8px;">※ 해당 팀원의 자동화 활동 참여 여부에 따라 선택해주세요.</div>
-      </div>
+      <!-- 보너스 항목 (연봉직만 표시) -->
+      <div id="mgr-bonus-section" class="hidden"></div>
 
       <table class="kpi-table" id="mgr-kpi-table">
         <thead>
@@ -517,15 +491,13 @@ function loadSelfFormForUser(name) {
     <strong style="margin-left:8px;">${emp.name}</strong> ${emp.rank} — ${emp.team}`;
   document.getElementById('self-form-container').classList.remove('hidden');
 
-  const autoToggle = document.getElementById('self-auto-toggle');
-  if (emp.type === 'annual') {
-    autoToggle.classList.remove('hidden');
-    document.querySelector('input[name="self-auto"][value="yes"]').checked = true;
+  if (emp.type === 'annual' && emp.bonus) {
+    renderBonusSection('self', emp);
   } else {
-    autoToggle.classList.add('hidden');
+    document.getElementById('self-bonus-section').classList.add('hidden');
   }
 
-  const criteria = getEffectiveCriteria(emp, 'self');
+  const criteria = getEffectiveCriteria(emp);
   renderKpiTable('self-kpi-body', 'self-total-display', criteria, 'self');
   document.getElementById('self-submit-msg').classList.add('hidden');
 }
@@ -534,9 +506,8 @@ function renderKpiTable(tbodyId, totalId, criteria, prefix) {
   const tbody = document.getElementById(tbodyId);
   tbody.innerHTML = '';
   criteria.forEach(item => {
-    const catClass = item.category
-      ? item.category.replace(' ', '')
-      : (item.id.startsWith('h') ? '사훈ESG' : '직무역량');
+    const catClass = item.id.startsWith('h') || item.id.startsWith('c') ? '사훈ESG' : '직무역량';
+    const guideType = item.id.startsWith('h') || item.id.startsWith('c') ? 'sahun' : 'kpi';
     const grades = [
       { g:'S', label:'탁월', pct:1.0,  color:'#1a6634' },
       { g:'A', label:'우수', pct:0.8,  color:'#2E75B6' },
@@ -546,8 +517,11 @@ function renderKpiTable(tbodyId, totalId, criteria, prefix) {
     ];
     const gradeButtons = grades.map(gd => {
       const pts = Math.round(item.max * gd.pct);
+      const guide = GRADING_GUIDE[guideType]?.[gd.g] || {};
+      const tooltip = guide.keyword ? `${guide.keyword}\n\n${guide.checklist || ''}` : '';
       return `<button class="grade-btn" data-grade="${gd.g}" data-pts="${pts}"
         style="--gc:${gd.color}"
+        title="${tooltip.replace(/"/g,'&quot;')}"
         onclick="selectGrade('${prefix}','${item.id}',${pts},this)">
         <span class="g-letter">${gd.g}</span>
         <span class="g-label">${gd.label}</span>
@@ -574,6 +548,55 @@ function renderKpiTable(tbodyId, totalId, criteria, prefix) {
   updateTotal(prefix, totalId, criteria);
 }
 
+/** 보너스 섹션 렌더링 (연봉직만) */
+function renderBonusSection(prefix, emp) {
+  const section = document.getElementById(prefix + '-bonus-section');
+  if (!emp.bonus) { section.classList.add('hidden'); return; }
+  section.classList.remove('hidden');
+  const grades = [
+    { g:'S', pts:5, color:'#1a6634' },
+    { g:'A', pts:4, color:'#2E75B6' },
+    { g:'B', pts:3, color:'#5a6ea8' },
+    { g:'C', pts:2, color:'#7F6000' },
+    { g:'D', pts:1, color:'#C00000' },
+  ];
+  const btns = grades.map(gd => {
+    const guide = GRADING_GUIDE.bonus?.[gd.g] || {};
+    const tooltip = guide.activity ? `${guide.activity}\n조건: ${guide.condition || ''}` : '';
+    return `<button class="grade-btn" data-grade="${gd.g}" data-pts="${gd.pts}"
+      style="--gc:${gd.color}"
+      title="${tooltip.replace(/"/g,'&quot;')}"
+      onclick="selectBonus('${prefix}',${gd.pts},this)">
+      <span class="g-letter">${gd.g}</span>
+      <span class="g-pts">+${gd.pts}점</span>
+    </button>`;
+  }).join('');
+
+  section.innerHTML = `
+    <div style="background:#EBF8FF;border:1px solid #BEE3F8;border-radius:8px;padding:14px 16px;margin-bottom:16px;">
+      <div style="font-weight:600;color:#2B6CB0;margin-bottom:6px;">🚀 자율 혁신 보너스 (+최대 5점)</div>
+      <div style="font-size:12px;color:#4a5568;margin-bottom:10px;"><strong>${emp.bonus.label}</strong> — ${emp.bonus.desc}</div>
+      <div class="grade-row">${btns}
+        <button class="grade-btn" style="--gc:#999" onclick="selectBonus('${prefix}',0,this)">
+          <span class="g-letter">-</span><span class="g-pts">미신청</span>
+        </button>
+      </div>
+      <div class="grade-selected" id="${prefix}-selected-bonus">— 미선택 (미신청 시 0점) —</div>
+      <input type="hidden" id="${prefix}-input-bonus" value="0">
+    </div>`;
+}
+
+function selectBonus(prefix, pts, btn) {
+  const section = btn.closest('div[style*="background"]');
+  section.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById(prefix + '-input-bonus').value = pts;
+  const selEl = document.getElementById(prefix + '-selected-bonus');
+  selEl.innerHTML = pts > 0
+    ? `<span style="color:#2B6CB0;font-weight:700;">+${pts}점 선택</span>`
+    : `<span style="color:#999;">미신청 (0점)</span>`;
+}
+
 function selectGrade(prefix, id, pts, btn) {
   const row = btn.closest('tr');
   row.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('selected'));
@@ -594,37 +617,12 @@ function getCurrentCriteria(prefix) {
   const name = prefix === 'self' ? selfVerifiedName : document.getElementById('mgr-target-select').value;
   const emp = getEmployee(name);
   if (!emp) return [];
-  return getEffectiveCriteria(emp, prefix);
+  return getEffectiveCriteria(emp);
 }
 
-function getEffectiveCriteria(emp, prefix) {
+function getEffectiveCriteria(emp) {
   if (emp.type !== 'annual') return HOURLY_CRITERIA;
-
-  const radioName = prefix === 'self' ? 'self-auto' : 'mgr-auto';
-  const autoRadio = document.querySelector(`input[name="${radioName}"]:checked`);
-  const isAuto = !autoRadio || autoRadio.value === 'yes';
-
-  if (isAuto) return emp.kpis;
-
-  return emp.kpis
-    .filter(item => item.id !== 'mes')
-    .map(item => {
-      if (['kpi1','kpi2','kpi3'].includes(item.id)) {
-        return { ...item, max: item.max + 5 };
-      }
-      return item;
-    });
-}
-
-function onAutoToggle(prefix) {
-  const name = prefix === 'self' ? selfVerifiedName : document.getElementById('mgr-target-select').value;
-  const emp = getEmployee(name);
-  if (!emp || emp.type !== 'annual') return;
-
-  const tbodyId = prefix === 'self' ? 'self-kpi-body' : 'mgr-kpi-body';
-  const totalId = prefix === 'self' ? 'self-total-display' : 'mgr-total-display';
-  const criteria = getEffectiveCriteria(emp, prefix);
-  renderKpiTable(tbodyId, totalId, criteria, prefix);
+  return emp.kpis;
 }
 
 function updateTotal(prefix, totalId, criteria) {
@@ -646,14 +644,13 @@ async function submitSelfEval() {
   const emp = getEmployee(name);
   if (!emp) return alert('인증 정보가 없습니다. 다시 로그인해주세요.');
 
-  const criteria = getEffectiveCriteria(emp, 'self');
+  const criteria = getEffectiveCriteria(emp);
   const scores = {};
   criteria.forEach(item => {
     scores[item.id] = parseInt(document.getElementById(`self-input-${item.id}`)?.value || 0);
   });
 
-  const autoRadio = document.querySelector('input[name="self-auto"]:checked');
-  const autoParticipation = emp.type !== 'annual' ? null : (!autoRadio || autoRadio.value === 'yes');
+  const bonusScore = parseInt(document.getElementById('self-input-bonus')?.value || 0);
 
   const payload = {
     name,
@@ -661,7 +658,7 @@ async function submitSelfEval() {
     rank: emp.rank,
     type: emp.type,
     scores,
-    autoParticipation,
+    bonusScore,
     comment: {
       achievement: document.getElementById('self-achievement').value,
       improvement: document.getElementById('self-improvement').value,
@@ -787,15 +784,13 @@ function loadManagerForm() {
   document.getElementById('mgr-person-info').classList.remove('hidden');
   document.getElementById('mgr-form-container').classList.remove('hidden');
 
-  const mgrAutoToggle = document.getElementById('mgr-auto-toggle');
-  if (emp.type === 'annual') {
-    mgrAutoToggle.classList.remove('hidden');
-    document.querySelector('input[name="mgr-auto"][value="yes"]').checked = true;
+  if (emp.type === 'annual' && emp.bonus) {
+    renderBonusSection('mgr', emp);
   } else {
-    mgrAutoToggle.classList.add('hidden');
+    document.getElementById('mgr-bonus-section').classList.add('hidden');
   }
 
-  const criteria = getEffectiveCriteria(emp, 'mgr');
+  const criteria = getEffectiveCriteria(emp);
   renderKpiTable('mgr-kpi-body', 'mgr-total-display', criteria, 'mgr');
   document.getElementById('mgr-submit-msg').classList.add('hidden');
 }
@@ -809,14 +804,13 @@ async function submitManagerFeedback() {
   if (!evaluatorName) return alert('팀장 인증이 필요합니다. 다시 로그인해주세요.');
   if (!targetName) return alert('평가 대상자(팀원) 이름을 선택해주세요.');
 
-  const criteria = getEffectiveCriteria(emp, 'mgr');
+  const criteria = getEffectiveCriteria(emp);
   const scores = {};
   criteria.forEach(item => {
     scores[item.id] = parseInt(document.getElementById(`mgr-input-${item.id}`)?.value || 0);
   });
 
-  const mgrAutoRadio = document.querySelector('input[name="mgr-auto"]:checked');
-  const autoParticipation = emp.type !== 'annual' ? null : (!mgrAutoRadio || mgrAutoRadio.value === 'yes');
+  const bonusScore = parseInt(document.getElementById('mgr-input-bonus')?.value || 0);
 
   const payload = {
     evaluatorName, targetName,
@@ -824,7 +818,7 @@ async function submitManagerFeedback() {
     targetRank: emp.rank,
     targetType: emp.type,
     scores,
-    autoParticipation,
+    bonusScore,
     strengths:     document.getElementById('mgr-strengths').value,
     improvements:  document.getElementById('mgr-improvements').value,
     overall:       document.getElementById('mgr-overall').value,
