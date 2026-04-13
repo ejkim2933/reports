@@ -110,6 +110,9 @@ function doPost(e) {
       case 'admin-login':
         result = handleAdminLogin(body);
         break;
+      case 'verify':
+        result = handleVerify(body);
+        break;
       default:
         result = { error: 'Unknown action: ' + action };
     }
@@ -208,9 +211,30 @@ function handleAdminResults(params) {
   return { success: true, data: { selfEvals: selfRows, mgrEvals: mgrRows } };
 }
 
+/** 직원 생년월일 인증 */
+function handleVerify(body) {
+  const { name, birthdate } = body;
+  if (!name || !birthdate) return { error: '이름과 생년월일을 입력해주세요.' };
+
+  const sheet = getSpreadsheet().getSheetByName('직원인증');
+  if (!sheet || sheet.getLastRow() < 2) return { error: '직원인증 시트가 없습니다. 관리자에게 문의하세요.' };
+
+  const data = sheet.getDataRange().getValues();
+  for (let i = 1; i < data.length; i++) {
+    const sheetName = String(data[i][0]).trim();
+    const sheetBirth = String(data[i][1]).trim();
+    const sheetRole = String(data[i][2] || '일반').trim();
+    if (sheetName === name && sheetBirth === birthdate) {
+      return { success: true, name: name, role: sheetRole };
+    }
+  }
+  return { error: '이름 또는 생년월일이 일치하지 않습니다.' };
+}
+
 /** 초기 설정: 시트 생성 및 헤더 삽입 (수동 실행용) */
 function initializeSheets() {
   getOrCreateSheet('자기평가', SELF_HEADERS);
   getOrCreateSheet('팀장평가', MGR_HEADERS);
-  SpreadsheetApp.getUi().alert('시트 초기화 완료!');
+  getOrCreateSheet('직원인증', ['이름', '생년월일', '권한']);
+  SpreadsheetApp.getUi().alert('시트 초기화 완료! 직원인증 시트에 이름/생년월일/권한(일반 또는 팀장)을 입력해주세요.');
 }

@@ -26,8 +26,6 @@
 <!-- 홈 화면                                        -->
 <!-- ══════════════════════════════════════════════ -->
 <main id="page-home">
-  <div id="home-status-bar"></div>
-
   <div class="home-grid">
     <div class="home-card self" onclick="showPage('self')">
       <div class="icon">📝</div>
@@ -87,15 +85,31 @@
 <main id="page-self" class="hidden">
   <div class="section-title">📝 자기평가 입력</div>
 
-  <div class="card">
-    <div class="form-group">
-      <label>📌 본인 이름을 선택하세요</label>
-      <select id="self-name-select" onchange="loadSelfForm()">
+  <!-- 인증 화면 -->
+  <div id="self-auth" class="login-wrap">
+    <div class="icon">📝</div>
+    <h2>본인 인증</h2>
+    <p>자기평가를 위해 이름과 생년월일을 입력하세요.</p>
+    <div class="form-group" style="text-align:left;">
+      <label>이름</label>
+      <select id="self-auth-name">
         <option value="">-- 이름 선택 --</option>
       </select>
     </div>
-    <div id="self-person-info" class="hidden" style="background:#f0f4f8;padding:12px 16px;border-radius:8px;font-size:13px;color:#4a5568;"></div>
+    <div class="form-group" style="text-align:left;">
+      <label>생년월일 (6자리)</label>
+      <input type="password" id="self-auth-birth" placeholder="예: 850315" maxlength="6"
+        onkeydown="if(event.key==='Enter')verifySelf()">
+    </div>
+    <button class="btn btn-primary" style="width:100%;margin-top:8px;" onclick="verifySelf()">확인</button>
+    <div id="self-auth-err" class="hidden alert alert-error mt-8"></div>
   </div>
+
+  <!-- 인증 후 평가 폼 -->
+  <div id="self-verified" class="hidden">
+    <div class="card">
+      <div id="self-person-info" style="background:#f0f4f8;padding:12px 16px;border-radius:8px;font-size:13px;color:#4a5568;"></div>
+    </div>
 
   <div id="self-form-container" class="hidden">
     <div class="card">
@@ -159,6 +173,7 @@
     </div>
     <div id="self-submit-msg" class="hidden mt-16"></div>
   </div>
+  </div><!-- /self-verified -->
 </main>
 
 <!-- ══════════════════════════════════════════════ -->
@@ -167,23 +182,38 @@
 <main id="page-manager" class="hidden">
   <div class="section-title">💬 팀장 피드백 작성</div>
 
-  <div class="card">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-      <div class="form-group">
-        <label>👤 평가자 (팀장) 이름</label>
-        <select id="mgr-evaluator-select">
-          <option value="">-- 팀장 이름 선택 --</option>
-        </select>
-      </div>
+  <!-- 인증 화면 -->
+  <div id="mgr-auth" class="login-wrap">
+    <div class="icon">💬</div>
+    <h2>팀장 인증</h2>
+    <p>팀원 평가를 위해 이름과 생년월일을 입력하세요.</p>
+    <div class="form-group" style="text-align:left;">
+      <label>이름</label>
+      <select id="mgr-auth-name">
+        <option value="">-- 이름 선택 --</option>
+      </select>
+    </div>
+    <div class="form-group" style="text-align:left;">
+      <label>생년월일 (6자리)</label>
+      <input type="password" id="mgr-auth-birth" placeholder="예: 850315" maxlength="6"
+        onkeydown="if(event.key==='Enter')verifyManager()">
+    </div>
+    <button class="btn btn-primary" style="width:100%;margin-top:8px;" onclick="verifyManager()">확인</button>
+    <div id="mgr-auth-err" class="hidden alert alert-error mt-8"></div>
+  </div>
+
+  <!-- 인증 후 평가 폼 -->
+  <div id="mgr-verified" class="hidden">
+    <div class="card">
+      <div id="mgr-evaluator-info" style="background:#f0f4f8;padding:12px 16px;border-radius:8px;font-size:13px;color:#4a5568;margin-bottom:16px;"></div>
       <div class="form-group">
         <label>👥 평가 대상 (팀원) 이름</label>
         <select id="mgr-target-select" onchange="loadManagerForm()">
           <option value="">-- 팀원 이름 선택 --</option>
         </select>
       </div>
+      <div id="mgr-person-info" class="hidden" style="background:#f0f4f8;padding:12px 16px;border-radius:8px;font-size:13px;color:#4a5568;"></div>
     </div>
-    <div id="mgr-person-info" class="hidden" style="background:#f0f4f8;padding:12px 16px;border-radius:8px;font-size:13px;color:#4a5568;"></div>
-  </div>
 
   <div id="mgr-form-container" class="hidden">
     <!-- 팀장 평가 점수 -->
@@ -270,6 +300,7 @@
     </div>
     <div id="mgr-submit-msg" class="hidden mt-16"></div>
   </div>
+  </div><!-- /mgr-verified -->
 </main>
 
 <!-- ══════════════════════════════════════════════ -->
@@ -301,6 +332,9 @@
         <button class="btn btn-warning btn-sm" onclick="adminLogout()">로그아웃</button>
       </div>
     </div>
+
+    <!-- 진행 현황 -->
+    <div id="admin-status-bar"></div>
 
     <!-- 통계 카드 -->
     <div class="admin-stats" id="admin-stats"></div>
@@ -394,6 +428,10 @@ function getEmployeesByTeam() {
   return teams;
 }
 
+// ── 인증 상태 ────────────────────────────────────
+let selfVerifiedName = null;   // 자기평가 인증된 사용자
+let mgrVerifiedName = null;    // 팀장 인증된 사용자
+
 // ── 페이지 전환 ──────────────────────────────────
 function showPage(page) {
   ['home','self','manager','admin'].forEach(p => {
@@ -402,13 +440,12 @@ function showPage(page) {
   document.querySelectorAll('header nav button').forEach((btn, i) => {
     btn.classList.toggle('active', ['home','self','manager','admin'][i] === page);
   });
-  if (page === 'home') loadHomeStatus();
-  if (page === 'self') initSelfPage();
-  if (page === 'manager') initManagerPage();
+  if (page === 'self') initSelfAuthPage();
+  if (page === 'manager') initMgrAuthPage();
 }
 
-// ── 홈 현황 표시 ──────────────────────────────────
-async function loadHomeStatus() {
+// ── 관리자 대시보드 현황바 ─────────────────────────
+async function loadAdminStatusBar() {
   try {
     const result = await apiGet('status');
     const data = result.data || {};
@@ -418,7 +455,7 @@ async function loadHomeStatus() {
       if (data[e.name]?.selfDone) selfDone++;
       if (data[e.name]?.managerDone) mgrDone++;
     });
-    document.getElementById('home-status-bar').innerHTML = `
+    document.getElementById('admin-status-bar').innerHTML = `
       <div class="status-summary">
         <div class="stat"><div class="num">${total}</div><div class="label">전체 인원</div></div>
         <div class="stat"><div class="num" style="color:#2E75B6">${selfDone}</div><div class="label">자기평가 완료</div></div>
@@ -430,15 +467,12 @@ async function loadHomeStatus() {
           <div class="progress-bar"><div class="fill mgr" style="width:${Math.round(mgrDone/total*100)}%"></div></div>
         </div>
       </div>`;
-  } catch(e) {
-    document.getElementById('home-status-bar').innerHTML =
-      `<div class="alert alert-warning">⚠️ 서버 연결 확인 중... Google Apps Script 웹 앱 URL을 설정해주세요.</div>`;
-  }
+  } catch(e) { /* 조용히 실패 */ }
 }
 
-// ── 자기평가 페이지 초기화 ───────────────────────
-function initSelfPage() {
-  const sel = document.getElementById('self-name-select');
+// ── 자기평가 인증 페이지 초기화 ────────────────────
+function initSelfAuthPage() {
+  const sel = document.getElementById('self-auth-name');
   if (sel.options.length > 1) return;
   ALL_EMPLOYEES.forEach(e => {
     const opt = document.createElement('option');
@@ -448,19 +482,39 @@ function initSelfPage() {
   });
 }
 
-function loadSelfForm() {
-  const name = document.getElementById('self-name-select').value;
-  const emp = getEmployee(name);
-  if (!emp) {
-    document.getElementById('self-person-info').classList.add('hidden');
-    document.getElementById('self-form-container').classList.add('hidden');
-    return;
+async function verifySelf() {
+  const name = document.getElementById('self-auth-name').value;
+  const birth = document.getElementById('self-auth-birth').value;
+  if (!name) return alert('이름을 선택해주세요.');
+  if (!birth || birth.length !== 6) return alert('생년월일 6자리를 입력해주세요.');
+
+  const errEl = document.getElementById('self-auth-err');
+  errEl.classList.add('hidden');
+
+  try {
+    const result = await apiPost('verify', { name, birthdate: birth });
+    if (result.success) {
+      selfVerifiedName = name;
+      document.getElementById('self-auth').classList.add('hidden');
+      document.getElementById('self-verified').classList.remove('hidden');
+      loadSelfFormForUser(name);
+    } else {
+      errEl.textContent = '❌ ' + (result.error || '인증 실패');
+      errEl.classList.remove('hidden');
+    }
+  } catch(e) {
+    errEl.textContent = '❌ 서버 연결 오류';
+    errEl.classList.remove('hidden');
   }
+}
+
+function loadSelfFormForUser(name) {
+  const emp = getEmployee(name);
+  if (!emp) return;
 
   document.getElementById('self-person-info').innerHTML = `
     <span class="tag tag-${emp.type}">${emp.type === 'annual' ? '연봉직' : '시급직'}</span>
     <strong style="margin-left:8px;">${emp.name}</strong> ${emp.rank} — ${emp.team}`;
-  document.getElementById('self-person-info').classList.remove('hidden');
   document.getElementById('self-form-container').classList.remove('hidden');
 
   const autoToggle = document.getElementById('self-auto-toggle');
@@ -537,8 +591,8 @@ function selectGrade(prefix, id, pts, btn) {
 }
 
 function getCurrentCriteria(prefix) {
-  const nameEl = document.getElementById(prefix === 'self' ? 'self-name-select' : 'mgr-target-select');
-  const emp = getEmployee(nameEl.value);
+  const name = prefix === 'self' ? selfVerifiedName : document.getElementById('mgr-target-select').value;
+  const emp = getEmployee(name);
   if (!emp) return [];
   return getEffectiveCriteria(emp, prefix);
 }
@@ -563,8 +617,8 @@ function getEffectiveCriteria(emp, prefix) {
 }
 
 function onAutoToggle(prefix) {
-  const nameEl = document.getElementById(prefix === 'self' ? 'self-name-select' : 'mgr-target-select');
-  const emp = getEmployee(nameEl.value);
+  const name = prefix === 'self' ? selfVerifiedName : document.getElementById('mgr-target-select').value;
+  const emp = getEmployee(name);
   if (!emp || emp.type !== 'annual') return;
 
   const tbodyId = prefix === 'self' ? 'self-kpi-body' : 'mgr-kpi-body';
@@ -588,9 +642,9 @@ function updateTotal(prefix, totalId, criteria) {
 
 // ── 자기평가 제출 ────────────────────────────────
 async function submitSelfEval() {
-  const name = document.getElementById('self-name-select').value;
+  const name = selfVerifiedName;
   const emp = getEmployee(name);
-  if (!emp) return alert('이름을 선택해주세요.');
+  if (!emp) return alert('인증 정보가 없습니다. 다시 로그인해주세요.');
 
   const criteria = getEffectiveCriteria(emp, 'self');
   const scores = {};
@@ -634,23 +688,87 @@ async function submitSelfEval() {
   }
 }
 
-// ── 팀장 피드백 페이지 초기화 ───────────────────
-function initManagerPage() {
-  const evalSel = document.getElementById('mgr-evaluator-select');
-  const targSel = document.getElementById('mgr-target-select');
-  if (evalSel.options.length > 1) return;
-
+// ── 팀장 인증 페이지 초기화 ─────────────────────
+function initMgrAuthPage() {
+  const sel = document.getElementById('mgr-auth-name');
+  if (sel.options.length > 1) return;
   ALL_EMPLOYEES.forEach(e => {
-    const opt1 = document.createElement('option');
-    opt1.value = e.name;
-    opt1.textContent = `${e.name} (${e.team} / ${e.rank})`;
-    evalSel.appendChild(opt1);
-
-    const opt2 = document.createElement('option');
-    opt2.value = e.name;
-    opt2.textContent = `${e.name} (${e.team} / ${e.rank})`;
-    targSel.appendChild(opt2);
+    const opt = document.createElement('option');
+    opt.value = e.name;
+    opt.textContent = `${e.name} (${e.team} / ${e.rank})`;
+    sel.appendChild(opt);
   });
+}
+
+async function verifyManager() {
+  const name = document.getElementById('mgr-auth-name').value;
+  const birth = document.getElementById('mgr-auth-birth').value;
+  if (!name) return alert('이름을 선택해주세요.');
+  if (!birth || birth.length !== 6) return alert('생년월일 6자리를 입력해주세요.');
+
+  const errEl = document.getElementById('mgr-auth-err');
+  errEl.classList.add('hidden');
+
+  try {
+    const result = await apiPost('verify', { name, birthdate: birth });
+    if (result.success) {
+      if (result.role !== '팀장') {
+        errEl.textContent = '❌ 팀장 권한이 없습니다. 관리자에게 문의하세요.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+      mgrVerifiedName = name;
+      document.getElementById('mgr-auth').classList.add('hidden');
+      document.getElementById('mgr-verified').classList.remove('hidden');
+      loadManagerTargetList(name);
+    } else {
+      errEl.textContent = '❌ ' + (result.error || '인증 실패');
+      errEl.classList.remove('hidden');
+    }
+  } catch(e) {
+    errEl.textContent = '❌ 서버 연결 오류';
+    errEl.classList.remove('hidden');
+  }
+}
+
+function loadManagerTargetList(evaluatorName) {
+  const emp = getEmployee(evaluatorName);
+  document.getElementById('mgr-evaluator-info').innerHTML = `
+    <strong>👤 평가자:</strong>
+    <span class="tag tag-${emp.type}">${emp.type === 'annual' ? '연봉직' : '시급직'}</span>
+    <strong style="margin-left:8px;">${emp.name}</strong> ${emp.rank} — ${emp.team}`;
+
+  // 팀원 목록 생성 (같은 팀 우선, 나머지 전체)
+  const targSel = document.getElementById('mgr-target-select');
+  targSel.innerHTML = '<option value="">-- 팀원 이름 선택 --</option>';
+
+  const myTeam = emp.team;
+  const teamMembers = ALL_EMPLOYEES.filter(e => e.team === myTeam && e.name !== evaluatorName);
+  const others = ALL_EMPLOYEES.filter(e => e.team !== myTeam && e.name !== evaluatorName);
+
+  if (teamMembers.length > 0) {
+    const grp1 = document.createElement('optgroup');
+    grp1.label = `📌 ${myTeam} (내 팀)`;
+    teamMembers.forEach(e => {
+      const opt = document.createElement('option');
+      opt.value = e.name;
+      opt.textContent = `${e.name} (${e.rank})`;
+      grp1.appendChild(opt);
+    });
+    targSel.appendChild(grp1);
+  }
+
+  if (others.length > 0) {
+    const grp2 = document.createElement('optgroup');
+    grp2.label = '기타 부서';
+    others.forEach(e => {
+      const opt = document.createElement('option');
+      opt.value = e.name;
+      opt.textContent = `${e.name} (${e.team} / ${e.rank})`;
+      grp2.appendChild(opt);
+    });
+    targSel.appendChild(grp2);
+  }
 }
 
 function loadManagerForm() {
@@ -684,13 +802,12 @@ function loadManagerForm() {
 
 // ── 팀장 피드백 제출 ─────────────────────────────
 async function submitManagerFeedback() {
-  const evaluatorName = document.getElementById('mgr-evaluator-select').value;
+  const evaluatorName = mgrVerifiedName;
   const targetName    = document.getElementById('mgr-target-select').value;
   const emp = getEmployee(targetName);
 
-  if (!evaluatorName) return alert('평가자(팀장) 이름을 선택해주세요.');
+  if (!evaluatorName) return alert('팀장 인증이 필요합니다. 다시 로그인해주세요.');
   if (!targetName) return alert('평가 대상자(팀원) 이름을 선택해주세요.');
-  if (evaluatorName === targetName) return alert('본인 평가는 자기평가 메뉴를 이용해주세요.');
 
   const criteria = getEffectiveCriteria(emp, 'mgr');
   const scores = {};
@@ -824,6 +941,7 @@ function transformAdminData(selfEvals, mgrEvals) {
 // ── 관리자 대시보드 로드 ──────────────────────────
 async function loadAdminDashboard() {
   try {
+    loadAdminStatusBar();
     const result = await apiGet('admin-results');
     const data = result.data || { selfEvals: [], mgrEvals: [] };
     const transformed = transformAdminData(data.selfEvals || [], data.mgrEvals || []);
