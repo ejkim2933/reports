@@ -4282,6 +4282,9 @@ const ptPosters = [
   {id:'p17',cat:'rule',color:'#7f1d1d',accent:'#ef4444',badge:'📌 안전수칙 安全规则',emoji:'🔥',title:'화재·폭발 방지 작업 防火防爆作业',sub:'화기 작업 전 필수 준수 | 动火作业必须遵守',
    rules:[{n:'🚫',t:'위험 장소 화기 사용 금지 易燃区禁用火源',d:'인화성·가연성 물질 존재 시 存在易燃·可燃物时'},{n:'🛡️',t:'불티 비산 방지·가연물 제거 防火花·清可燃物',d:'사내 화기 작업 원칙 금지 厂内原则禁止动火'},{n:'⚠️',t:'인화성 액체 용기 용접·용단 금지 易燃液体容器禁焊割',d:'폭발 위험 有爆炸风险'},{n:'🧪',t:'화기 작업 전 내부 액체 제거·세척 动火前清液体·清洗',d:'잔류 인화 물질 완전 제거 彻底清除残留易燃物'},{n:'💨',t:'인화성 증기 체류 공간 충분 환기 易燃蒸气区充分通风',d:'작업 전·중 환기 유지 作业前后保持通风'}],
    footer:'화기 작업 = 사전 허가·감시인 배치 필수 | 动火=须许可·设监护人',fb:'#7f1d1d',fc:'#fff'},
+  {id:'p18',cat:'rule',color:'#0e7490',accent:'#06b6d4',badge:'📌 안전수칙 安全规则',emoji:'🔐',title:'LOTO 8단계 절차 LOTO八步骤',sub:'설비 정비·수리 시 필수 준수 | 维修保养必须遵守',
+   rules:[{n:'1',t:'운전정지 준비 停机准备',d:'상급자 보고·동료 공유 报告上级·告知同事'},{n:'2',t:'운전 정지 停止运行',d:'정해진 순서대로 정지 按规定顺序停机'},{n:'3',t:'에너지 차단 切断能源',d:'전원·압력·열원 확실 차단 彻底切断电·压·热源'},{n:'4',t:'잠금·표지 설치 上锁·挂牌',d:'작업자명 기재, 열쇠는 본인 보관 标注作业者，钥匙本人保管'},{n:'5',t:'작업 실시 实施作业',d:'동력 차단 재확인 후 수리 再确认断电后维修'},{n:'6',t:'점검 및 확인 检查·确认',d:'설비 주변·작업자 안전 확인 确认设备及人员安全'},{n:'7',t:'잠금·표지 해제 解锁·摘牌',d:'설치한 본인만 제거 仅设置者本人解除'},{n:'8',t:'기계·설비 가동 设备启动',d:'동료에게 가동 알림 启动前告知同事'}],
+   footer:'LOTO = 본인 잠금·본인 해제 원칙 | LOTO=本人上锁·本人解锁',fb:'#0e7490',fc:'#fff'},
   {id:'p8',cat:'monthly',color:'#0f4c75',accent:'#1b98e0',badge:'📅 이달의 안전 목표 本月目标',emoji:'🎯',title:'이달의 안전 목표 本月目标',sub:'함께 지킵시다 | 一起遵守',
    rules:[{n:'①',t:'TBM 100% 참석 全员参加',d:'매일 작업 전 10분 每天工作前10分钟'},{n:'②',t:'아차사고 1건↑ 신고 报告险情',d:'공유=예방 分享=预防'},{n:'③',t:'보호구 완전 착용 穿戴防护',d:'예외 없이 无例外'},{n:'④',t:'퇴근 전 정리 下班整理',d:'내 구역은 내 책임 我的区域我负责'}],
    footer:'무재해 목표 달성! | 零事故！',fb:'#0f4c75',fc:'#fff'},
@@ -4497,8 +4500,8 @@ function ptPrint(id){
     .subtitle{font-size:15pt;color:rgba(255,255,255,0.92);font-weight:500;}
     /* 본문 — 수직 중앙 정렬 */
     .body{flex:1;padding:14mm 16mm;display:flex;flex-direction:column;justify-content:center;min-height:0;}
-    ul{list-style:none;padding:0;flex:1;display:flex;flex-direction:column;justify-content:center;gap:6mm;}
-    li{display:flex;gap:10mm;align-items:center;padding:5mm 0;border-bottom:2px solid #f1f5f9;}
+    ul{list-style:none;padding:0;flex:1;display:flex;flex-direction:column;justify-content:center;gap:3mm;}
+    li{display:flex;gap:9mm;align-items:center;padding:3mm 0;border-bottom:2px solid #f1f5f9;}
     li:last-child{border-bottom:none;}
     .num{flex-shrink:0;width:18mm;height:18mm;border-radius:50%;background:${p.accent};color:#fff;display:flex;align-items:center;justify-content:center;font-size:18pt;font-weight:800;
       -webkit-print-color-adjustment:exact !important;print-color-adjust:exact !important;}
