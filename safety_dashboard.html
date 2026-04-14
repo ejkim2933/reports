@@ -1217,9 +1217,152 @@ async function supaSync(key) {
 const DB = {
   get(key){ try{return JSON.parse(localStorage.getItem('safety_'+key))||[];}catch{return [];} },
   getObj(key){ try{return JSON.parse(localStorage.getItem('safety_'+key))||{};}catch{return {};} },
-  set(key,val){ localStorage.setItem('safety_'+key, JSON.stringify(val)); supaSync(key); },
+  set(key,val){ localStorage.setItem('safety_'+key, JSON.stringify(val)); supaSync(key); try{CloudDB.syncKey(key);}catch(e){} },
   push(key,item){ const arr=DB.get(key); arr.unshift(item); DB.set(key,arr); return arr; }
 };
+
+// ============================================================
+// CloudDB — Apps Script(스프레드시트 + 드라이브) 통합 원격 저장소
+// JSONP(GET) + text/plain POST 로 CORS 우회
+// 모든 기기에서 동일한 최신 상태를 공유하기 위한 레이어
+// ============================================================
+const CloudDB = (() => {
+  const URL = (typeof APPS_SCRIPT_URL !== 'undefined') ? APPS_SCRIPT_URL :
+              (typeof DRIVE_UPLOAD_URL !== 'undefined') ? DRIVE_UPLOAD_URL : '';
+  // localStorage 키 → 스프레드시트 탭 매핑
+  const TABLE_OF_KEY = {
+    patrol:'패트롤', tbm:'TBM', education:'교육',
+    accident:'아차사고', siteIssues:'지적사항',
+    risk:'위험성평가', equipment:'설비점검', signs:'비표',
+    esg_done:'ESG체크'
+  };
+
+  function getJSONP(params){
+    return new Promise((resolve,reject)=>{
+      if(!URL){ reject(new Error('APPS_SCRIPT_URL not set')); return; }
+      const cb = '_cb_' + Date.now() + '_' + Math.floor(Math.random()*1e6);
+      const s = document.createElement('script');
+      const to = setTimeout(()=>{ cleanup(); reject(new Error('JSONP timeout')); }, 25000);
+      const cleanup = ()=>{ try{delete window[cb];}catch(e){} s.remove(); clearTimeout(to); };
+      window[cb] = (data)=>{ cleanup(); resolve(data); };
+      const q = Object.entries({...params, callback: cb})
+        .map(([k,v])=>encodeURIComponent(k)+'='+encodeURIComponent(v)).join('&');
+      s.src = URL + '?' + q;
+      s.onerror = ()=>{ cleanup(); reject(new Error('JSONP network error')); };
+      document.body.appendChild(s);
+    });
+  }
+  async function postJSON(body){
+    if(!URL) throw new Error('APPS_SCRIPT_URL not set');
+    const res = await fetch(URL, {
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify(body),
+      redirect:'follow'
+    });
+    return res.json();
+  }
+
+  async function loadTable(table){ return (await getJSONP({action:'load', table})).rows || []; }
+  async function loadAll(){ return (await getJSONP({action:'loadAll'})).tables || {}; }
+  async function saveRow(table, row){ return postJSON({action:'save', table, row}); }
+  async function deleteRow(table, id){ return postJSON({action:'delete', table, id}); }
+  async function clearTable(table){ return postJSON({action:'clear', table}); }
+
+  async function listFiles(subfolder){ return (await getJSONP({action:'listFiles', subfolder:subfolder||''})).files || []; }
+  async function deleteFile(fileId){ return postJSON({action:'deleteFile', fileId}); }
+  function uploadFile(file, opts){
+    return new Promise((resolve,reject)=>{
+      const r = new FileReader();
+      r.onload = async (e) => {
+        try{
+          const base64 = e.target.result.split(',')[1];
+          const out = await postJSON({
+            action:'upload',
+            fileName: file.name,
+            fileData: base64,
+            mimeType: file.type || 'application/octet-stream',
+            subfolder: (opts && opts.subfolder) || '',
+            renameBase: (opts && opts.renameBase) || '',
+            overwrite: (opts && opts.overwrite !== false)
+          });
+          resolve(out);
+        }catch(err){ reject(err); }
+      };
+      r.onerror = reject;
+      r.readAsDataURL(file);
+    });
+  }
+
+  // DB.set() 호출 시 원격 시트에 동기화 (debounced)
+  const _pending = {};
+  async function syncKey(key){
+    const table = TABLE_OF_KEY[key];
+    if(!table || !URL) return;
+    clearTimeout(_pending[key]);
+    _pending[key] = setTimeout(async ()=>{
+      try{
+        const raw = localStorage.getItem('safety_'+key);
+        const val = raw ? JSON.parse(raw) : null;
+        if(Array.isArray(val)){
+          await postJSON({action:'clear', table});
+          if(val.length) await postJSON({action:'saveMany', table, rows:val});
+        } else if(val && typeof val==='object' && key==='esg_done'){
+          const rows=[];
+          Object.keys(val).forEach(idx=>{
+            const months = val[idx] || {};
+            Object.keys(months).forEach(m=>{
+              rows.push({idx:`${idx}_${m}`, month:m, done:months[m]?1:0, updatedAt:new Date().toISOString()});
+            });
+          });
+          await postJSON({action:'clear', table});
+          if(rows.length) await postJSON({action:'saveMany', table, rows});
+        }
+      }catch(e){ console.warn('[CloudDB.syncKey]', key, e.message); }
+    }, 400);
+  }
+
+  // 초기 hydrate: 시트 → localStorage 캐시 → 활성 섹션 리렌더
+  async function hydrate(){
+    if(!URL) return;
+    try{
+      const tables = await loadAll();
+      const R2K = {'패트롤':'patrol','TBM':'tbm','교육':'education','아차사고':'accident',
+                   '지적사항':'siteIssues','위험성평가':'risk','설비점검':'equipment','비표':'signs'};
+      Object.keys(R2K).forEach(t=>{
+        const rows = tables[t] || [];
+        if(Array.isArray(rows)) localStorage.setItem('safety_'+R2K[t], JSON.stringify(rows));
+      });
+      const esgRows = tables['ESG체크'] || [];
+      const esg = {};
+      esgRows.forEach(r=>{
+        const m = String(r.idx||'').match(/^(.+)_(\d+)$/);
+        if(!m) return;
+        if(!esg[m[1]]) esg[m[1]]={};
+        esg[m[1]][m[2]] = r.done?1:0;
+      });
+      if(esgRows.length) localStorage.setItem('safety_esg_done', JSON.stringify(esg));
+      // 현재 활성 섹션 리렌더
+      const active = document.querySelector('.section.active');
+      if(active){
+        const sid = active.id.replace('section-','');
+        if(sid==='dashboard' && typeof renderDashboard==='function') renderDashboard();
+        if(sid==='patrol' && typeof showPatrolView==='function') showPatrolView('home');
+        if(sid==='accident' && typeof renderHistories==='function') renderHistories('acc');
+        if(sid==='risk' && typeof renderRiskStatus==='function') renderRiskStatus();
+        if(sid==='docmgr' && typeof renderDocMgr==='function') renderDocMgr();
+      }
+      console.log('✅ CloudDB hydrated');
+    }catch(e){ console.warn('CloudDB hydrate 실패:', e.message); }
+  }
+
+  return { URL, loadTable, loadAll, saveRow, deleteRow, clearTable,
+           listFiles, deleteFile, uploadFile, syncKey, hydrate };
+})();
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('DOMContentLoaded', () => { setTimeout(()=>CloudDB.hydrate(), 500); });
+}
 
 // ============================================================
 // NAVIGATION
@@ -1242,7 +1385,7 @@ function showSection(id){
   event && event.currentTarget && event.currentTarget.classList.add('active');
   document.getElementById('page-title').textContent = pageTitles[id]||id;
   if(id==='dashboard') renderDashboard();
-  if(id==='docmgr') renderDocMgr();
+  if(id==='docmgr'){ renderDocMgr(); if(typeof dmLoadDrive==='function') dmLoadDrive(); }
   if(id==='schedule') renderSchedule();
   if(id==='education') { renderESGPlan('esg-plan-edu'); }
   if(id==='meetcal') renderMeetCal();
@@ -2756,10 +2899,51 @@ const docMasterList = [
   {id:'d40', wwsCode:'', wwsNo:'', name:'합동 안전점검 기록부', basis:'산안법 §64', period:'분기1회', status:'미보유', updated:'', expires:'', note:'원·하청 합동, 노·사 및 도급사 참여', category:'legal', hasTemplate:false, localFile:''},
 ];
 
+// 드라이브 파일 캐시 (docId → [files])
+let dmDriveCache = {};
+let dmDriveLoaded = false;
+
+function dmSanitizeName(name){ return (name||'').replace(/[\\/:*?"<>|]/g, '_'); }
+
+async function dmLoadDrive(){
+  if(!CloudDB || !CloudDB.URL) return;
+  try{
+    const files = await CloudDB.listFiles('서류관리');
+    const cache = {};
+    docMasterList.forEach(d=>{
+      const base = dmSanitizeName(d.name);
+      const escaped = base.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('^' + escaped + '_(\\d{4}-\\d{2}-\\d{2})\\.([^.]+)$');
+      const matched = files
+        .filter(f=>re.test(f.name))
+        .map(f=>{
+          const m = f.name.match(re);
+          return { id:f.id, name:f.name, date:m[1], url:f.fileUrl, previewUrl:f.previewUrl };
+        })
+        .sort((a,b)=>b.date.localeCompare(a.date));
+      cache[d.id] = matched;
+    });
+    dmDriveCache = cache;
+    dmDriveLoaded = true;
+    if(typeof renderDocMgr==='function') renderDocMgr();
+  }catch(e){ console.warn('dmLoadDrive 실패:', e.message); }
+}
+
 function getDMList(){
   const saved = DB.getObj('doclist');
-  if(Object.keys(saved).length===0) return docMasterList;
-  return docMasterList.map(d=>({...d,...(saved[d.id]||{})}));
+  return docMasterList.map(d=>{
+    const files = dmDriveCache[d.id] || [];
+    const autoStatus = files.length > 0 ? '보유' : '미보유';
+    const autoUpdated = files.length > 0 ? files[0].date : '';
+    const ov = saved[d.id] || {};
+    return {
+      ...d,
+      status: ov.status || autoStatus,
+      updated: ov.updated || autoUpdated,
+      note: ov.note !== undefined ? ov.note : (d.note || ''),
+      expires: ov.expires || d.expires || ''
+    };
+  });
 }
 function saveDMItem(id, field, value){
   const saved = DB.getObj('doclist');
@@ -2936,13 +3120,9 @@ function dmNote(id){
   if(note!==null){ saveDMItem(id,'note',note); renderDocMgr(); }
 }
 
-// 다중 파일 관리
-function getDMFiles(docId){
-  try{ const all=JSON.parse(localStorage.getItem('safety_dm_files')||'{}'); return all[docId]||[]; }catch(e){ return []; }
-}
-function setDMFiles(docId, files){
-  try{ const all=JSON.parse(localStorage.getItem('safety_dm_files')||'{}'); all[docId]=files; localStorage.setItem('safety_dm_files',JSON.stringify(all)); }catch(e){}
-}
+// 다중 파일 관리 (드라이브 매칭 기반)
+function getDMFiles(docId){ return dmDriveCache[docId] || []; }
+function setDMFiles(docId, files){ dmDriveCache[docId] = files; } // no-op 유지(하위호환)
 function dmGetRequiredCount(period){
   if(!period) return 0;
   if(period.includes('매월')||period==='월1회') return 12;
@@ -2955,55 +3135,49 @@ function dmGetRequiredCount(period){
   if(period.includes('연16시간')) return 1;
   return 0;
 }
-function dmUploadToDrive(docId, input) {
+async function dmUploadToDrive(docId, input){
   if(!input.files || !input.files[0]) return;
   const file = input.files[0];
-  const today = new Date().toISOString().split('T')[0];
+  const doc = docMasterList.find(d=>d.id===docId);
+  if(!doc){ alert('서류 정보를 찾을 수 없습니다'); return; }
   const statusEl = document.getElementById('dm-upload-status-' + docId);
-
-  const addFileRecord = (url) => {
-    const files = getDMFiles(docId);
-    files.push({name:file.name, url:url||'', date:today});
-    setDMFiles(docId, files);
-    saveDMItem(docId, 'status', '보유');
-    saveDMItem(docId, 'updated', today);
-    input.value='';
-    if(statusEl){ statusEl.textContent='✅'; setTimeout(()=>{statusEl.textContent='';},1500); }
-    renderDocMgr();
-  };
-
-  if(!DRIVE_UPLOAD_URL){
-    addFileRecord('');
-    return;
-  }
+  if(!CloudDB || !CloudDB.URL){ alert('서버 URL이 설정되지 않았습니다'); return; }
 
   if(statusEl) statusEl.textContent = '업로드 중...';
-  const reader = new FileReader();
-  reader.onload = function(e){
-    const base64 = e.target.result.split(',')[1];
-    fetch(DRIVE_UPLOAD_URL, {
-      method:'POST', mode:'no-cors',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({fileName:file.name, fileData:base64, mimeType:file.type, subfolder:'서류관리'})
-    }).then(()=>{
-      addFileRecord('https://drive.google.com/drive/folders/10a7V0ao6Qf-_9XeiK4Bd2NRmfAX7rgB5');
-    }).catch(err=>{
-      if(statusEl) statusEl.textContent='❌ 실패';
-      console.error(err);
+  try{
+    const res = await CloudDB.uploadFile(file, {
+      subfolder: '서류관리',
+      renameBase: doc.name,   // 서류명_YYYY-MM-DD.ext 로 저장
+      overwrite: true
     });
-  };
-  reader.readAsDataURL(file);
-}
-function dmRemoveFile(docId, fileIdx){
-  if(!confirm('이 파일을 삭제하시겠습니까?')) return;
-  const files = getDMFiles(docId);
-  files.splice(fileIdx, 1);
-  setDMFiles(docId, files);
-  if(files.length===0){
-    saveDMItem(docId, 'status', '미보유');
-    saveDMItem(docId, 'updated', '');
+    input.value = '';
+    if(res && res.success){
+      if(statusEl){ statusEl.textContent = '✅'; setTimeout(()=>{statusEl.textContent='';}, 1500); }
+      await dmLoadDrive();
+    } else {
+      if(statusEl) statusEl.textContent = '❌ ' + (res && res.message ? res.message : '실패');
+    }
+  }catch(err){
+    if(statusEl) statusEl.textContent = '❌ 실패';
+    console.error('업로드 오류:', err);
   }
-  renderDocMgr();
+}
+
+async function dmRemoveFile(docId, fileIdx){
+  if(!confirm('이 파일을 드라이브 휴지통으로 이동하시겠습니까?')) return;
+  const files = dmDriveCache[docId] || [];
+  const target = files[fileIdx];
+  if(!target || !target.id) return;
+  try{
+    const res = await CloudDB.deleteFile(target.id);
+    if(res && res.success){
+      await dmLoadDrive();
+    } else {
+      alert('삭제 실패: ' + (res && res.message ? res.message : ''));
+    }
+  }catch(err){
+    alert('삭제 실패: ' + err.message);
+  }
 }
 
 // 서류 추가

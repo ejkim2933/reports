@@ -44,11 +44,12 @@ function doPost(e) {
     const body = JSON.parse(e.postData.contents || '{}');
     const action = body.action || 'upload';
 
-    if (action === 'upload')    return jsonOut(uploadFile(body));
-    if (action === 'save')      return jsonOut(saveRow(body.table, body.row));
-    if (action === 'saveMany')  return jsonOut(saveMany(body.table, body.rows));
-    if (action === 'delete')    return jsonOut(deleteRow(body.table, body.id));
-    if (action === 'clear')     return jsonOut(clearTable(body.table));
+    if (action === 'upload')     return jsonOut(uploadFile(body));
+    if (action === 'deleteFile') return jsonOut(deleteDriveFile(body.fileId));
+    if (action === 'save')       return jsonOut(saveRow(body.table, body.row));
+    if (action === 'saveMany')   return jsonOut(saveMany(body.table, body.rows));
+    if (action === 'delete')     return jsonOut(deleteRow(body.table, body.id));
+    if (action === 'clear')      return jsonOut(clearTable(body.table));
 
     return jsonOut({ success:false, message:'unknown action: '+action });
   } catch (err) {
@@ -270,6 +271,19 @@ function uploadFile(data) {
     downloadUrl: 'https://drive.google.com/uc?export=download&id=' + fileId,
     previewUrl: 'https://drive.google.com/file/d/' + fileId + '/preview'
   };
+}
+
+// ============================================================
+// 드라이브 파일 삭제 (휴지통으로 이동)
+// ============================================================
+function deleteDriveFile(fileId) {
+  if (!fileId) return { success:false, message:'fileId required' };
+  try {
+    DriveApp.getFileById(fileId).setTrashed(true);
+    return { success:true, fileId:fileId };
+  } catch (err) {
+    return { success:false, message:'deleteFile error: '+err.message };
+  }
 }
 
 // ============================================================
