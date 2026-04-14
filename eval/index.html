@@ -27,38 +27,36 @@
 <!-- ══════════════════════════════════════════════ -->
 <main id="page-home">
   <!-- ▼ 상단 3-박스 안내 (1차 단계 / 로그인 방법 / 성과관리 가이드) -->
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;">
+  <div class="home-grid" style="margin-top:0;margin-bottom:8px;">
 
     <!-- 1차 단계 -->
-    <div style="background:linear-gradient(135deg,#fff4e6,#ffe0b3);border-left:6px solid #ED7D31;border-radius:10px;padding:18px 20px;display:flex;flex-direction:column;">
-      <div style="font-size:11px;color:#9C5400;font-weight:700;letter-spacing:1.5px;">CURRENT PHASE</div>
-      <div style="font-size:16px;font-weight:bold;color:#7F3300;margin-top:4px;">🤝 1차 단계 — KPI 합의</div>
-      <div style="font-size:12px;color:#5a3000;margin-top:8px;line-height:1.6;">
-        팀장과 팀원이 평가 항목을 함께 검토하고 "합의 / 수정요청" 의견을 남겨주세요.<br>
-        합의 완료 후 <b>12월 자기평가 → 1월 팀장평가</b> 순으로 점수 입력이 오픈됩니다.
-      </div>
+    <div class="home-card" style="cursor:default;">
+      <div class="icon">🤝</div>
+      <h2>1차 단계 — KPI 합의</h2>
+      <p>팀장과 팀원이 평가 항목을 함께 검토하고<br>"합의 / 수정요청" 의견을 남겨주세요.<br>
+        합의 후 <b>12월 자기평가 → 1월 팀장평가</b> 순으로 오픈됩니다.</p>
+      <div class="badge" style="background:#FCE4D6;color:#843C0C;">CURRENT PHASE</div>
     </div>
 
     <!-- 로그인 방법 -->
-    <div style="background:#f0f7ff;border:1px solid #BDD7EE;border-left:6px solid #2E75B6;border-radius:10px;padding:18px 20px;display:flex;flex-direction:column;color:#1F3864;">
-      <div style="font-size:11px;color:#2E75B6;font-weight:700;letter-spacing:1.5px;">LOGIN GUIDE</div>
-      <div style="font-size:16px;font-weight:bold;margin-top:4px;">🔑 로그인 방법</div>
-      <div style="font-size:12px;margin-top:8px;line-height:1.6;">
-        이름 입력 + 생년월일 6자리 (YYMMDD)<br>
-        예: 1985년 3월 15일 → <code style="background:#fff;padding:1px 6px;border-radius:4px;">850315</code><br>
-        <span style="color:#4a5568;">권한 자동 구분 — <b>관리자 / 팀장 / 팀원</b></span>
-      </div>
+    <div class="home-card" style="cursor:default;">
+      <div class="icon">🔑</div>
+      <h2>로그인 방법</h2>
+      <p>이름 입력 + 생년월일 6자리 (YYMMDD)<br>
+        예: 1985년 3월 15일 → <code style="background:#f0f4f8;padding:1px 6px;border-radius:4px;">850315</code><br>
+        권한 자동 구분 — <b>관리자 / 팀장 / 팀원</b></p>
+      <div class="badge" style="background:#BDD7EE;color:#1F3864;">LOGIN GUIDE</div>
     </div>
 
-    <!-- 성과관리 가이드 -->
-    <a href="guide.html" target="_blank"
-       style="text-decoration:none;background:linear-gradient(135deg,#1F3864,#2E75B6);border-radius:10px;padding:18px 20px;color:white;box-shadow:0 4px 16px rgba(31,56,100,0.25);transition:transform 0.2s;display:flex;flex-direction:column;"
-       onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
-      <div style="font-size:11px;opacity:0.7;letter-spacing:1.5px;">PERFORMANCE GUIDE</div>
-      <div style="font-size:16px;font-weight:bold;margin-top:4px;">📋 성과관리 안내 →</div>
-      <div style="font-size:12px;opacity:0.9;margin-top:8px;line-height:1.6;">
-        PMS 평가 방식, 일정, 채점 기준 등 전체 안내를 확인하세요.
-      </div>
+    <!-- 성과관리 가이드 (차별점 — 푸른 계열) -->
+    <a href="guide.html" target="_blank" class="home-card"
+       style="background:linear-gradient(135deg,#1F3864,#2E75B6);color:white;text-decoration:none;display:block;">
+      <div class="icon">📋</div>
+      <h2 style="color:white;">성과관리 안내 →</h2>
+      <p style="color:rgba(255,255,255,0.9);">
+        PMS 평가 방식, 일정, 채점 기준 등<br>전체 안내를 확인하세요.
+      </p>
+      <div class="badge" style="background:rgba(255,255,255,0.2);color:white;">PERFORMANCE GUIDE</div>
     </a>
 
   </div>
