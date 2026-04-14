@@ -1285,9 +1285,136 @@ async function supaSync(key) {
 const DB = {
   get(key){ try{return JSON.parse(localStorage.getItem('safety_'+key))||[];}catch{return [];} },
   getObj(key){ try{return JSON.parse(localStorage.getItem('safety_'+key))||{};}catch{return {};} },
-  set(key,val){ localStorage.setItem('safety_'+key, JSON.stringify(val)); supaSync(key); },
+  set(key,val){ localStorage.setItem('safety_'+key, JSON.stringify(val)); supaSync(key); try{ scheduleKVSync(key); }catch(e){} },
   push(key,item){ const arr=DB.get(key); arr.unshift(item); DB.set(key,arr); return arr; }
 };
+
+// ============================================================
+// CloudDB — Google Sheets + Drive 실시간 공유 레이어 (KV 방식)
+//   · 시트 한 탭(데이터저장소)에 모든 localStorage 데이터를 JSON 으로 저장
+//   · JSONP(GET) + text/plain POST 로 CORS 우회
+//   · 안전 하이드레이트: 원격에 값 있을 때만 로컬 덮어쓰기, 없으면 로컬→원격 업로드
+// ============================================================
+const TRACKED_KEYS = ['patrol','tbm','patrolCalendar','tbmCalendar','education','meetlog',
+  'esg_done','esg_files','esg_memos','esg_custom','doclist','dm_files','doc_custom',
+  'risk','riskFiles','accident','equipment','siteIssues','signs'];
+
+const CloudDB = (() => {
+  function url(){ return (typeof DRIVE_UPLOAD_URL !== 'undefined') ? DRIVE_UPLOAD_URL : ''; }
+
+  function getJSONP(params){
+    return new Promise((resolve,reject)=>{
+      const U = url();
+      if(!U){ reject(new Error('CloudDB URL not set')); return; }
+      const cb = '_cb_' + Date.now() + '_' + Math.floor(Math.random()*1e6);
+      const s = document.createElement('script');
+      const to = setTimeout(()=>{ cleanup(); reject(new Error('JSONP timeout')); }, 30000);
+      const cleanup = ()=>{ try{delete window[cb];}catch(e){} s.remove(); clearTimeout(to); };
+      window[cb] = (data)=>{ cleanup(); resolve(data); };
+      const q = Object.entries({...params, callback: cb})
+        .map(([k,v])=>encodeURIComponent(k)+'='+encodeURIComponent(v)).join('&');
+      s.src = U + '?' + q;
+      s.onerror = ()=>{ cleanup(); reject(new Error('JSONP network error')); };
+      document.body.appendChild(s);
+    });
+  }
+  async function postJSON(body){
+    const U = url();
+    if(!U) throw new Error('CloudDB URL not set');
+    const res = await fetch(U, {
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify(body),
+      redirect:'follow'
+    });
+    return res.json();
+  }
+  async function kvSet(key, value){ return postJSON({action:'kvSet', key, value}); }
+  async function kvAll(){ const r = await getJSONP({action:'kvAll'}); return r.values || {}; }
+  async function kvDelete(key){ return postJSON({action:'kvDelete', key}); }
+  async function listFiles(subfolder){ return (await getJSONP({action:'listFiles', subfolder:subfolder||''})).files || []; }
+  async function deleteFile(fileId){ return postJSON({action:'deleteFile', fileId}); }
+
+  // 활성 섹션 리렌더
+  function reRenderActive(){
+    const active = document.querySelector('.section.active');
+    if(!active) return;
+    const sid = active.id.replace('section-','');
+    try{
+      if(sid==='dashboard' && typeof renderDashboard==='function') renderDashboard();
+      if(sid==='docmgr' && typeof renderDocMgr==='function') renderDocMgr();
+      if(sid==='patrol' && typeof showPatrolView==='function') showPatrolView('home');
+      if(sid==='accident' && typeof renderHistories==='function') renderHistories('acc');
+      if(sid==='risk' && typeof renderRiskStatus==='function') renderRiskStatus();
+      if(sid==='education' && typeof renderESGPlan==='function') renderESGPlan('esg-plan-edu');
+      if(sid==='meetcal' && typeof renderMeetCal==='function') renderMeetCal();
+      if(sid==='schedule' && typeof renderSchedule==='function') renderSchedule();
+      if(sid==='signs' && typeof renderSigns==='function') renderSigns();
+    }catch(e){ console.warn('reRender 오류:', e.message); }
+  }
+
+  // 안전 하이드레이트: 원격 값 있을 때만 로컬 덮어씀. 원격 비었는데 로컬 있으면 → 원격에 업로드(1회 마이그레이션)
+  let hydrated = false;
+  async function hydrate(){
+    if(!url() || hydrated) return;
+    try{
+      const remote = await kvAll();
+      const toMigrate = [];
+      TRACKED_KEYS.forEach(k => {
+        const localRaw = localStorage.getItem('safety_'+k);
+        let localParsed = null;
+        if(localRaw){ try{ localParsed = JSON.parse(localRaw); }catch(e){} }
+        const hasLocal = Array.isArray(localParsed) ? localParsed.length > 0
+                       : (localParsed && typeof localParsed === 'object') ? Object.keys(localParsed).length > 0
+                       : !!localParsed;
+        const remoteVal = remote[k];
+        const hasRemote = Array.isArray(remoteVal) ? remoteVal.length > 0
+                       : (remoteVal && typeof remoteVal === 'object') ? Object.keys(remoteVal).length > 0
+                       : !!remoteVal;
+        if(hasRemote){
+          localStorage.setItem('safety_'+k, JSON.stringify(remoteVal));
+        } else if(hasLocal){
+          toMigrate.push(k);
+        }
+      });
+      if(toMigrate.length){
+        console.log('→ 로컬→시트 마이그레이션:', toMigrate.join(', '));
+        for(const k of toMigrate){
+          try{
+            const val = JSON.parse(localStorage.getItem('safety_'+k));
+            await kvSet(k, val);
+          }catch(e){ console.warn('migrate fail:', k, e.message); }
+        }
+      }
+      hydrated = true;
+      console.log('✅ CloudDB hydrated');
+      reRenderActive();
+    }catch(e){
+      console.warn('CloudDB hydrate 실패 (로컬 유지):', e.message);
+    }
+  }
+
+  return { url, kvSet, kvAll, kvDelete, listFiles, deleteFile, postJSON, getJSONP, hydrate, reRenderActive };
+})();
+
+// DB.set() 훅: 시트에 자동 동기화 (debounced 500ms)
+const _kvPending = {};
+function scheduleKVSync(key){
+  if(!TRACKED_KEYS.includes(key)) return;
+  if(!CloudDB || !CloudDB.url()) return;
+  clearTimeout(_kvPending[key]);
+  _kvPending[key] = setTimeout(async () => {
+    try{
+      const raw = localStorage.getItem('safety_'+key);
+      let val = null;
+      if(raw){ try{ val = JSON.parse(raw); }catch(e){} }
+      await CloudDB.kvSet(key, val);
+    }catch(e){ console.warn('시트 동기화 실패:', key, e.message); }
+  }, 500);
+}
+
+// 페이지 로드 후 하이드레이트 (URL 로딩 이후 실행되도록 약간 지연)
+window.addEventListener('DOMContentLoaded', () => { setTimeout(()=>CloudDB.hydrate(), 600); });
 
 // ============================================================
 // NAVIGATION

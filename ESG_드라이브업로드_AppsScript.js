@@ -46,6 +46,8 @@ function doPost(e) {
 
     if (action === 'upload')     return jsonOut(uploadFile(body));
     if (action === 'deleteFile') return jsonOut(deleteDriveFile(body.fileId));
+    if (action === 'kvSet')      return jsonOut(kvSet(body.key, body.value));
+    if (action === 'kvDelete')   return jsonOut(kvDelete(body.key));
     if (action === 'save')       return jsonOut(saveRow(body.table, body.row));
     if (action === 'saveMany')   return jsonOut(saveMany(body.table, body.rows));
     if (action === 'delete')     return jsonOut(deleteRow(body.table, body.id));
@@ -65,6 +67,8 @@ function doGet(e) {
 
     if (action === 'load')          result = loadTable(p.table);
     else if (action === 'loadAll')  result = loadAllTables();
+    else if (action === 'kvGet')    result = kvGet(p.key);
+    else if (action === 'kvAll')    result = kvAll();
     else if (action === 'listFiles')result = listDriveFiles(p.subfolder || '');
     else if (action === 'ping')     result = { success:true, ts:new Date().toISOString() };
     else result = { success:false, message:'unknown action: '+action };
@@ -271,6 +275,98 @@ function uploadFile(data) {
     downloadUrl: 'https://drive.google.com/uc?export=download&id=' + fileId,
     previewUrl: 'https://drive.google.com/file/d/' + fileId + '/preview'
   };
+}
+
+// ============================================================
+// Key-Value 저장소 (범용) — 모든 페이지의 localStorage 키를 시트 한 탭에 저장
+// ============================================================
+const KV_SHEET = '데이터저장소';
+
+function ensureKVSheet(ss) {
+  let sh = ss.getSheetByName(KV_SHEET);
+  if (!sh) {
+    sh = ss.insertSheet(KV_SHEET);
+    sh.getRange(1,1,1,3).setValues([['key','value','updatedAt']]);
+    sh.setFrozenRows(1);
+    sh.getRange(1,1,1,3).setFontWeight('bold').setBackground('#1e5096').setFontColor('#ffffff');
+    sh.setColumnWidth(1, 180);
+    sh.setColumnWidth(2, 800);
+    sh.setColumnWidth(3, 180);
+  }
+  return sh;
+}
+
+function kvGet(key) {
+  try {
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sh = ensureKVSheet(ss);
+    const last = sh.getLastRow();
+    if (last < 2) return { success:true, key, value:null };
+    const data = sh.getRange(2,1,last-1,3).getValues();
+    for (var i = 0; i < data.length; i++) {
+      if (String(data[i][0]) === String(key)) {
+        try { return { success:true, key, value: JSON.parse(data[i][1] || 'null'), updatedAt: data[i][2] }; }
+        catch(e) { return { success:true, key, value: null }; }
+      }
+    }
+    return { success:true, key, value: null };
+  } catch (err) { return { success:false, message:'kvGet: '+err.message }; }
+}
+
+function kvSet(key, value) {
+  try {
+    if (!key) return { success:false, message:'key required' };
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sh = ensureKVSheet(ss);
+    const now = new Date().toISOString();
+    const serialized = JSON.stringify(value === undefined ? null : value);
+    const last = sh.getLastRow();
+    if (last >= 2) {
+      const keys = sh.getRange(2,1,last-1,1).getValues();
+      for (var i = 0; i < keys.length; i++) {
+        if (String(keys[i][0]) === String(key)) {
+          sh.getRange(i+2, 2, 1, 2).setValues([[serialized, now]]);
+          return { success:true, key };
+        }
+      }
+    }
+    sh.appendRow([key, serialized, now]);
+    return { success:true, key };
+  } catch (err) { return { success:false, message:'kvSet: '+err.message }; }
+}
+
+function kvDelete(key) {
+  try {
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sh = ensureKVSheet(ss);
+    const last = sh.getLastRow();
+    if (last < 2) return { success:true, deleted:0 };
+    const keys = sh.getRange(2,1,last-1,1).getValues();
+    for (var i = keys.length-1; i >= 0; i--) {
+      if (String(keys[i][0]) === String(key)) {
+        sh.deleteRow(i+2);
+        return { success:true, deleted:1 };
+      }
+    }
+    return { success:true, deleted:0 };
+  } catch (err) { return { success:false, message:'kvDelete: '+err.message }; }
+}
+
+function kvAll() {
+  try {
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sh = ensureKVSheet(ss);
+    const last = sh.getLastRow();
+    if (last < 2) return { success:true, values:{} };
+    const data = sh.getRange(2,1,last-1,3).getValues();
+    const out = {};
+    data.forEach(function(row){
+      if (!row[0]) return;
+      try { out[row[0]] = JSON.parse(row[1] || 'null'); }
+      catch(e) { out[row[0]] = null; }
+    });
+    return { success:true, values: out };
+  } catch (err) { return { success:false, message:'kvAll: '+err.message }; }
 }
 
 // ============================================================
