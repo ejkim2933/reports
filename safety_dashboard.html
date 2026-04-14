@@ -662,6 +662,13 @@ table tr:hover td{background:#f8fafc;}
             <textarea id="p-issues" placeholder="특이사항, 불량/개선 필요 사항, 조치 완료 사항 기재" style="width:100%;min-height:60px;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;"></textarea>
           </div>
 
+          <!-- 사진 첨부 (여러 장 가능, 드라이브 자동 업로드) -->
+          <div style="margin-top:12px;padding-top:12px;border-top:2px solid #e8edf3;">
+            <div style="font-size:13px;font-weight:700;color:#0d1f3c;margin-bottom:8px;">📸 현장 사진 <span style="font-size:11px;font-weight:400;color:#6b7280;">(여러 장 가능 · 자동 압축 · 드라이브 저장)</span></div>
+            <input type="file" id="p-photos" accept="image/*" multiple onchange="addPatrolPhotos(this)" style="width:100%;padding:4px;border:1px solid #d1d5db;border-radius:6px;font-size:12px;">
+            <div id="p-photos-preview" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;"></div>
+          </div>
+
           <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
             <button class="btn btn-outline" onclick="clearPatrol()">초기화</button>
             <button class="btn btn-success" onclick="savePatrolDay()">💾 점검 저장</button>
@@ -1758,6 +1765,9 @@ function openPatrolDay(day){
   const inspectorEl = document.getElementById('p-inspector');
   if(inspectorEl) inspectorEl.value = saved.inspector || '';
 
+  // 사진 복원
+  renderPatrolPhotosPreview(key);
+
   updatePatrolDayProgress();
   // 스크롤 이동
   document.getElementById('patrol-checklist-form').scrollIntoView({behavior:'smooth', block:'start'});
@@ -2121,21 +2131,163 @@ function openTbmDay(day){
   document.getElementById('tbm-day-title').textContent = `${now.getMonth()+1}월 ${day}일 TBM 기록`;
   document.getElementById('tbm-day-done').checked = !!dayData.done;
   document.getElementById('tbm-day-agenda').value = dayData.agenda || '';
-  document.getElementById('tbm-day-photo-preview').innerHTML = dayData.photoName
-    ? `<div style="font-size:12px;color:#16a34a;">📎 ${dayData.photoName}</div>` : '';
+  const previewEl = document.getElementById('tbm-day-photo-preview');
+  if(dayData.photoData){
+    const link = dayData.photoDriveUrl ? `<a href="${dayData.photoDriveUrl}" target="_blank" style="font-size:10px;color:#1e5096;text-decoration:underline;display:block;margin-top:2px;">드라이브에서 보기 →</a>` : '';
+    previewEl.innerHTML = `<img src="${dayData.photoData}" style="width:140px;height:100px;object-fit:cover;border-radius:8px;border:2px solid #16a34a;"><div style="font-size:11px;color:#16a34a;margin-top:2px;">📎 ${dayData.photoName||''}</div>${link}`;
+  } else if(dayData.photoName){
+    const link = dayData.photoDriveUrl ? `<a href="${dayData.photoDriveUrl}" target="_blank" style="font-size:11px;color:#1e5096;text-decoration:underline;">드라이브에서 보기 →</a>` : '';
+    previewEl.innerHTML = `<div style="font-size:12px;color:#16a34a;">📎 ${dayData.photoName}</div>${link}`;
+  } else {
+    previewEl.innerHTML = '';
+  }
   document.getElementById('tbm-day-form').dataset.key = key;
+}
+
+// 이미지 압축 — 200KB 이하 강제 (해상도/품질 자동 조정)
+const MAX_PHOTO_BYTES = 200 * 1024;
+function compressImage(file){
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const sizes = [1280, 1024, 900, 800, 700, 600, 500];
+        const qualities = [0.75, 0.65, 0.55, 0.5, 0.45, 0.4];
+        let result = null;
+        outer: for(const maxDim of sizes){
+          for(const q of qualities){
+            const ratio = Math.min(1, maxDim / Math.max(img.width, img.height));
+            const w = Math.round(img.width * ratio);
+            const h = Math.round(img.height * ratio);
+            const canvas = document.createElement('canvas');
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            const dataUrl = canvas.toDataURL('image/jpeg', q);
+            const approxBytes = Math.ceil((dataUrl.length - 'data:image/jpeg;base64,'.length) * 3 / 4);
+            if(approxBytes <= MAX_PHOTO_BYTES){ result = dataUrl; break outer; }
+            result = dataUrl;
+          }
+        }
+        resolve(result);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// 패트롤 사진: 여러 장 업로드 + 자동 압축 + 드라이브 저장
+async function addPatrolPhotos(input){
+  const form = document.getElementById('patrol-checklist-form');
+  const key = form?.dataset.key;
+  if(!key || !input.files.length) return;
+  const patrolData = DB.getObj('patrolCalendar');
+  if(!patrolData[key]) patrolData[key] = {};
+  if(!Array.isArray(patrolData[key].photos)) patrolData[key].photos = [];
+  const previewEl = document.getElementById('p-photos-preview');
+  const files = Array.from(input.files);
+
+  for(let i = 0; i < files.length; i++){
+    const file = files[i];
+    const idx = patrolData[key].photos.length + 1;
+    const placeholder = document.createElement('div');
+    placeholder.style.cssText = 'width:100px;height:100px;border:2px dashed #d1d5db;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#1e5096;text-align:center;padding:4px;';
+    placeholder.textContent = `업로드 중... ${i+1}/${files.length}`;
+    previewEl.appendChild(placeholder);
+
+    try{
+      const dataUrl = await compressImage(file);
+      const ext = (file.name.split('.').pop()||'jpg').toLowerCase();
+      const newFileName = `패트롤_${key}_${String(idx).padStart(2,'0')}.${ext}`;
+      const base64 = dataUrl.split(',')[1];
+      await fetch(DRIVE_UPLOAD_URL, {
+        method:'POST', mode:'no-cors',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ fileName:newFileName, fileData:base64, mimeType:'image/jpeg', subfolder:'패트롤_사진' })
+      });
+      patrolData[key].photos.push({
+        name: newFileName,
+        data: dataUrl,
+        driveUrl: 'https://drive.google.com/drive/folders/10a7V0ao6Qf-_9XeiK4Bd2NRmfAX7rgB5',
+        uploadedAt: new Date().toISOString()
+      });
+      DB.set('patrolCalendar', patrolData);
+      placeholder.remove();
+      renderPatrolPhotosPreview(key);
+    }catch(err){
+      placeholder.style.border = '2px solid #dc2626';
+      placeholder.style.color = '#dc2626';
+      placeholder.textContent = '실패';
+      console.error('패트롤 사진 업로드 오류:', err);
+    }
+  }
+  input.value = '';
+}
+
+function renderPatrolPhotosPreview(key){
+  const previewEl = document.getElementById('p-photos-preview');
+  if(!previewEl) return;
+  const patrolData = DB.getObj('patrolCalendar');
+  const photos = (patrolData[key] && Array.isArray(patrolData[key].photos)) ? patrolData[key].photos : [];
+  if(photos.length === 0){ previewEl.innerHTML = ''; return; }
+  previewEl.innerHTML = photos.map((p, i)=>`
+    <div style="position:relative;">
+      <img src="${p.data}" style="width:100px;height:100px;object-fit:cover;border-radius:8px;border:2px solid #16a34a;cursor:pointer;" onclick="window.open('${p.driveUrl||p.data}','_blank')" title="${p.name}">
+      <button onclick="removePatrolPhoto('${key}',${i})" style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#dc2626;color:#fff;border:none;cursor:pointer;font-size:11px;line-height:1;">✕</button>
+    </div>`).join('');
+}
+
+function removePatrolPhoto(key, idx){
+  if(!confirm('이 사진을 삭제하시겠습니까? (드라이브 파일은 휴지통으로 별도 정리 필요)')) return;
+  const patrolData = DB.getObj('patrolCalendar');
+  if(!patrolData[key] || !Array.isArray(patrolData[key].photos)) return;
+  patrolData[key].photos.splice(idx, 1);
+  DB.set('patrolCalendar', patrolData);
+  renderPatrolPhotosPreview(key);
 }
 
 function previewTbmDayPhoto(input){
   const preview = document.getElementById('tbm-day-photo-preview');
   if(!preview || !input.files.length) return;
   const file = input.files[0];
-  const reader = new FileReader();
-  reader.onload = function(e){
-    preview.innerHTML = `<img src="${e.target.result}" style="width:140px;height:100px;object-fit:cover;border-radius:8px;border:2px solid #e5e7eb;">
-      <div style="font-size:11px;color:#6b7280;margin-top:2px;">${file.name}</div>`;
-  };
-  reader.readAsDataURL(file);
+  const form = document.getElementById('tbm-day-form');
+  const key = form?.dataset.key;
+  if(!key) return;
+
+  preview.innerHTML = '<div style="font-size:11px;color:#1e5096;">압축 + 드라이브 업로드 중...</div>';
+
+  compressImage(file).then(dataUrl => {
+    const sizeKB = Math.ceil((dataUrl.length * 3 / 4) / 1024);
+    const ext = (file.name.split('.').pop()||'jpg').toLowerCase();
+    const newFileName = `TBM_${key}.${ext}`;
+
+    preview.innerHTML = `<img src="${dataUrl}" style="width:140px;height:100px;object-fit:cover;border-radius:8px;border:2px solid #e5e7eb;">
+      <div style="font-size:11px;color:#1e5096;margin-top:2px;">📤 ${newFileName} (${sizeKB}KB) — 드라이브 업로드 중...</div>`;
+
+    const base64 = dataUrl.split(',')[1];
+    fetch(DRIVE_UPLOAD_URL, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ fileName:newFileName, fileData:base64, mimeType:'image/jpeg', subfolder:'TBM_사진' })
+    }).then(()=>{
+      const tbmData = DB.getObj('tbmCalendar');
+      const cur = tbmData[key] || {};
+      cur.photoName = newFileName;
+      cur.photoData = dataUrl;
+      cur.photoDriveUrl = 'https://drive.google.com/drive/folders/10a7V0ao6Qf-_9XeiK4Bd2NRmfAX7rgB5';
+      cur.uploadedAt = new Date().toISOString();
+      tbmData[key] = cur;
+      DB.set('tbmCalendar', tbmData);
+      preview.innerHTML = `<img src="${dataUrl}" style="width:140px;height:100px;object-fit:cover;border-radius:8px;border:2px solid #16a34a;">
+        <div style="font-size:11px;color:#16a34a;margin-top:2px;">✅ ${newFileName} (${sizeKB}KB) — 드라이브 저장 완료</div>
+        <a href="${cur.photoDriveUrl}" target="_blank" style="font-size:10px;color:#1e5096;text-decoration:underline;">드라이브에서 보기 →</a>`;
+      if(typeof renderTbmCalendar==='function') renderTbmCalendar();
+    }).catch(err=>{
+      preview.innerHTML = `<div style="font-size:12px;color:#dc2626;">❌ 드라이브 업로드 실패: ${err.message||err}</div>`;
+      console.error('Drive upload error:', err);
+    });
+  });
 }
 
 function saveTbmDay(){
