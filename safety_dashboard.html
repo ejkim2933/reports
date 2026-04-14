@@ -1304,7 +1304,7 @@ const DB = {
 // ============================================================
 const TRACKED_KEYS = ['patrol','tbm','patrolCalendar','tbmCalendar','education','meetlog',
   'esg_done','esg_files','esg_memos','esg_custom','doclist','dm_files','doc_custom',
-  'risk','riskFiles','accident','equipment','siteIssues','signs'];
+  'risk','riskFiles','accident','equipment','siteIssues','signs','daily5'];
 
 const CloudDB = (() => {
   function url(){ return (typeof DRIVE_UPLOAD_URL !== 'undefined') ? DRIVE_UPLOAD_URL : ''; }
@@ -2995,18 +2995,18 @@ const daily5Items = [
   {id:'d5_5', title:'작업 시작 전 설비 점검 및 TBM 활동 실시', sub:'설비 점검 완료 확인, TBM 일지 작성 (매일)', link:'tbm', linkText:'TBM →'}
 ];
 
-function getDaily5Key(){
-  return 'daily5_' + new Date().toISOString().split('T')[0];
-}
+// Daily5: 단일 누적 객체 {YYYY-MM-DD: {id: bool}}. DB 경유 → CloudDB 동기화
+function getDaily5DateKey(){ return new Date().toISOString().split('T')[0]; }
 
 function getDaily5State(){
-  const key = getDaily5Key();
-  const raw = localStorage.getItem(key);
-  return raw ? JSON.parse(raw) : {};
+  const all = DB.getObj('daily5');
+  return all[getDaily5DateKey()] || {};
 }
 
 function saveDaily5State(state){
-  localStorage.setItem(getDaily5Key(), JSON.stringify(state));
+  const all = DB.getObj('daily5');
+  all[getDaily5DateKey()] = state;
+  DB.set('daily5', all);
 }
 
 function toggleDaily5(id){
@@ -3456,12 +3456,12 @@ function dmNote(id){
   if(note!==null){ saveDMItem(id,'note',note); renderDocMgr(); }
 }
 
-// 다중 파일 관리
+// 다중 파일 관리 (DB 경유 → CloudDB 자동 동기화)
 function getDMFiles(docId){
-  try{ const all=JSON.parse(localStorage.getItem('safety_dm_files')||'{}'); return all[docId]||[]; }catch(e){ return []; }
+  const all = DB.getObj('dm_files'); return all[docId]||[];
 }
 function setDMFiles(docId, files){
-  try{ const all=JSON.parse(localStorage.getItem('safety_dm_files')||'{}'); all[docId]=files; localStorage.setItem('safety_dm_files',JSON.stringify(all)); }catch(e){}
+  const all = DB.getObj('dm_files'); all[docId]=files; DB.set('dm_files', all);
 }
 function dmGetRequiredCount(period){
   if(!period) return 0;
@@ -3683,24 +3683,13 @@ function removeCustomESGItem(globalIdx){
 // Apps Script 웹앱 배포 후 여기에 URL을 붙여넣으세요
 const DRIVE_UPLOAD_URL = 'https://script.google.com/macros/s/AKfycbyiZ5j5XH7G3gOMXzlSxbX9hJ5WxCf2J3PMUGGZfaQI3jQC7s0NOn-T8grEmi7LRpIZuA/exec';
 
-function getESGFiles(){
-  try{ return JSON.parse(localStorage.getItem('safety_esg_files')||'{}'); }catch(e){ return {}; }
-}
-function setESGFiles(data){
-  localStorage.setItem('safety_esg_files', JSON.stringify(data));
-}
-function getESGDone(){
-  try{ return JSON.parse(localStorage.getItem('safety_esg_done')||'{}'); }catch(e){ return {}; }
-}
-function setESGDone(data){
-  localStorage.setItem('safety_esg_done', JSON.stringify(data));
-}
-function getESGMemos(){
-  try{ return JSON.parse(localStorage.getItem('safety_esg_memos')||'{}'); }catch(e){ return {}; }
-}
-function setESGMemos(data){
-  localStorage.setItem('safety_esg_memos', JSON.stringify(data));
-}
+// ESG 관련 저장소 (DB 경유 → CloudDB 자동 동기화)
+function getESGFiles(){ return DB.getObj('esg_files'); }
+function setESGFiles(data){ DB.set('esg_files', data); }
+function getESGDone(){ return DB.getObj('esg_done'); }
+function setESGDone(data){ DB.set('esg_done', data); }
+function getESGMemos(){ return DB.getObj('esg_memos'); }
+function setESGMemos(data){ DB.set('esg_memos', data); }
 function isESGDone(idx, month){
   const saved = getESGDone();
   if(saved[idx] && saved[idx][month]) return true;
