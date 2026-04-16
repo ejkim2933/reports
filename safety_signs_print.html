@@ -420,8 +420,8 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 3mm;
+  justify-content: flex-start;
+  gap: 3.5mm;
   min-height: 0;
   overflow: hidden;
 }
@@ -434,6 +434,10 @@ body {
   border-radius: 4px;
   background: #fafafa;
 }
+
+/* 룰 많은 비표(s20 휴게실 7항목) — 윗·아래 여백 없이 꽉 채움 */
+.sign-rules.dense { justify-content: space-between; gap: 0; }
+.sign-rules.dense .rule { padding: 2mm 4mm; }
 
 .sign-red .rule { border-left: 4px solid var(--red); }
 .sign-yellow .rule { border-left: 4px solid var(--yellow-dark); }
@@ -1955,7 +1959,7 @@ body {
   </div>
   <div class="sign-body">
     <div class="sign-location">설치위치: 사내 휴게실<br><span class="sign-location-cn">安装位置：公司休息室</span></div>
-    <div class="sign-rules">
+    <div class="sign-rules dense">
       <div class="rule">
         <span class="rule-icon">1</span>
         <div class="rule-text">
