@@ -573,56 +573,69 @@ body {
   flex-shrink: 0;
 }
 
-/* 위험 요인 박스 — 대형·강렬 */
+/* 위험 요인 박스 — 초대형·강렬 (s17 전용 최상위 강조) */
 .danger-box {
-  background: #FFF3E0;
-  border: 3px solid var(--red);
-  border-radius: 6px;
-  padding: 4mm 6mm 5mm;
-  margin-bottom: 3mm;
+  background: #FFF0E8;
+  border: 5px solid var(--red);
+  border-radius: 8px;
+  padding: 7mm 9mm 8mm;
+  margin-bottom: 5mm;
   flex-shrink: 0;
+  box-shadow: 0 2px 0 rgba(200,16,46,0.15);
+  position: relative;
+}
+.danger-box::before {
+  content: '';
+  position: absolute;
+  top: -5px; left: -5px; right: -5px;
+  height: 8mm;
+  background: linear-gradient(90deg, var(--red) 0%, var(--red-dark) 100%);
+  border-radius: 4px 4px 0 0;
 }
 .danger-box-title {
-  font-size: 15pt;
+  font-size: 22pt;
   font-weight: 900;
   color: var(--red-dark);
-  margin-bottom: 3mm;
+  margin-bottom: 5mm;
+  margin-top: 4mm;
   display: flex;
   align-items: center;
-  gap: 2mm;
+  gap: 3mm;
+  letter-spacing: -0.3px;
 }
 .danger-box-title-cn {
-  font-size: 10pt;
+  font-size: 14pt;
   font-weight: 700;
-  color: #999;
+  color: #888;
   font-family: 'Noto Sans SC', sans-serif !important;
 }
 .danger-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3mm 8mm;
+  gap: 5mm 10mm;
   list-style: none;
 }
 .danger-list li {
-  font-size: 11pt;
+  font-size: 15pt;
   font-weight: 900;
   color: #111;
-  padding-left: 6mm;
+  padding-left: 8mm;
   position: relative;
-  line-height: 1.45;
+  line-height: 1.4;
   white-space: nowrap;
 }
 .danger-list li::before {
-  content: '\2013';
+  content: '\26A0';
   position: absolute;
   left: 0;
+  top: 0;
   color: var(--red);
   font-weight: 900;
-  font-size: 13pt;
+  font-size: 16pt;
 }
 .danger-list li .cn {
-  font-size: 9pt;
-  color: #666;
+  font-size: 12pt;
+  color: #555;
   font-weight: 500;
   font-family: 'Noto Sans SC', sans-serif !important;
   white-space: nowrap;
