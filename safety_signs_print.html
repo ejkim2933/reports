@@ -256,12 +256,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 /* RED: prohibition circle */
 .sign-red .sign-symbol {
   width: 78px;
   height: 78px;
+  aspect-ratio: 1 / 1;
   border: 7px solid var(--red);
   border-radius: 50%;
   background: #fff;
@@ -322,6 +324,7 @@ body {
 .sign-blue .sign-symbol {
   width: 78px;
   height: 78px;
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
   background: var(--blue);
   display: flex;
@@ -339,6 +342,7 @@ body {
 .sign-fire .sign-symbol {
   width: 96px;
   height: 96px;
+  aspect-ratio: 1 / 1;
   background: var(--red);
   border-radius: 4px;
   display: flex;
@@ -857,13 +861,19 @@ body {
 /* 확장형 인쇄 시 정확히 1페이지 */
 @media print {
   .sign-extended {
-    height: 285mm !important;
-    max-height: 285mm !important;
-    min-height: 285mm !important;
+    height: 297mm !important;
+    max-height: 297mm !important;
+    min-height: 297mm !important;
     overflow: hidden !important;
   }
+  /* s17은 레이아웃이 빡빡해 bleed는 최소한으로 */
   .sign-extended .sign-header {
-    border-top-width: 6mm !important;
+    border-top-width: 10mm !important;
+  }
+  .sign-extended .sign-footer-ext {
+    height: 18mm !important;
+    padding-top: 1mm !important;
+    padding-bottom: 6mm !important;
   }
 }
 
@@ -945,12 +955,25 @@ body {
 
   .sign-page {
     width: 100%;
-    min-height: 100vh;
+    height: 297mm !important;
+    max-height: 297mm !important;
+    min-height: 297mm !important;
     margin: 0;
     box-shadow: none;
     page-break-after: always;
     page-break-inside: avoid;
+    overflow: hidden;
     border: none;
+  }
+
+  /* 브라우저 강제 여백에 대비한 안전 색상존 — 위아래 bleed */
+  .sign-page:not(.sign-extended) .sign-header {
+    border-top-width: 14mm !important;
+  }
+  .sign-page:not(.sign-extended) .sign-footer {
+    height: 22mm !important;
+    padding-top: 2mm !important;
+    padding-bottom: 8mm !important;
   }
 
   .sign-page:last-child {
@@ -963,7 +986,7 @@ body {
 
   @page {
     size: A4 portrait;
-    margin: 6mm 0;
+    margin: 0;
   }
 
   /* 분전반 A4 1/4 ×4 인쇄 모드 — 기존 디자인 축소 */
@@ -972,7 +995,7 @@ body {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     width: 210mm;
-    height: 285mm;
+    height: 297mm;
     margin: 0;
     padding: 1mm;
     gap: 1mm;
@@ -1127,31 +1150,31 @@ body {
     <span class="sign-id">s01</span>
     <div class="sign-symbol"><span class="sym-inner"></span></div>
     <div class="category-badge">금지 <span class="category-badge-cn">禁止</span></div>
-    <div class="sign-title">크레인 작업 구역</div>
-    <div class="sign-title-cn">起重机作业区域</div>
+    <div class="sign-title">천장주행크레인 작업구역</div>
+    <div class="sign-title-cn">天车作业区域</div>
   </div>
   <div class="sign-body">
-    <div class="sign-location">설치위치: 천장주행크레인 / 크레인 작업 구역<br><span class="sign-location-cn">安装位置：天车/起重机作业区域</span></div>
+    <div class="sign-location">설치위치: 천장주행크레인 작업구역<br><span class="sign-location-cn">安装位置：天车作业区域</span></div>
     <div class="sign-rules">
       <div class="rule">
         <span class="rule-icon">1</span>
         <div class="rule-text">
-          <div class="rule-kr">정격하중 초과 적재 금지</div>
-          <div class="rule-cn">严禁超过额定载荷</div>
+          <div class="rule-kr">크레인 작업 반경 내 무단 출입 금지</div>
+          <div class="rule-cn">严禁擅自进入起重机作业半径内</div>
         </div>
       </div>
       <div class="rule">
         <span class="rule-icon">2</span>
         <div class="rule-text">
-          <div class="rule-kr">인양물 아래 출입 금지</div>
-          <div class="rule-cn">严禁进入吊装物下方</div>
+          <div class="rule-kr">인양물 하부 통행 제한</div>
+          <div class="rule-cn">禁止在吊装物下方通行</div>
         </div>
       </div>
       <div class="rule">
         <span class="rule-icon">3</span>
         <div class="rule-text">
-          <div class="rule-kr">안전모 반드시 착용</div>
-          <div class="rule-cn">必须佩戴安全帽</div>
+          <div class="rule-kr">중량물 이동 작업 시 안전한 위치에서 대기, 안전 확보 후 통행</div>
+          <div class="rule-cn">搬运重物作业时在安全位置等候，确认安全后方可通行</div>
         </div>
       </div>
     </div>
@@ -1444,44 +1467,65 @@ body {
 <!-- s10 -->
 <!-- s10 삭제됨 — s20 사내 휴게실 이용 수칙으로 대체 -->
 
-<!-- s11 -->
+<!-- s11 - 운반대차 안전수칙 -->
 <div class="sign-page sign-yellow" data-id="s11" data-type="yellow">
   <div class="sign-header">
     <span class="sign-id">s11</span>
     <div class="sign-symbol"></div>
     <div class="category-badge">경고 <span class="category-badge-cn">警告</span></div>
-    <div class="sign-title">운반대차 구역</div>
-    <div class="sign-title-cn">搬运车区域</div>
+    <div class="sign-title">운반대차 안전수칙</div>
+    <div class="sign-title-cn">搬运车安全守则</div>
   </div>
   <div class="sign-body">
-    <div class="sign-location">설치위치: 운반대차 구역<br><span class="sign-location-cn">安装位置：搬运车区域</span></div>
-    <div class="sign-rules">
+    <div class="sign-location">설치위치: 운반대차 사용 구역<br><span class="sign-location-cn">安装位置：搬运车使用区域</span></div>
+    <div class="sign-rules dense">
       <div class="rule">
         <span class="rule-icon">1</span>
         <div class="rule-text">
-          <div class="rule-kr">운반대차 허용 적재하중 반드시 준수</div>
-          <div class="rule-cn">严禁超过额定载荷</div>
+          <div class="rule-kr">작업 전 점검 — 바퀴 회전 상태 등 이상 유무 확인</div>
+          <div class="rule-cn">作业前检查 — 确认车轮转动状态等有无异常</div>
         </div>
       </div>
       <div class="rule">
         <span class="rule-icon">2</span>
         <div class="rule-text">
-          <div class="rule-kr">대차 이동 시 전방 주시 필수</div>
-          <div class="rule-cn">移动时注意前方</div>
+          <div class="rule-kr">안전한 적재 — 무게중심은 중앙, 무거운 것은 하단, 시야를 가리지 않는 높이 유지</div>
+          <div class="rule-cn">安全装载 — 重心居中，重物置于下方，保持不遮挡视线的高度</div>
         </div>
       </div>
       <div class="rule">
         <span class="rule-icon">3</span>
         <div class="rule-text">
-          <div class="rule-kr">경사로에서 대차 이동 금지</div>
-          <div class="rule-cn">禁止在坡道上移动</div>
+          <div class="rule-kr">운반 방식 — 끌지 말고 밀어서 이동, 진행 방향의 시야 확보</div>
+          <div class="rule-cn">搬运方式 — 推行前进而非拉行，确保前方视野</div>
         </div>
       </div>
       <div class="rule">
         <span class="rule-icon">4</span>
         <div class="rule-text">
-          <div class="rule-kr">중량물은 반드시 2인 이상 운반</div>
-          <div class="rule-cn">重物须两人以上搬运</div>
+          <div class="rule-kr">속도 및 이동 — 보행 속도로 천천히 이동, 뒷걸음 운반 금지</div>
+          <div class="rule-cn">速度与移动 — 以步行速度缓慢移动，严禁倒退搬运</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">5</span>
+        <div class="rule-text">
+          <div class="rule-kr">통로 확보 — 이동 경로의 장애물 제거, 굴러 떨어질 위험이 있는 물건은 고정</div>
+          <div class="rule-cn">确保通道 — 清除移动路径上的障碍物，易滚落物品须加以固定</div>
+        </div>
+      </div>
+      <div class="rule rule-prohibit">
+        <span class="rule-icon">6</span>
+        <div class="rule-text">
+          <div class="rule-kr">금지사항 — 대차 탑승 금지, 적재물 과적 금지</div>
+          <div class="rule-cn">禁止事项 — 严禁搭乘搬运车，严禁超载</div>
+        </div>
+      </div>
+      <div class="rule">
+        <span class="rule-icon">7</span>
+        <div class="rule-text">
+          <div class="rule-kr">경사로 — 화물이 떨어지지 않도록 주의, 필요시 2인 1조 운반</div>
+          <div class="rule-cn">坡道作业 — 防止货物坠落，必要时两人一组搬运</div>
         </div>
       </div>
     </div>
@@ -1856,8 +1900,8 @@ body {
     <span class="sign-id">s18</span>
     <div class="sign-symbol"><span class="sym-inner">!</span></div>
     <div class="category-badge">지시 <span class="category-badge-cn">指示</span></div>
-    <div class="sign-title">산업용 리프트 안전수칙 (작업 전·중)</div>
-    <div class="sign-title-cn">工业升降机安全守则（作业前·作业中）</div>
+    <div class="sign-title">산업용 리프트 안전수칙 (작업시)</div>
+    <div class="sign-title-cn">工业升降机安全守则（作业时）</div>
   </div>
   <div class="sign-body">
     <div class="sign-location">설치위치: 산업용 리프트 구역<br><span class="sign-location-cn">安装位置：工业升降机区域</span></div>
@@ -1903,8 +1947,8 @@ body {
     <span class="sign-id">s19</span>
     <div class="sign-symbol"><span class="sym-inner">!</span></div>
     <div class="category-badge">지시 <span class="category-badge-cn">指示</span></div>
-    <div class="sign-title">산업용 리프트 안전수칙 (작업 후·유지보수)</div>
-    <div class="sign-title-cn">工业升降机安全守则（作业后·维护保养）</div>
+    <div class="sign-title">산업용 리프트 안전수칙 (유지보수)</div>
+    <div class="sign-title-cn">工业升降机安全守则（维护保养）</div>
   </div>
   <div class="sign-body">
     <div class="sign-location">설치위치: 산업용 리프트 구역<br><span class="sign-location-cn">安装位置：工业升降机区域</span></div>
@@ -2008,7 +2052,7 @@ body {
 <script>
 // ===== Sign metadata for grid cards =====
 const signMeta = {
-  s01: { title: '크레인 작업 구역', type: 'red', label: '금지', loc: '천장주행크레인 / 크레인 작업 구역', summary: '정격하중 초과 금지, 안전모 반드시 착용' },
+  s01: { title: '천장주행크레인 작업구역', type: 'red', label: '금지', loc: '천장주행크레인 작업구역', summary: '무단 출입·인양물 하부 통행 금지, 중량물 이동 시 안전 위치 대기' },
   s02: { title: '금형 취급 구역', type: 'blue', label: '지시', loc: '금형 보관대 / 금형 취급 구역', summary: '2인 1조 필수, 안전화·안전모 착용' },
   s03: { title: '고소작업 구역', type: 'yellow', label: '경고', loc: '고소작업 구역 / 사다리 사용 구역', summary: '안전대 착용 필수, 추락 위험' },
   s04: { title: '분전반 / 전기 패널함', type: 'red', label: '금지', loc: '분전반 / 전기 패널함', summary: '허가자 외 접근 금지 (A4 1/4 ×4)' },
@@ -2017,7 +2061,7 @@ const signMeta = {
   s07: { title: '화학물질 보관소', type: 'yellow', label: '경고', loc: '화학물질 보관소', summary: 'MSDS 비치, 개인보호구 착용 필수' },
   s08: { title: '비상구', type: 'green', label: '안전', loc: '비상구', summary: '비상구, 장애물 적재 절대 금지' },
   s09: { title: '소화기 비치 위치', type: 'fire', label: '방화', loc: '소화기 비치 위치', summary: '소화기 비치 및 사용법 안내' },
-  s11: { title: '운반대차 구역', type: 'yellow', label: '경고', loc: '운반대차 구역', summary: '적재하중 준수, 2인 이상 운반' },
+  s11: { title: '운반대차 안전수칙', type: 'yellow', label: '경고', loc: '운반대차 사용 구역', summary: '작업 전 점검, 안전 적재, 밀어서 이동, 탑승·과적 금지' },
   s12: { title: '래핑기 작업 구역', type: 'red', label: '금지', loc: '래핑기 작업 구역', summary: '신체 접근 금지, 구역 접근 금지, 비상정지' },
   s13: { title: '사출기 작업 구역', type: 'blue', label: '지시', loc: '사출기 작업 구역', summary: '안전문 닫힘 확인, 금형 체결 확인' },
   s14: { title: '건조기 구역', type: 'yellow', label: '경고', loc: '건조기 구역', summary: '가동 중 개방 금지, 고온 주의' },
